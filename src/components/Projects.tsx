@@ -10,8 +10,8 @@ export default function Projects() {
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <section id="projects" className="section-padding">
-            <div className="max-w-6xl mx-auto" ref={ref}>
+        <section id="projects" className="section-padding flex flex-col items-center justify-center w-full">
+            <div className="max-w-6xl w-full mx-auto flex flex-col items-center" ref={ref}>
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -29,7 +29,7 @@ export default function Projects() {
                     <div className="section-underline" />
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-2 gap-6 w-full text-left">
                     {projects.map((project, i) => (
                         <motion.article
                             key={project.title}

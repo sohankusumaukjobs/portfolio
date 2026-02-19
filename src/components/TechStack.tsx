@@ -77,8 +77,8 @@ export default function TechStack() {
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <section id="stack" className="section-padding">
-            <div className="max-w-6xl mx-auto" ref={ref}>
+        <section id="stack" className="section-padding flex flex-col items-center justify-center w-full">
+            <div className="max-w-6xl w-full mx-auto flex flex-col items-center" ref={ref}>
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -95,7 +95,7 @@ export default function TechStack() {
                     <div className="section-underline" />
                 </motion.div>
 
-                <div className="space-y-12">
+                <div className="space-y-12 w-full">
                     {techStack.map((category, ci) => (
                         <motion.div
                             key={category.category}

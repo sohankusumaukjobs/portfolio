@@ -71,26 +71,26 @@ export default function Contact() {
     };
 
     return (
-        <section id="contact" className="section-padding">
-            <div className="max-w-6xl mx-auto" ref={ref}>
+        <section id="contact" className="section-padding flex flex-col items-center justify-center w-full">
+            <div className="max-w-6xl w-full mx-auto flex flex-col items-center" ref={ref}>
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-16"
+                    className="flex flex-col items-center text-center mb-16 w-full"
                 >
                     <p className="section-label">{"// contact"}</p>
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
                         Let&apos;s <span className="gradient-text">Connect</span>
                     </h2>
-                    <p className="text-[#9fb3c9] max-w-xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-xl">
                         Have a project in mind or just want to say hi? I&apos;m always open
                         to discussing new opportunities and creative ideas.
                     </p>
-                    <div className="section-underline mx-auto" />
+                    <div className="section-underline" />
                 </motion.div>
 
-                <div className="grid lg:grid-cols-5 gap-8">
+                <div className="grid lg:grid-cols-5 gap-8 w-full text-left">
                     {/* Left — Form (wider) */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}

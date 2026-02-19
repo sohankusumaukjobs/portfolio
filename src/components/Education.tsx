@@ -10,25 +10,25 @@ export default function Education() {
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <section id="education" className="section-padding">
-            <div className="max-w-4xl mx-auto" ref={ref}>
+        <section id="education" className="section-padding flex flex-col items-center justify-center w-full">
+            <div className="max-w-4xl w-full mx-auto flex flex-col items-center" ref={ref}>
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-14"
+                    className="flex flex-col items-center text-center mb-14 w-full"
                 >
                     <p className="section-label">{"// education"}</p>
                     <h2 className="text-4xl font-bold text-white mb-4">
                         <span className="gradient-text">Education</span>
                     </h2>
-                    <p className="text-[#9fb3c9] max-w-2xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-2xl">
                         Academic Background
                     </p>
-                    <div className="section-underline mx-auto" />
+                    <div className="section-underline" />
                 </motion.div>
 
-                <div className="space-y-6">
+                <div className="space-y-6 w-full text-left">
                     {education.map((edu, i) => (
                         <motion.div
                             key={edu.degree}

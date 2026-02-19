@@ -10,8 +10,8 @@ export default function Certifications() {
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <section id="certifications" className="section-padding">
-            <div className="max-w-6xl mx-auto" ref={ref}>
+        <section id="certifications" className="section-padding flex flex-col items-center justify-center w-full">
+            <div className="max-w-6xl w-full mx-auto flex flex-col items-center" ref={ref}>
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -28,7 +28,7 @@ export default function Certifications() {
                     <div className="section-underline" />
                 </motion.div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full text-left">
                     {certifications.map((cert, i) => (
                         <motion.div
                             key={cert.name}
