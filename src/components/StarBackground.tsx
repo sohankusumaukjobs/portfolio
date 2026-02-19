@@ -6,11 +6,8 @@ interface Star {
     x: number;
     y: number;
     radius: number;
-    alpha: number;
-    baseAlpha: number;
     color: string;
-    twinkleSpeed: number;
-    twinkleDir: number;
+    alpha: number;
 }
 
 interface Comet {
@@ -22,6 +19,11 @@ interface Comet {
     opacity: number;
     thickness: number;
     active: boolean;
+    state: "charging" | "shooting";
+    chargeTimer: number;
+    maxChargeTime: number;
+    originX: number;
+    originY: number;
 }
 
 interface Satellite {
@@ -35,18 +37,9 @@ interface Satellite {
     blinkState: boolean;
 }
 
-interface GalacticCloud {
-    x: number;
-    y: number;
-    radius: number;
-    r: number;
-    g: number;
-    b: number;
-    opacity: number;
-}
-
 export default function StarBackground() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const bgCanvasRef = useRef<HTMLCanvasElement>(null);
+    const fgCanvasRef = useRef<HTMLCanvasElement>(null);
 
     // Seeded random for consistent galaxy generation across resizes
     let seed = 12345;
@@ -56,33 +49,27 @@ export default function StarBackground() {
     };
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+        const bgCanvas = bgCanvasRef.current;
+        const fgCanvas = fgCanvasRef.current;
+        if (!bgCanvas || !fgCanvas) return;
 
-        const ctx = canvas.getContext("2d", { alpha: false });
-        if (!ctx) return;
+        // bgCtx uses alpha: false for ultra-fast opaque rendering
+        const bgCtx = bgCanvas.getContext("2d", { alpha: false });
+        // fgCtx needs transparency to show the bgCanvas underneath
+        const fgCtx = fgCanvas.getContext("2d");
+        if (!bgCtx || !fgCtx) return;
 
         const USE_ANIMATION = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        // Visual Configuration
-        const STAR_COUNT = 3000; // High density for the Milky Way
-        const GALAXY_BAND_ANGLE = Math.PI / 4; // Diagonal top-left to bottom-right
-        const GALAXY_WIDTH = Math.max(window.innerWidth, window.innerHeight) * 0.4;
+        const STAR_COUNT = 3000;
+        const GALAXY_BAND_ANGLE = Math.PI / 4;
 
+        // Data shared between bg (static) and fg (dynamic comets)
         let stars: Star[] = [];
-        let clouds: GalacticCloud[] = [];
-        let dustLanes: GalacticCloud[] = [];
         let comets: Comet[] = [];
         let satellites: Satellite[] = [];
         let animationFrameId: number;
         let time = 0;
-
-        const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            seed = 12345; // Reset seed on resize so galaxy looks consistent
-            initSimulation();
-        };
 
         const randomGauss = () => {
             let u = 0, v = 0;
@@ -91,75 +78,84 @@ export default function StarBackground() {
             return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
         };
 
-        const initSimulation = () => {
+        const renderBackgroundOnce = () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            bgCanvas.width = width;
+            bgCanvas.height = height;
+            seed = 12345; // Consistent galaxy
             stars = [];
-            clouds = [];
-            dustLanes = [];
-            comets = [];
-            satellites = [];
 
-            const cx = canvas.width / 2;
-            const cy = canvas.height / 2;
-            const diagMax = Math.max(canvas.width, canvas.height) * 1.5;
+            const cx = width / 2;
+            const cy = height / 2;
+            const diagMax = Math.max(width, height) * 1.5;
+            const GALAXY_WIDTH = Math.max(width, height) * 0.4;
 
-            // 1. Generate Galactic Glowing Clouds (The Milky Way Band)
-            const CLOUD_COUNT = 150;
-            for (let i = 0; i < CLOUD_COUNT; i++) {
-                // Distribute heavily along the diagonal band
+            // 1. Deep Space
+            const bgGradient = bgCtx.createLinearGradient(0, 0, 0, height);
+            bgGradient.addColorStop(0, "#01040a");
+            bgGradient.addColorStop(1, "#030a16");
+            bgCtx.fillStyle = bgGradient;
+            bgCtx.fillRect(0, 0, width, height);
+
+            // 2. Draw Galactic Clouds (Additive)
+            bgCtx.globalCompositeOperation = "screen";
+            for (let i = 0; i < 150; i++) {
                 const lengthAlongBand = (seededRandom() - 0.5) * diagMax;
                 const distFromCenter = randomGauss() * (GALAXY_WIDTH / 3);
-
                 const x = cx + Math.cos(GALAXY_BAND_ANGLE) * lengthAlongBand - Math.sin(GALAXY_BAND_ANGLE) * distFromCenter;
                 const y = cy + Math.sin(GALAXY_BAND_ANGLE) * lengthAlongBand + Math.cos(GALAXY_BAND_ANGLE) * distFromCenter;
 
-                // Color palette: Warm core (brown/orange/pink) + Outer cool (blue/purple)
                 const isCore = Math.abs(distFromCenter) < GALAXY_WIDTH / 4;
                 let r, g, b;
-
                 if (isCore) {
-                    // Core: Warm, bright
-                    r = Math.floor(seededRandom() * 50 + 200); // 200-250 (orange/red/white)
-                    g = Math.floor(seededRandom() * 50 + 150); // 150-200
-                    b = Math.floor(seededRandom() * 50 + 100); // 100-150
+                    r = Math.floor(seededRandom() * 50 + 200);
+                    g = Math.floor(seededRandom() * 50 + 150);
+                    b = Math.floor(seededRandom() * 50 + 100);
                 } else {
-                    // Edges: Cool, deep
-                    r = Math.floor(seededRandom() * 50 + 40);   // 40-90 (purple/blue)
-                    g = Math.floor(seededRandom() * 40 + 30);  // 30-70
-                    b = Math.floor(seededRandom() * 80 + 100); // 100-180
+                    r = Math.floor(seededRandom() * 50 + 40);
+                    g = Math.floor(seededRandom() * 40 + 30);
+                    b = Math.floor(seededRandom() * 80 + 100);
                 }
 
-                clouds.push({
-                    x, y,
-                    radius: seededRandom() * 200 + 150, // Large soft clouds
-                    r, g, b,
-                    opacity: seededRandom() * 0.03 + 0.01 // Very faint, overlapping builds intensity
-                });
+                const radius = seededRandom() * 200 + 150;
+                const opacity = seededRandom() * 0.03 + 0.01;
+
+                const grad = bgCtx.createRadialGradient(x, y, 0, x, y, radius);
+                grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${opacity})`);
+                grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+                bgCtx.fillStyle = grad;
+                bgCtx.beginPath();
+                bgCtx.arc(x, y, radius, 0, Math.PI * 2);
+                bgCtx.fill();
             }
 
-            // 2. Generate Dark Dust Lanes (Occluding clouds)
-            const DUST_COUNT = 80;
-            for (let i = 0; i < DUST_COUNT; i++) {
+            // 3. Draw Dark Dust Lanes (Normal)
+            bgCtx.globalCompositeOperation = "source-over";
+            for (let i = 0; i < 80; i++) {
                 const lengthAlongBand = (seededRandom() - 0.5) * diagMax;
-                // Dust is tightly clustered near the exact center line
                 const distFromCenter = randomGauss() * (GALAXY_WIDTH / 8);
-
                 const x = cx + Math.cos(GALAXY_BAND_ANGLE) * lengthAlongBand - Math.sin(GALAXY_BAND_ANGLE) * distFromCenter;
                 const y = cy + Math.sin(GALAXY_BAND_ANGLE) * lengthAlongBand + Math.cos(GALAXY_BAND_ANGLE) * distFromCenter;
 
-                dustLanes.push({
-                    x, y,
-                    radius: seededRandom() * 150 + 50,
-                    r: 2, g: 5, b: 10, // Very dark, near black/deep blue space color
-                    opacity: seededRandom() * 0.2 + 0.1
-                });
+                const radius = seededRandom() * 150 + 50;
+                const opacity = seededRandom() * 0.2 + 0.1;
+
+                const grad = bgCtx.createRadialGradient(x, y, 0, x, y, radius);
+                grad.addColorStop(0, `rgba(2, 5, 10, ${opacity})`);
+                grad.addColorStop(1, `rgba(2, 5, 10, 0)`);
+                bgCtx.fillStyle = grad;
+                bgCtx.beginPath();
+                bgCtx.arc(x, y, radius, 0, Math.PI * 2);
+                bgCtx.fill();
             }
 
-            // 3. Generate Stars
+            // 4. Generate & Draw Stars
+            bgCtx.globalCompositeOperation = "screen";
             for (let i = 0; i < STAR_COUNT; i++) {
                 let x, y;
                 let isBand = false;
 
-                // 60% of stars cluster tightly in the Milky Way band
                 if (seededRandom() < 0.6) {
                     const lengthAlongBand = (seededRandom() - 0.5) * diagMax;
                     const distFromCenter = randomGauss() * (GALAXY_WIDTH / 2);
@@ -167,229 +163,197 @@ export default function StarBackground() {
                     y = cy + Math.sin(GALAXY_BAND_ANGLE) * lengthAlongBand + Math.cos(GALAXY_BAND_ANGLE) * distFromCenter;
                     isBand = true;
                 } else {
-                    // 40% uniform background stars
-                    x = seededRandom() * canvas.width;
-                    y = seededRandom() * canvas.height;
+                    x = seededRandom() * width;
+                    y = seededRandom() * height;
                 }
 
-                // Size bias: lots of tiny faint stars, rare bright ones
                 const sizeRand = seededRandom();
                 let radius = 0.4;
                 if (sizeRand > 0.8) radius = seededRandom() * 0.5 + 0.4;
                 if (sizeRand > 0.98) radius = seededRandom() * 0.8 + 0.7;
 
-                // Color bias: Warm in the band, varied outside
                 let color = "rgba(255, 255, 255, ";
                 const colorRand = seededRandom();
                 if (isBand && colorRand > 0.5) {
-                    color = "rgba(255, 220, 180, "; // Warm/yellow
+                    color = "rgba(255, 220, 180, ";
                 } else if (!isBand && colorRand > 0.8) {
-                    color = "rgba(180, 220, 255, "; // Blue
+                    color = "rgba(180, 220, 255, ";
                 }
 
-                const baseAlpha = seededRandom() > 0.7
-                    ? seededRandom() * 0.5 + 0.3 // bright
-                    : seededRandom() * 0.3 + 0.1; // faint
+                const alpha = seededRandom() > 0.7
+                    ? seededRandom() * 0.5 + 0.3
+                    : seededRandom() * 0.3 + 0.1;
 
-                stars.push({
-                    x, y, radius, alpha: baseAlpha, baseAlpha, color,
-                    twinkleSpeed: seededRandom() * 0.005 + 0.001,
-                    twinkleDir: seededRandom() > 0.5 ? 1 : -1,
-                });
+                // Save star data for comets to pick from
+                stars.push({ x, y, radius, color, alpha });
+
+                // Draw to screen
+                bgCtx.beginPath();
+                bgCtx.arc(x, y, radius, 0, Math.PI * 2);
+                bgCtx.fillStyle = `${color}${alpha})`;
+                if (radius > 0.8) {
+                    bgCtx.shadowBlur = Math.random() * 4 + 2;
+                    bgCtx.shadowColor = `${color}${alpha})`;
+                } else {
+                    bgCtx.shadowBlur = 0;
+                }
+                bgCtx.fill();
             }
+            bgCtx.shadowBlur = 0;
         };
 
-        const drawSimulation = () => {
-            // 1. Deep Space Background
-            const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            bgGradient.addColorStop(0, "#01040a"); // Incredibly dark blue/black
-            bgGradient.addColorStop(1, "#030a16");
-            ctx.fillStyle = bgGradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const renderForegroundAnimation = () => {
+            fgCtx.clearRect(0, 0, fgCanvas.width, fgCanvas.height);
+            time++;
 
-            // 2. Draw Galactic Clouds (Additive)
-            ctx.globalCompositeOperation = "screen"; // Additive blending for glows
-            clouds.forEach((n) => {
-                const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius);
-                grad.addColorStop(0, `rgba(${n.r}, ${n.g}, ${n.b}, ${n.opacity})`);
-                grad.addColorStop(1, `rgba(${n.r}, ${n.g}, ${n.b}, 0)`);
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
-                ctx.fill();
+            // Handle Comets
+            // Increased comet frequency. Spawns directly from an existing star.
+            if (stars.length > 0 && Math.random() < 0.03) { // 3% chance per frame to spawn a comet charging
+                const randomStar = stars[Math.floor(Math.random() * stars.length)];
 
-                if (USE_ANIMATION) { // Slow majestic drift
-                    n.x -= Math.cos(GALAXY_BAND_ANGLE) * 0.05;
-                    n.y -= Math.sin(GALAXY_BAND_ANGLE) * 0.05;
-                }
-            });
+                comets.push({
+                    x: randomStar.x,
+                    y: randomStar.y,
+                    originX: randomStar.x,
+                    originY: randomStar.y,
+                    length: Math.random() * 100 + 50,
+                    speed: Math.random() * 8 + 6,
+                    // Angle radiating somewhat towards bottom/left or top/right 
+                    angle: Math.PI / 4 + (Math.random() * 1.5 - 0.75),
+                    opacity: 1,
+                    thickness: Math.random() * 1.5 + 1.5,
+                    active: true,
+                    state: "charging",
+                    chargeTimer: 0,
+                    maxChargeTime: Math.random() * 20 + 10 // 10-30 frames of brightening
+                });
+            }
 
-            // 3. Draw Dark Dust Lanes (Subtractive/Normal)
-            ctx.globalCompositeOperation = "source-over"; // Normal blending to occlude light
-            dustLanes.forEach((d) => {
-                const grad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.radius);
-                grad.addColorStop(0, `rgba(${d.r}, ${d.g}, ${d.b}, ${d.opacity})`);
-                grad.addColorStop(1, `rgba(${d.r}, ${d.g}, ${d.b}, 0)`);
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
-                ctx.fill();
+            comets.forEach((comet) => {
+                if (!comet.active) return;
 
-                if (USE_ANIMATION) {
-                    d.x -= Math.cos(GALAXY_BAND_ANGLE) * 0.05;
-                    d.y -= Math.sin(GALAXY_BAND_ANGLE) * 0.05;
-                }
-            });
+                if (comet.state === "charging") {
+                    comet.chargeTimer++;
+                    const progress = comet.chargeTimer / comet.maxChargeTime;
 
-            // 4. Draw Stars
-            ctx.globalCompositeOperation = "screen";
-            stars.forEach((star) => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `${star.color}${star.alpha})`;
+                    // Draw a brightening glowing star
+                    fgCtx.beginPath();
+                    fgCtx.arc(comet.originX, comet.originY, 1.5 + (progress * 2), 0, Math.PI * 2);
+                    fgCtx.fillStyle = `rgba(180, 230, 255, ${progress})`;
+                    fgCtx.shadowBlur = progress * 15;
+                    fgCtx.shadowColor = "rgba(100, 200, 255, 1)";
+                    fgCtx.fill();
+                    fgCtx.shadowBlur = 0;
 
-                if (star.radius > 0.8) {
-                    ctx.shadowBlur = Math.random() * 4 + 2; // subtle shimmer
-                    ctx.shadowColor = `${star.color}${star.alpha})`;
-                } else {
-                    ctx.shadowBlur = 0;
-                }
-                ctx.fill();
-
-                if (USE_ANIMATION) {
-                    // Twinkle
-                    star.alpha += star.twinkleSpeed * star.twinkleDir;
-                    if (star.alpha <= star.baseAlpha * 0.2) {
-                        star.twinkleDir = 1;
-                        star.alpha = star.baseAlpha * 0.2;
-                    } else if (star.alpha >= Math.min(star.baseAlpha * 1.5, 1)) {
-                        star.twinkleDir = -1;
-                        star.alpha = Math.min(star.baseAlpha * 1.5, 1);
+                    if (comet.chargeTimer >= comet.maxChargeTime) {
+                        comet.state = "shooting";
                     }
+                } else {
+                    // Shooting state
+                    const tailEndX = comet.x - Math.cos(comet.angle) * comet.length;
+                    const tailEndY = comet.y - Math.sin(comet.angle) * comet.length;
 
-                    // Drift along the galaxy band
-                    star.x -= Math.cos(GALAXY_BAND_ANGLE) * 0.05;
-                    star.y -= Math.sin(GALAXY_BAND_ANGLE) * 0.05;
-                }
-            });
-            ctx.shadowBlur = 0;
-
-            // 5. Draw Dynamic Entities (Comets / Satellites)
-            ctx.globalCompositeOperation = "source-over";
-            if (USE_ANIMATION) {
-                time++;
-
-                // Comets
-                if (Math.random() < 0.0005) {
-                    comets.push({
-                        x: Math.random() * canvas.width * 1.5,
-                        y: -50,
-                        length: Math.random() * 200 + 100,
-                        speed: Math.random() * 10 + 12,
-                        angle: Math.PI / 3 + (Math.random() * 0.2 - 0.1),
-                        opacity: Math.random() * 0.5 + 0.5,
-                        thickness: Math.random() * 2 + 1,
-                        active: true,
-                    });
-                }
-
-                // Satellites
-                if (Math.random() < 0.001 && satellites.length < 2) {
-                    const isLeftToRight = Math.random() > 0.5;
-                    satellites.push({
-                        x: isLeftToRight ? -10 : canvas.width + 10,
-                        y: Math.random() * (canvas.height * 0.8),
-                        speed: Math.random() * 0.4 + 0.1, // Very slow, realistic satellite speed
-                        angle: isLeftToRight ? (0 + Math.random() * 0.1) : (Math.PI - Math.random() * 0.1),
-                        size: Math.random() * 0.6 + 0.4,
-                        active: true,
-                        blinkTimer: 0,
-                        blinkState: true,
-                    });
-                }
-
-                // Render Comets
-                comets.forEach((comet) => {
-                    if (!comet.active) return;
-                    const endX = comet.x - Math.cos(comet.angle) * comet.length;
-                    const endY = comet.y - Math.sin(comet.angle) * comet.length;
-
-                    const grad = ctx.createLinearGradient(comet.x, comet.y, endX, endY);
+                    // Draw the comet tail
+                    const grad = fgCtx.createLinearGradient(comet.x, comet.y, tailEndX, tailEndY);
                     grad.addColorStop(0, `rgba(255, 255, 255, ${comet.opacity})`);
-                    grad.addColorStop(0.1, `rgba(150, 220, 255, ${comet.opacity * 0.6})`);
+                    grad.addColorStop(0.1, `rgba(150, 220, 255, ${comet.opacity * 0.8})`);
                     grad.addColorStop(1, "rgba(0, 170, 255, 0)");
 
-                    ctx.beginPath();
-                    ctx.moveTo(comet.x, comet.y);
-                    ctx.lineTo(endX, endY);
-                    ctx.strokeStyle = grad;
-                    ctx.lineWidth = comet.thickness;
-                    ctx.lineCap = "round";
-                    ctx.stroke();
+                    fgCtx.beginPath();
+                    fgCtx.moveTo(comet.x, comet.y);
+                    fgCtx.lineTo(tailEndX, tailEndY);
+                    fgCtx.strokeStyle = grad;
+                    fgCtx.lineWidth = comet.thickness;
+                    fgCtx.lineCap = "round";
+                    fgCtx.globalCompositeOperation = "screen";
+                    fgCtx.stroke();
+                    fgCtx.globalCompositeOperation = "source-over";
 
-                    comet.x -= Math.cos(comet.angle) * comet.speed;
+                    // Update position
+                    comet.x += Math.cos(comet.angle) * comet.speed;
                     comet.y += Math.sin(comet.angle) * comet.speed;
 
-                    // Fade tail over time slightly
-                    comet.opacity *= 0.99;
+                    // Fade out slightly fast after it leaves the origin
+                    comet.opacity *= 0.95;
 
-                    if (comet.x < -comet.length || comet.y > canvas.height + comet.length || comet.opacity < 0.05) {
+                    if (comet.opacity < 0.05 ||
+                        comet.x < -200 || comet.x > fgCanvas.width + 200 ||
+                        comet.y < -200 || comet.y > fgCanvas.height + 200) {
                         comet.active = false;
                     }
+                }
+            });
+            comets = comets.filter((c) => c.active);
+
+            // Limited satellites passing over
+            if (Math.random() < 0.001 && satellites.length < 2) {
+                const isLeftToRight = Math.random() > 0.5;
+                satellites.push({
+                    x: isLeftToRight ? -10 : fgCanvas.width + 10,
+                    y: Math.random() * (fgCanvas.height * 0.8),
+                    speed: Math.random() * 0.4 + 0.1,
+                    angle: isLeftToRight ? (0 + Math.random() * 0.1) : (Math.PI - Math.random() * 0.1),
+                    size: Math.random() * 0.6 + 0.4,
+                    active: true,
+                    blinkTimer: 0,
+                    blinkState: true,
                 });
-                comets = comets.filter((c) => c.active);
-
-                // Render Satellites
-                satellites.forEach((sat) => {
-                    if (!sat.active) return;
-
-                    sat.x += Math.cos(sat.angle) * sat.speed;
-                    sat.y += Math.sin(sat.angle) * sat.speed;
-
-                    sat.blinkTimer++;
-                    if (sat.blinkTimer > 60) {
-                        sat.blinkTimer = 0;
-                        sat.blinkState = !sat.blinkState;
-                    }
-
-                    ctx.beginPath();
-                    ctx.arc(sat.x, sat.y, sat.size, 0, Math.PI * 2);
-                    ctx.fillStyle = "rgba(200, 200, 200, 0.6)";
-                    ctx.fill();
-
-                    if (sat.blinkState) {
-                        ctx.beginPath();
-                        ctx.arc(sat.x, sat.y, sat.size * 2, 0, Math.PI * 2);
-                        ctx.fillStyle = "rgba(255, 30, 30, 0.8)"; // Red strobe typical of LEO sats/planes
-                        ctx.fill();
-                    }
-
-                    if (sat.x < -50 || sat.x > canvas.width + 50 || sat.y < -50 || sat.y > canvas.height + 50) {
-                        sat.active = false;
-                    }
-                });
-                satellites = satellites.filter((s) => s.active);
             }
+
+            satellites.forEach((sat) => {
+                if (!sat.active) return;
+                sat.x += Math.cos(sat.angle) * sat.speed;
+                sat.y += Math.sin(sat.angle) * sat.speed;
+
+                sat.blinkTimer++;
+                if (sat.blinkTimer > 60) {
+                    sat.blinkTimer = 0;
+                    sat.blinkState = !sat.blinkState;
+                }
+
+                // Base grey body
+                fgCtx.beginPath();
+                fgCtx.arc(sat.x, sat.y, sat.size, 0, Math.PI * 2);
+                fgCtx.fillStyle = "rgba(200, 200, 200, 0.6)";
+                fgCtx.fill();
+
+                if (sat.blinkState) {
+                    fgCtx.beginPath();
+                    fgCtx.arc(sat.x, sat.y, sat.size * 2, 0, Math.PI * 2);
+                    fgCtx.fillStyle = "rgba(255, 30, 30, 0.8)";
+                    fgCtx.fill();
+                }
+
+                if (sat.x < -50 || sat.x > fgCanvas.width + 50 || sat.y < -50 || sat.y > fgCanvas.height + 50) {
+                    sat.active = false;
+                }
+            });
+            satellites = satellites.filter(s => s.active);
+
+            animationFrameId = requestAnimationFrame(renderForegroundAnimation);
         };
 
-        const renderLoop = () => {
-            drawSimulation();
-            if (USE_ANIMATION) {
-                animationFrameId = requestAnimationFrame(renderLoop);
-            }
+        const setupCanvases = () => {
+            // bg canvas is static
+            renderBackgroundOnce();
+
+            // fg canvas runs the animation loop
+            fgCanvas.width = window.innerWidth;
+            fgCanvas.height = window.innerHeight;
+            comets = [];
+            satellites = [];
         };
 
-        resizeCanvas();
+        setupCanvases();
+
         if (USE_ANIMATION) {
-            renderLoop();
-        } else {
-            drawSimulation();
+            renderForegroundAnimation();
         }
 
         let resizeTimeout: NodeJS.Timeout;
         const handleResize = () => {
             clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(resizeCanvas, 400); // Wait longer so resize doesn't trigger heavy redraw constantly
+            resizeTimeout = setTimeout(setupCanvases, 400);
         };
         window.addEventListener("resize", handleResize);
 
@@ -401,10 +365,19 @@ export default function StarBackground() {
     }, []);
 
     return (
-        <canvas
-            ref={canvasRef}
-            className="fixed inset-0 pointer-events-none z-[-2]"
-            aria-hidden="true"
-        />
+        <>
+            {/* Background Canvas: Renders exactly once, guaranteed 0% CPU impact during scroll */}
+            <canvas
+                ref={bgCanvasRef}
+                className="fixed inset-0 pointer-events-none z-[-3]"
+                aria-hidden="true"
+            />
+            {/* Foreground Canvas: Transparent, absolutely separated layer, hardware accelerated for only ~5-20 small moving objects */}
+            <canvas
+                ref={fgCanvasRef}
+                className="fixed inset-0 pointer-events-none z-[-2]"
+                aria-hidden="true"
+            />
+        </>
     );
 }
