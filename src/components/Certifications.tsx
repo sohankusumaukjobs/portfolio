@@ -22,7 +22,7 @@ export default function Certifications() {
                     <h2 className="text-4xl font-bold text-white mb-4">
                         <span className="gradient-text">Credentials</span>
                     </h2>
-                    <p className="text-[#9fb3c9] max-w-2xl mx-auto">
+                    <p className="text-center text-[#9fb3c9] max-w-2xl mx-auto">
                         Certifications & Professional Development
                     </p>
                     <div className="section-underline mx-auto" />

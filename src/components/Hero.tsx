@@ -237,7 +237,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-5xl md:text-6xl lg:text-[4.5rem] font-black leading-[1.05] mb-5 tracking-tight flex flex-col"
+                        className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-black leading-[1.05] mb-5 tracking-tight flex flex-col"
                     >
                         <span className="text-white">
                             Crafting <span className="text-[#00aaff]">Digital</span>
@@ -300,11 +300,11 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-wrap gap-4"
+                        className="flex flex-col sm:flex-row flex-wrap gap-4 w-full sm:w-auto"
                     >
                         <a
                             href="#contact"
-                            className="flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02]"
+                            className="flex items-center justify-center sm:justify-start gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto text-center"
                             style={{
                                 background: "linear-gradient(135deg, #0077ff, #00aaff)",
                                 boxShadow: "0 8px 25px rgba(0, 170, 255, 0.4)"
@@ -316,7 +316,7 @@ export default function Hero() {
                             href="/resume.pdf"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white tracking-wide transition-all duration-300 border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 shadow-lg"
+                            className="flex items-center justify-center sm:justify-start gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white tracking-wide transition-all duration-300 border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 shadow-lg w-full sm:w-auto text-center"
                         >
                             GET RESUME <Download size={18} strokeWidth={2.5} />
                         </a>

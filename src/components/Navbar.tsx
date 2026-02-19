@@ -76,7 +76,7 @@ export default function Navbar() {
                             alt="Sohan Kusuma Logo"
                             width={360}
                             height={160}
-                            className="object-contain"
+                            className="w-[140px] sm:w-[180px] md:w-[260px] lg:w-[360px] h-auto object-contain"
                             style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,0.6))" }}
                         />
                     </button>
@@ -85,7 +85,7 @@ export default function Navbar() {
                     <div className="hidden md:flex ml-auto items-center gap-12 mr-2">
                         {navLinks.map((link) => (
                             <button
-                                key={link.href}
+                                key={link.label}
                                 onClick={() => handleClick(link.href)}
                                 className={`text-sm font-semibold transition-colors duration-300 tracking-wide ${activeSection === link.href ? "text-white" : "text-[#9fb3c9] hover:text-white"}`}
                             >
@@ -117,7 +117,7 @@ export default function Navbar() {
                     >
                         {navLinks.map((link, i) => (
                             <motion.button
-                                key={link.href}
+                                key={link.label}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.08 }}

@@ -35,9 +35,7 @@ export default function Projects() {
                             key={project.title}
                             initial={{ opacity: 0, y: 30 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 0.5, delay: 0.1 + i * 0.12 }}
-                            whileHover={{ y: -6, scale: 1.01 }}
-                            className="group glass p-6 md:p-7"
+                            className="group glass p-6 md:p-7 h-full flex flex-col"
                         >
                             {/* Top gradient line */}
                             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#00aaff] to-[#38c1ff] opacity-60 group-hover:opacity-100 transition-opacity z-10" />
@@ -69,7 +67,7 @@ export default function Projects() {
                                 {project.description}
                             </p>
 
-                            <div className="flex flex-wrap gap-2 relative z-10">
+                            <div className="flex flex-wrap gap-2 relative z-10 mt-auto">
                                 {project.tags.map((tag) => (
                                     <span
                                         key={tag}

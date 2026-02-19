@@ -178,8 +178,8 @@ export const education: Education[] = [
 
 export const navLinks = [
     { label: "About", href: "#about" },
-    { label: "Experience", href: "#about" },
     { label: "Skills", href: "#stack" },
     { label: "Projects", href: "#projects" },
+    { label: "Credentials", href: "#certifications" },
     { label: "Contact", href: "#contact" },
 ];

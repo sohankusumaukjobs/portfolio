@@ -61,7 +61,7 @@ export default function About() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="glass p-8 md:p-10"
+                        className="glass p-6 sm:p-8 md:p-10"
                     >
                         <p className="text-[#e6f0ff] leading-relaxed text-base md:text-lg">
                             {professionalSummary}
@@ -90,7 +90,7 @@ export default function About() {
                                     {/* Timeline dot */}
                                     <div className="absolute left-[10px] md:left-[18px] top-7 w-3 h-3 rounded-full bg-[#00aaff] border-2 border-[#031022] shadow-[0_0_12px_rgba(0,170,255,0.6)]" />
 
-                                    <div className="glass p-6 md:p-8">
+                                    <div className="glass p-5 sm:p-6 md:p-8">
                                         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 mb-4">
                                             <h3 className="text-lg font-semibold text-white">
                                                 {exp.title}

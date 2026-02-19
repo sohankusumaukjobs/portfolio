@@ -102,6 +102,7 @@ export default function TechStack() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.5, delay: 0.1 + ci * 0.1 }}
+                            className="glass p-6 sm:p-8 rounded-3xl"
                         >
                             <h3 className="text-sm font-medium text-[#00aaff] mb-4 uppercase tracking-wider font-[var(--font-jetbrains)]">
                                 {category.category}

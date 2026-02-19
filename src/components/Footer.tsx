@@ -43,33 +43,19 @@ export default function Footer() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label={label}
-                                    className="glass"
-                                    style={{
-                                        padding: "10px",
-                                        borderRadius: "50%",
-                                        color: "#9fb3c9",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center"
-                                    }}
+                                    className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 transition-all duration-300 shadow-lg"
                                     onMouseEnter={(e) => {
-                                        e.currentTarget.style.color = "#00aaff";
                                         e.currentTarget.style.transform = "translateY(-4px)";
-                                        e.currentTarget.style.boxShadow = "var(--shadow-1), 0 10px 20px rgba(0,160,255,0.1)";
+                                        e.currentTarget.style.boxShadow = "var(--shadow-1), 0 10px 20px rgba(0,160,255,0.15)";
+                                        e.currentTarget.style.color = "#00aaff";
                                     }}
                                     onMouseLeave={(e) => {
-                                        e.currentTarget.style.color = "#9fb3c9";
                                         e.currentTarget.style.transform = "translateY(0)";
-                                        e.currentTarget.style.boxShadow = "var(--shadow-1), 0 2px 8px rgba(0,160,255,0.03)";
-                                    }}
-                                    onMouseDown={(e) => {
-                                        e.currentTarget.style.transform = "translateY(0) scale(0.95)";
-                                    }}
-                                    onMouseUp={(e) => {
-                                        e.currentTarget.style.transform = "translateY(-4px) scale(1)";
+                                        e.currentTarget.style.boxShadow = "var(--shadow-1), 0 2px 8px rgba(0,0,0,0.5)";
+                                        e.currentTarget.style.color = "#9fb3c9";
                                     }}
                                 >
-                                    <Icon size={16} style={{ position: "relative", zIndex: 1 }} />
+                                    <Icon size={20} className="text-current" strokeWidth={2.5} />
                                 </a>
                             ))}
                         </div>

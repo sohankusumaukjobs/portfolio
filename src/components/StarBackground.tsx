@@ -209,8 +209,8 @@ export default function StarBackground() {
             time++;
 
             // Handle Comets
-            // Gap of ~2 seconds (120 frames at 60fps)
-            if (stars.length > 0 && time - lastCometSpawnTime > 120 && Math.random() < 0.05) {
+            // Gap of ~5-8 seconds (300 frames at 60fps)
+            if (stars.length > 0 && time - lastCometSpawnTime > 300 && Math.random() < 0.02) {
                 lastCometSpawnTime = time;
                 const randomStar = stars[Math.floor(Math.random() * stars.length)];
 
@@ -220,7 +220,7 @@ export default function StarBackground() {
                     originX: randomStar.x,
                     originY: randomStar.y,
                     length: Math.random() * 150 + 80,
-                    speed: Math.random() * 1.5 + 0.5, // VERY SLOW: 0.5 to 2.0 for majestic smooth glide
+                    speed: Math.random() * 1.0 + 0.3, // VERY SLOW: 0.3 to 1.3 for majestic smooth glide
                     // Angle radiating somewhat towards bottom/left or top/right 
                     angle: Math.PI / 4 + (Math.random() * 1.5 - 0.75),
                     opacity: 1,
@@ -288,8 +288,8 @@ export default function StarBackground() {
             });
             comets = comets.filter((c) => c.active);
 
-            // Frequent 3 spaceships passing every 5 seconds (~300 frames)
-            if (time - lastSatSpawnTime > 300) {
+            // Rare 3 spaceships passing every 10-15 seconds (~600 frames)
+            if (time - lastSatSpawnTime > 600 && Math.random() < 0.05) {
                 lastSatSpawnTime = time;
                 const isLeftToRight = Math.random() > 0.5;
                 const baseY = Math.random() * (fgCanvas.height * 0.8);
