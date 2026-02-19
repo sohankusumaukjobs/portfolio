@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Github, Linkedin, Mail, Download, ArrowDown } from "lucide-react";
+import { Github, Linkedin, Mail, Download, ArrowDown, User } from "lucide-react";
 import { personalInfo, codeSnippet } from "@/data/resume";
 
 /* ─── syntax-highlighting helpers ──────────────────────── */
@@ -219,64 +219,55 @@ export default function Hero() {
             <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row gap-12 lg:gap-20 items-center relative z-10">
                 {/* Left — Text */}
                 <div className="w-full lg:w-1/2 flex flex-col justify-center" style={{ paddingRight: "clamp(0px, 2vw, 40px)" }}>
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4 }}
-                        className="text-[#9fb3c9] text-lg md:text-xl mb-3 font-light tracking-wide"
+
+                    {/* Welcome Pill */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="inline-flex items-center px-4 py-1.5 rounded-full border border-[#00aaff]/30 bg-[#00aaff]/10 self-start mb-6"
                     >
-                        {personalInfo.tagline}
-                    </motion.p>
+                        <span className="text-[#00aaff] text-xs font-bold tracking-[0.2em] uppercase">
+                            Welcome To My Universe
+                        </span>
+                    </motion.div>
+
+                    {/* Headings */}
                     <motion.h1
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-7xl md:text-[6.5rem] font-black leading-[0.95] mb-8 tracking-tight"
+                        className="text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[1.05] mb-6 tracking-tight flex flex-col"
                     >
-                        <span className="gradient-text">{personalInfo.taglineHighlight}</span>
+                        <span className="text-white">
+                            Crafting <span className="text-[#00aaff]">Digital</span>
+                        </span>
+                        <span className="bg-gradient-to-r from-[#0055ff] to-[#00aaff] bg-clip-text text-transparent opacity-90 drop-shadow-[0_0_15px_rgba(0,170,255,0.2)]">
+                            Masterpieces
+                        </span>
                     </motion.h1>
-                    <motion.p
+
+                    {/* Subtext */}
+                    <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-[#9fb3c9] text-base md:text-lg max-w-xl leading-relaxed mb-10"
+                        className="text-[#9fb3c9] text-xl md:text-2xl leading-relaxed mb-10 max-w-xl"
                     >
-                        {personalInfo.subtitle}
-                    </motion.p>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.995 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                        className="flex flex-wrap gap-4 mb-10"
-                    >
-                        <a
-                            href="#projects"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
-                            }}
-                            className="title-pill title-pill--active"
-                            style={{ padding: "0.8rem 1.4rem", fontSize: "0.95rem", fontWeight: 500 }}
-                        >
-                            <ArrowDown size={16} /> View My Work
-                        </a>
-                        <a
-                            href="/resume.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="title-pill"
-                            style={{ padding: "0.8rem 1.4rem", fontSize: "0.95rem", fontWeight: 500 }}
-                        >
-                            <Download size={16} /> Get Resume
-                        </a>
+                        <p className="mb-1">
+                            I'm <span className="text-white font-bold">Sohan Kusuma</span>, a professional <span className="text-[#00aaff] font-bold">Innovator.</span>
+                        </p>
+                        <p>
+                            dedicated to building high-performance, user-centric web applications.
+                        </p>
                     </motion.div>
 
+                    {/* Social Icons (Rounded Squares) */}
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex items-center gap-3"
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        className="flex items-center gap-4 mb-10"
                     >
                         {[
                             { icon: Github, href: personalInfo.github, label: "GitHub" },
@@ -289,35 +280,46 @@ export default function Hero() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label={label}
-                                className="glass"
-                                style={{
-                                    padding: "10px",
-                                    borderRadius: "50%",
-                                    color: "#9fb3c9",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center"
-                                }}
+                                className="flex items-center justify-center w-12 h-12 rounded-2xl border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 transition-all duration-300 shadow-lg"
                                 onMouseEnter={(e) => {
-                                    e.currentTarget.style.color = "#00aaff";
                                     e.currentTarget.style.transform = "translateY(-4px)";
-                                    e.currentTarget.style.boxShadow = "var(--shadow-1), 0 10px 20px rgba(0,160,255,0.1)";
+                                    e.currentTarget.style.boxShadow = "var(--shadow-1), 0 10px 20px rgba(0,160,255,0.15)";
                                 }}
                                 onMouseLeave={(e) => {
-                                    e.currentTarget.style.color = "#9fb3c9";
                                     e.currentTarget.style.transform = "translateY(0)";
-                                    e.currentTarget.style.boxShadow = "var(--shadow-1), 0 2px 8px rgba(0,160,255,0.03)";
-                                }}
-                                onMouseDown={(e) => {
-                                    e.currentTarget.style.transform = "translateY(0) scale(0.95)";
-                                }}
-                                onMouseUp={(e) => {
-                                    e.currentTarget.style.transform = "translateY(-4px) scale(1)";
+                                    e.currentTarget.style.boxShadow = "var(--shadow-1), 0 2px 8px rgba(0,0,0,0.5)";
                                 }}
                             >
-                                <Icon size={18} style={{ position: "relative", zIndex: 1 }} />
+                                <Icon size={22} className="text-white" strokeWidth={2.5} />
                             </a>
                         ))}
+                    </motion.div>
+
+                    {/* Action Buttons */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                        className="flex flex-wrap gap-5"
+                    >
+                        <a
+                            href="#contact"
+                            className="flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02]"
+                            style={{
+                                background: "linear-gradient(135deg, #0077ff, #00aaff)",
+                                boxShadow: "0 8px 25px rgba(0, 170, 255, 0.4)"
+                            }}
+                        >
+                            LET'S COLLABORATE <User size={20} strokeWidth={2.5} />
+                        </a>
+                        <a
+                            href="/resume.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-white tracking-wide transition-all duration-300 border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 shadow-lg"
+                        >
+                            GET RESUME <Download size={20} strokeWidth={2.5} />
+                        </a>
                     </motion.div>
                 </div>
 
