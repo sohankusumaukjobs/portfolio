@@ -240,3 +240,43 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ─── Marquee Animations ─────────────────────────────── */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-50% - 1rem));
+  }
+
+  /* -50% of the flex content, which includes two copies and the gap between them */
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(calc(-50% - 1rem));
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 40s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 40s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+.marquee-container:hover .animate-marquee-left,
+.marquee-container:hover .animate-marquee-right {
+  animation-play-state: paused;
+}

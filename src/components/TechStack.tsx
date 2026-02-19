@@ -76,6 +76,16 @@ export default function TechStack() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
+    // Flatten logic for continuous marquees
+    const allTech = techStack.flatMap((c) =>
+        c.items.map((item) => ({ item, category: c.category }))
+    );
+
+    // Split into 3 rows for the marquee
+    const row1 = allTech.slice(0, Math.ceil(allTech.length / 3));
+    const row2 = allTech.slice(Math.ceil(allTech.length / 3), Math.ceil((allTech.length * 2) / 3));
+    const row3 = allTech.slice(Math.ceil((allTech.length * 2) / 3));
+
     return (
         <section id="stack" className="section-padding flex flex-col items-center justify-center w-full">
             <div className="max-w-6xl w-full mx-auto flex flex-col items-center" ref={ref}>
@@ -95,55 +105,48 @@ export default function TechStack() {
                     <div className="section-underline" />
                 </motion.div>
 
-                <div className="space-y-12 w-full">
-                    {techStack.map((category, ci) => (
-                        <motion.div
-                            key={category.category}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={isInView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 0.5, delay: 0.1 + ci * 0.1 }}
-                            className="glass p-6 sm:p-8 rounded-3xl"
-                        >
-                            <h3 className="text-center text-sm font-medium text-[#00aaff] mb-6 uppercase tracking-wider font-[var(--font-jetbrains)] w-full block">
-                                {category.category}
-                            </h3>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                                {category.items.map((item, ii) => {
-                                    const Icon = iconMap[item];
-                                    return (
-                                        <motion.div
-                                            key={item}
-                                            initial={{ opacity: 0, scale: 0.9 }}
-                                            animate={
-                                                isInView
-                                                    ? { opacity: 1, scale: 1 }
-                                                    : {}
-                                            }
-                                            transition={{
-                                                duration: 0.3,
-                                                delay: 0.2 + ii * 0.05,
-                                            }}
-                                            whileHover={{
-                                                scale: 1.05,
-                                                y: -2,
-                                            }}
-                                            className="glass flex flex-col items-center justify-center gap-3 p-5 cursor-default transition-all duration-300 hover:border-[rgba(0,170,255,0.3)] hover:shadow-[0_20px_50px_rgba(0,160,255,0.12)]"
-                                        >
-                                            {Icon && (
-                                                <Icon
-                                                    size={32}
-                                                    className="text-[#00aaff] relative z-10"
-                                                />
-                                            )}
-                                            <span className="text-xs text-[#9fb3c9] text-center relative z-10">
-                                                {item}
-                                            </span>
-                                        </motion.div>
-                                    );
-                                })}
+                <div className="w-full mt-8 overflow-hidden flex flex-col gap-6">
+                    {[row1, row2, row3].map((rowItems, rowIndex) => {
+                        const direction = rowIndex % 2 === 0 ? "left" : "right";
+                        const baseSpeed = 40; // Seconds for a full loop
+                        const speed = rowIndex % 2 === 0 ? baseSpeed : baseSpeed + 8; // slight variance for parallax feel
+
+                        return (
+                            <div key={rowIndex} className="flex overflow-hidden relative w-full marquee-container py-2">
+                                {/* Fade masks for smooth entry/exit */}
+                                <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#031022] to-transparent z-10 pointer-events-none" />
+                                <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#031022] to-transparent z-10 pointer-events-none" />
+
+                                <div
+                                    className={`flex gap-6 px-3 ${direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
+                                        }`}
+                                    style={{ animationDuration: `${speed}s` }}
+                                >
+                                    {[...rowItems, ...rowItems].map((tech, idx) => {
+                                        const Icon = iconMap[tech.item];
+                                        return (
+                                            <div
+                                                key={`${tech.item}-${idx}`}
+                                                className="flex items-center gap-4 bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] px-6 py-4 rounded-2xl min-w-[260px] max-w-[260px] cursor-default transition-colors hover:bg-[rgba(255,255,255,0.04)] hover:border-[rgba(0,170,255,0.3)] hover:shadow-[0_0_20px_rgba(0,170,255,0.1)]"
+                                            >
+                                                <div className="p-3 rounded-xl bg-[rgba(0,170,255,0.08)] border border-[rgba(0,170,255,0.15)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] shrink-0">
+                                                    {Icon && <Icon size={24} className="text-[#00aaff]" />}
+                                                </div>
+                                                <div className="flex flex-col truncate">
+                                                    <span className="text-white font-bold text-[15px] tracking-wide uppercase truncate">
+                                                        {tech.item}
+                                                    </span>
+                                                    <span className="text-[#00aaff] text-[11px] font-[var(--font-jetbrains)] tracking-wider opacity-80 uppercase mt-0.5 truncate">
+                                                        {tech.category}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        </motion.div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </section>
