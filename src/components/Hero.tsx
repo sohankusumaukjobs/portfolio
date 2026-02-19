@@ -225,9 +225,9 @@ export default function Hero() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5 }}
-                        className="inline-flex items-center px-4 py-1.5 rounded-full border border-[#00aaff]/30 bg-[#00aaff]/10 self-start mb-6"
+                        className="inline-flex items-center px-4 py-1.5 rounded-full border border-[#00aaff]/20 bg-[#00aaff]/10 self-start mb-5"
                     >
-                        <span className="text-[#00aaff] text-xs font-bold tracking-[0.2em] uppercase">
+                        <span className="text-[#00aaff] text-[11px] font-bold tracking-[0.2em] uppercase">
                             Welcome To My Universe
                         </span>
                     </motion.div>
@@ -237,7 +237,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[1.05] mb-6 tracking-tight flex flex-col"
+                        className="text-5xl md:text-6xl lg:text-[4.5rem] font-black leading-[1.05] mb-5 tracking-tight flex flex-col"
                     >
                         <span className="text-white">
                             Crafting <span className="text-[#00aaff]">Digital</span>
@@ -252,7 +252,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-[#9fb3c9] text-xl md:text-2xl leading-relaxed mb-10 max-w-xl"
+                        className="text-[#9fb3c9] text-base md:text-lg leading-relaxed mb-8 max-w-xl"
                     >
                         <p className="mb-1">
                             I'm <span className="text-white font-bold">Sohan Kusuma</span>, a professional <span className="text-[#00aaff] font-bold">Innovator.</span>
@@ -267,7 +267,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
-                        className="flex items-center gap-4 mb-10"
+                        className="flex items-center gap-3 mb-8"
                     >
                         {[
                             { icon: Github, href: personalInfo.github, label: "GitHub" },
@@ -280,7 +280,7 @@ export default function Hero() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label={label}
-                                className="flex items-center justify-center w-12 h-12 rounded-2xl border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 transition-all duration-300 shadow-lg"
+                                className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 transition-all duration-300 shadow-lg"
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = "translateY(-4px)";
                                     e.currentTarget.style.boxShadow = "var(--shadow-1), 0 10px 20px rgba(0,160,255,0.15)";
@@ -290,7 +290,7 @@ export default function Hero() {
                                     e.currentTarget.style.boxShadow = "var(--shadow-1), 0 2px 8px rgba(0,0,0,0.5)";
                                 }}
                             >
-                                <Icon size={22} className="text-white" strokeWidth={2.5} />
+                                <Icon size={20} className="text-white" strokeWidth={2.5} />
                             </a>
                         ))}
                     </motion.div>
@@ -300,25 +300,25 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-wrap gap-5"
+                        className="flex flex-wrap gap-4"
                     >
                         <a
                             href="#contact"
-                            className="flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02]"
+                            className="flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02]"
                             style={{
                                 background: "linear-gradient(135deg, #0077ff, #00aaff)",
                                 boxShadow: "0 8px 25px rgba(0, 170, 255, 0.4)"
                             }}
                         >
-                            LET'S COLLABORATE <User size={20} strokeWidth={2.5} />
+                            LET'S COLLABORATE <User size={18} strokeWidth={2.5} />
                         </a>
                         <a
                             href="/resume.pdf"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-white tracking-wide transition-all duration-300 border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 shadow-lg"
+                            className="flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white tracking-wide transition-all duration-300 border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 shadow-lg"
                         >
-                            GET RESUME <Download size={20} strokeWidth={2.5} />
+                            GET RESUME <Download size={18} strokeWidth={2.5} />
                         </a>
                     </motion.div>
                 </div>
