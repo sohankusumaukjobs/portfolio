@@ -329,15 +329,26 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-col sm:flex-row flex-wrap gap-5 w-full sm:w-auto"
+                        className="flex flex-col sm:flex-row w-full sm:w-auto mt-[18px] gap-[12px] sm:gap-[18px]"
                     >
                         <a
                             href="#contact"
-                            className="flex items-center justify-center sm:justify-start gap-4 px-9 py-4 rounded-[22px] text-[15px] font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto text-center"
+                            className="flex items-center justify-center gap-4 text-[15px] font-bold text-white tracking-wide w-full sm:w-auto text-center focus:outline-none focus:ring-[4px] focus:ring-[rgba(0,170,255,0.18)]"
                             style={{
-                                background: "linear-gradient(135deg, rgba(0, 119, 255, 0.9), rgba(0, 170, 255, 0.9))",
-                                boxShadow: "0 8px 30px rgba(0, 170, 255, 0.35)",
-                                border: "1px solid rgba(255, 255, 255, 0.15)"
+                                padding: "14px 22px",
+                                borderRadius: "14px",
+                                background: "linear-gradient(135deg, #008cff, #00aaff)",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                boxShadow: "0 10px 35px rgba(0, 140, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.05)",
+                                transition: "all 0.28s cubic-bezier(.2,.9,.3,1)"
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = "translateY(-3px)";
+                                e.currentTarget.style.boxShadow = "0 18px 45px rgba(0,160,255,0.18), inset 0 1px 0 rgba(255,255,255,0.05)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = "translateY(0)";
+                                e.currentTarget.style.boxShadow = "0 10px 35px rgba(0, 140, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.05)";
                             }}
                         >
                             LET'S COLLABORATE <UserPlus size={22} className="ml-1" strokeWidth={2.5} />
@@ -346,9 +357,24 @@ export default function Hero() {
                             href="/resume.pdf"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center sm:justify-start gap-3 px-9 py-4 rounded-[22px] text-[15px] font-bold text-white tracking-wide transition-all duration-300 hover:bg-white/5 shadow-lg w-full sm:w-auto text-center bg-[#0a1120]"
+                            className="flex items-center justify-center gap-3 text-[15px] font-bold text-white tracking-wide w-full sm:w-auto text-center focus:outline-none focus:ring-[4px] focus:ring-[rgba(0,170,255,0.18)]"
                             style={{
-                                border: "1px solid rgba(255, 255, 255, 0.15)"
+                                padding: "14px 22px",
+                                borderRadius: "14px",
+                                background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015))",
+                                backdropFilter: "blur(14px) saturate(140%)",
+                                WebkitBackdropFilter: "blur(14px) saturate(140%)",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                boxShadow: "0 10px 35px rgba(0, 140, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.05)",
+                                transition: "all 0.28s cubic-bezier(.2,.9,.3,1)"
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = "translateY(-3px)";
+                                e.currentTarget.style.boxShadow = "0 18px 45px rgba(0,160,255,0.18), inset 0 1px 0 rgba(255,255,255,0.05)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = "translateY(0)";
+                                e.currentTarget.style.boxShadow = "0 10px 35px rgba(0, 140, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.05)";
                             }}
                         >
                             GET RESUME <Download size={20} className="ml-1" strokeWidth={2.5} />
