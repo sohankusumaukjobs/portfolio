@@ -57,8 +57,8 @@ export default function Navbar() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-                        ? "bg-black/70 backdrop-blur-md border-b border-white/10"
-                        : "bg-transparent"
+                    ? "bg-[#031022]/70 backdrop-blur-md border-b border-white/[0.04]"
+                    : "bg-transparent"
                     }`}
                 role="navigation"
                 aria-label="Main navigation"
@@ -73,23 +73,14 @@ export default function Navbar() {
                     </button>
 
                     {/* Desktop nav */}
-                    <div className="hidden md:flex items-center gap-8">
+                    <div className="hidden md:flex items-center gap-4">
                         {navLinks.map((link) => (
                             <button
                                 key={link.href}
                                 onClick={() => handleClick(link.href)}
-                                className={`text-sm transition-colors duration-200 relative group ${activeSection === link.href
-                                        ? "text-white"
-                                        : "text-[#6b7280] hover:text-white"
-                                    }`}
+                                className={`title-pill ${activeSection === link.href ? "title-pill--active" : ""}`}
                             >
-                                {link.label}
-                                <span
-                                    className={`absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-[#00d4ff] to-[#7b2ff7] transition-all duration-300 ${activeSection === link.href
-                                            ? "w-full"
-                                            : "w-0 group-hover:w-full"
-                                        }`}
-                                />
+                                <span className="font-medium text-sm">{link.label}</span>
                             </button>
                         ))}
                     </div>
@@ -113,7 +104,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="fixed inset-0 z-40 bg-[#080808]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
+                        className="fixed inset-0 z-40 bg-[#031022]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
                     >
                         {navLinks.map((link, i) => (
                             <motion.button
@@ -122,10 +113,8 @@ export default function Navbar() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.08 }}
                                 onClick={() => handleClick(link.href)}
-                                className={`text-2xl transition-colors ${activeSection === link.href
-                                        ? "text-white"
-                                        : "text-white/60 hover:text-white"
-                                    }`}
+                                className={`title-pill ${activeSection === link.href ? "title-pill--active" : ""}`}
+                                style={{ fontSize: "1.25rem", padding: "1rem 2rem" }}
                             >
                                 {link.label}
                             </motion.button>

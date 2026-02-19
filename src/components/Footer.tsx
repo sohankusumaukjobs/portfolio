@@ -1,6 +1,6 @@
 "use client";
 
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, Phone, ArrowUp } from "lucide-react";
 import { personalInfo, navLinks } from "@/data/resume";
 
 export default function Footer() {
@@ -10,32 +10,74 @@ export default function Footer() {
     };
 
     return (
-        <footer className="border-t border-white/5 py-12 px-6" role="contentinfo">
+        <footer className="border-t border-white/5 pt-16 pb-8 px-6 relative" role="contentinfo">
             <div className="max-w-6xl mx-auto">
-                <div className="grid md:grid-cols-3 gap-8 mb-10">
+                <div className="grid md:grid-cols-3 gap-12 mb-12">
                     {/* Brand */}
                     <div>
-                        <h3 className="text-xl font-bold gradient-text mb-3">
+                        <h3 className="text-2xl font-bold gradient-text mb-4">
                             SK.
                         </h3>
-                        <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs">
+                        <p className="text-[#9fb3c9] text-sm leading-relaxed max-w-xs mb-6">
                             Data Analyst &amp; ML Engineer dedicated to
                             transforming raw data into powerful insights and
                             intelligent systems.
                         </p>
+                        <div className="flex gap-3">
+                            {[
+                                { icon: Github, href: personalInfo.github, label: "GitHub" },
+                                { icon: Linkedin, href: personalInfo.linkedin, label: "LinkedIn" },
+                                { icon: Mail, href: `mailto:${personalInfo.email}`, label: "Email" },
+                            ].map(({ icon: Icon, href, label }) => (
+                                <a
+                                    key={href}
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={label}
+                                    className="glass"
+                                    style={{
+                                        padding: "10px",
+                                        borderRadius: "50%",
+                                        color: "#9fb3c9",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center"
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.color = "#00aaff";
+                                        e.currentTarget.style.transform = "translateY(-4px)";
+                                        e.currentTarget.style.boxShadow = "var(--shadow-1), 0 10px 20px rgba(0,160,255,0.1)";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.color = "#9fb3c9";
+                                        e.currentTarget.style.transform = "translateY(0)";
+                                        e.currentTarget.style.boxShadow = "var(--shadow-1), 0 2px 8px rgba(0,160,255,0.03)";
+                                    }}
+                                    onMouseDown={(e) => {
+                                        e.currentTarget.style.transform = "translateY(0) scale(0.95)";
+                                    }}
+                                    onMouseUp={(e) => {
+                                        e.currentTarget.style.transform = "translateY(-4px) scale(1)";
+                                    }}
+                                >
+                                    <Icon size={16} style={{ position: "relative", zIndex: 1 }} />
+                                </a>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Navigation */}
                     <nav aria-label="Footer navigation">
-                        <h4 className="text-sm font-semibold text-white mb-4">
+                        <h4 className="text-sm font-semibold text-white mb-5 uppercase tracking-wider">
                             Navigation
                         </h4>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-3">
                             {navLinks.map((link) => (
                                 <button
                                     key={link.href}
                                     onClick={() => handleClick(link.href)}
-                                    className="text-sm text-[#6b7280] hover:text-[#00d4ff] transition-colors text-left"
+                                    className="text-sm text-[#9fb3c9] hover:text-[#00aaff] transition-colors text-left"
                                 >
                                     {link.label}
                                 </button>
@@ -45,61 +87,47 @@ export default function Footer() {
 
                     {/* Connect */}
                     <div>
-                        <h4 className="text-sm font-semibold text-white mb-4">
+                        <h4 className="text-sm font-semibold text-white mb-5 uppercase tracking-wider">
                             Connect
                         </h4>
-                        <div className="flex gap-3 mb-4">
-                            {[
-                                {
-                                    icon: Github,
-                                    href: personalInfo.github,
-                                    label: "GitHub",
-                                },
-                                {
-                                    icon: Linkedin,
-                                    href: personalInfo.linkedin,
-                                    label: "LinkedIn",
-                                },
-                                {
-                                    icon: Mail,
-                                    href: `mailto:${personalInfo.email}`,
-                                    label: "Email",
-                                },
-                            ].map(({ icon: Icon, href, label }) => (
-                                <a
-                                    key={href}
-                                    href={href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label={label}
-                                    className="p-2 rounded-lg border border-white/10 text-[#6b7280] hover:text-[#00d4ff] hover:border-[#00d4ff]/30 transition-all"
-                                >
-                                    <Icon size={16} />
-                                </a>
-                            ))}
+                        <div className="space-y-3">
+                            <a
+                                href={`mailto:${personalInfo.email}`}
+                                className="flex items-center gap-2 text-sm text-[#9fb3c9] hover:text-[#00aaff] transition-colors"
+                            >
+                                <Mail size={14} aria-hidden="true" />
+                                {personalInfo.email}
+                            </a>
+                            <a
+                                href={`tel:${personalInfo.phone}`}
+                                className="flex items-center gap-2 text-sm text-[#9fb3c9] hover:text-[#00aaff] transition-colors"
+                            >
+                                <Phone size={14} aria-hidden="true" />
+                                {personalInfo.phone}
+                            </a>
                         </div>
-                        <a
-                            href={`mailto:${personalInfo.email}`}
-                            className="text-sm text-[#6b7280] hover:text-[#00d4ff] transition-colors"
-                        >
-                            {personalInfo.email}
-                        </a>
-                        <p className="text-sm text-[#6b7280] mt-1">
-                            {personalInfo.phone}
-                        </p>
                     </div>
                 </div>
 
-                <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
-                    <p className="text-xs text-[#6b7280]">
-                        © {new Date().getFullYear()} Sohan Kusuma. Crafted with
-                        Next.js &amp; Tailwind.
+                <div className="border-t border-[rgba(255,255,255,0.04)] pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
+                    <p className="text-xs text-[#9fb3c9]">
+                        © {new Date().getFullYear()} Sohan Kusuma. All rights reserved.
                     </p>
-                    <p className="text-xs text-[#6b7280]">
+                    <p className="text-xs text-[#9fb3c9]">
                         Made with ❤️ in London, UK
                     </p>
                 </div>
             </div>
+
+            {/* Back to top fallback for non-JS/older users, real reactive button is in BackToTop component */}
+            <button
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                className="absolute right-8 top-8 glass hover:text-[#00aaff] transition-colors"
+                style={{ padding: "10px", borderRadius: "50%", color: "#9fb3c9" }}
+                aria-label="Back to top"
+            >
+                <ArrowUp size={16} />
+            </button>
         </footer>
     );
 }

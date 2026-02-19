@@ -24,7 +24,8 @@ export default function BackToTop() {
                     onClick={() =>
                         window.scrollTo({ top: 0, behavior: "smooth" })
                     }
-                    className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-gradient-to-r from-[#00d4ff] to-[#7b2ff7] text-white shadow-lg hover:opacity-90 transition-opacity"
+                    className="title-pill title-pill--active fixed bottom-6 right-6 z-50 flex items-center justify-center p-0"
+                    style={{ width: "48px", height: "48px", borderRadius: "50%", padding: 0 }}
                     aria-label="Back to top"
                 >
                     <ArrowUp size={20} />

@@ -89,7 +89,7 @@ export default function TechStack() {
                     <h2 className="text-4xl font-bold text-white mb-4">
                         The <span className="gradient-text">Arsenal</span>
                     </h2>
-                    <p className="text-[#6b7280] max-w-2xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-2xl mx-auto">
                         Technologies & tools I use to bring ideas to life
                     </p>
                     <div className="section-underline mx-auto" />
@@ -103,7 +103,7 @@ export default function TechStack() {
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.5, delay: 0.1 + ci * 0.1 }}
                         >
-                            <h3 className="text-sm font-medium text-[#00d4ff] mb-4 uppercase tracking-wider font-[var(--font-jetbrains)]">
+                            <h3 className="text-sm font-medium text-[#00aaff] mb-4 uppercase tracking-wider font-[var(--font-jetbrains)]">
                                 {category.category}
                             </h3>
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -125,18 +125,16 @@ export default function TechStack() {
                                             whileHover={{
                                                 scale: 1.05,
                                                 y: -2,
-                                                boxShadow:
-                                                    "0 0 20px rgba(0,212,255,0.3)",
                                             }}
-                                            className="glass-card flex flex-col items-center justify-center gap-3 p-5 cursor-default transition-all duration-300 hover:border-[#00d4ff]/30"
+                                            className="glass flex flex-col items-center justify-center gap-3 p-5 cursor-default transition-all duration-300 hover:border-[rgba(0,170,255,0.3)] hover:shadow-[0_20px_50px_rgba(0,160,255,0.12)]"
                                         >
                                             {Icon && (
                                                 <Icon
                                                     size={32}
-                                                    className="text-[#00d4ff]"
+                                                    className="text-[#00aaff] relative z-10"
                                                 />
                                             )}
-                                            <span className="text-xs text-[#9ca3af] text-center">
+                                            <span className="text-xs text-[#9fb3c9] text-center relative z-10">
                                                 {item}
                                             </span>
                                         </motion.div>

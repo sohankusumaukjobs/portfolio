@@ -32,8 +32,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-[var(--font-inter)] antialiased">
+      <body className="font-[var(--font-inter)] antialiased relative">
         <div className="noise-overlay" aria-hidden="true" />
+        {/* Edge glow effects */}
+        <div className="edge-glow-left" aria-hidden="true" />
+        <div className="edge-glow-right" aria-hidden="true" />
         {children}
       </body>
     </html>

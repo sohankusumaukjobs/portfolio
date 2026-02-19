@@ -22,7 +22,7 @@ export default function Certifications() {
                     <h2 className="text-4xl font-bold text-white mb-4">
                         <span className="gradient-text">Credentials</span>
                     </h2>
-                    <p className="text-[#6b7280] max-w-2xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-2xl mx-auto">
                         Certifications & Professional Development
                     </p>
                     <div className="section-underline mx-auto" />
@@ -35,26 +35,27 @@ export default function Certifications() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.4, delay: 0.1 + i * 0.08 }}
-                            className="glass-card shimmer-hover p-5 group relative overflow-hidden"
+                            whileHover={{ y: -4 }}
+                            className="glass p-5 group"
                         >
                             {/* Left gradient border */}
-                            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#00d4ff] to-[#7b2ff7]" />
+                            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#00aaff] to-[#38c1ff] z-10" />
 
-                            <div className="flex items-start gap-3 pl-2">
-                                <div className="p-2 rounded-lg bg-gradient-to-br from-[#00d4ff]/10 to-[#7b2ff7]/10 border border-white/5 shrink-0">
+                            <div className="flex items-start gap-3 pl-2 relative z-10">
+                                <div className="p-2 rounded-lg bg-[rgba(0,170,255,0.1)] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] shrink-0">
                                     <ShieldCheck
                                         size={18}
-                                        className="text-[#00d4ff]"
+                                        className="text-[#00aaff]"
                                     />
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-sm font-semibold text-white mb-1 leading-tight">
+                                    <h3 className="text-sm font-semibold text-white mb-1 leading-tight group-hover:text-[#00aaff] transition-colors">
                                         {cert.name}
                                     </h3>
-                                    <p className="text-xs text-[#6b7280] mb-2">
+                                    <p className="text-xs text-[#9fb3c9] mb-2">
                                         {cert.issuer}
                                     </p>
-                                    <span className="inline-block text-xs px-2.5 py-0.5 rounded-full bg-white/10 text-[#9ca3af]">
+                                    <span className="inline-block text-xs px-2.5 py-0.5 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.05)] text-[#9fb3c9]">
                                         {cert.date}
                                     </span>
                                 </div>

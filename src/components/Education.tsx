@@ -22,7 +22,7 @@ export default function Education() {
                     <h2 className="text-4xl font-bold text-white mb-4">
                         <span className="gradient-text">Education</span>
                     </h2>
-                    <p className="text-[#6b7280] max-w-2xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-2xl mx-auto">
                         Academic Background
                     </p>
                     <div className="section-underline mx-auto" />
@@ -35,15 +35,15 @@ export default function Education() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.5, delay: 0.1 + i * 0.15 }}
-                            className="glass-card glass-card-hover p-6 md:p-8 relative overflow-hidden"
+                            className="glass p-6 md:p-8 transition-transform duration-300 hover:translate-y-[-4px]"
                         >
-                            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#00d4ff] to-[#7b2ff7]" />
+                            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#00aaff] to-[#38c1ff] z-10" />
 
-                            <div className="flex flex-col md:flex-row md:items-center gap-4">
-                                <div className="p-3 rounded-xl bg-gradient-to-br from-[#00d4ff]/10 to-[#7b2ff7]/10 border border-white/5 self-start">
+                            <div className="flex flex-col md:flex-row md:items-center gap-4 relative z-10">
+                                <div className="p-3 rounded-xl bg-[rgba(0,170,255,0.1)] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] self-start">
                                     <GraduationCap
                                         size={24}
-                                        className="text-[#00d4ff]"
+                                        className="text-[#00aaff]"
                                         aria-hidden="true"
                                     />
                                 </div>
@@ -51,14 +51,14 @@ export default function Education() {
                                     <h3 className="text-lg font-semibold text-white mb-1">
                                         {edu.degree}
                                     </h3>
-                                    <p className="text-[#9ca3af] text-sm">
+                                    <p className="text-[#9fb3c9] text-sm">
                                         {edu.institution}
                                     </p>
                                     <div className="flex flex-wrap gap-3 mt-3">
-                                        <span className="text-xs text-[#6b7280] border border-white/10 rounded-full px-3 py-1">
+                                        <span className="text-xs text-[#9fb3c9] border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] rounded-full px-3 py-1">
                                             {edu.period}
                                         </span>
-                                        <span className="text-xs text-[#00d4ff] border border-[#00d4ff]/20 rounded-full px-3 py-1 bg-[#00d4ff]/5">
+                                        <span className="text-xs text-[#00aaff] border border-[rgba(0,170,255,0.2)] rounded-full px-3 py-1 bg-[rgba(0,170,255,0.05)] shadow-[0_4px_12px_rgba(0,170,255,0.1)]">
                                             {edu.grade}
                                         </span>
                                     </div>

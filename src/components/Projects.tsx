@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { ExternalLink, ArrowUpRight } from "lucide-react";
+import { ExternalLink, ArrowUpRight, Sparkles } from "lucide-react";
 import { projects } from "@/data/resume";
 
 export default function Projects() {
@@ -16,15 +16,15 @@ export default function Projects() {
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-14"
+                    className="text-center mb-16"
                 >
                     <p className="section-label">{"// projects"}</p>
-                    <h2 className="text-4xl font-bold text-white mb-4">
-                        Featured <span className="gradient-text">Work</span>
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                        Featured <span className="gradient-text">Creations</span>
                     </h2>
-                    <p className="text-[#6b7280] max-w-2xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-2xl mx-auto">
                         A selection of high-impact data and ML solutions, built with focus
-                        on accuracy, scalability, and real-world impact.
+                        on scalability, performance, and real-world impact.
                     </p>
                     <div className="section-underline mx-auto" />
                 </motion.div>
@@ -35,58 +35,46 @@ export default function Projects() {
                             key={project.title}
                             initial={{ opacity: 0, y: 30 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-                            whileHover={{ y: -4 }}
-                            className="group relative overflow-hidden rounded-2xl"
-                            style={{
-                                background: "rgba(255,255,255,0.03)",
-                                border: "1px solid rgba(255,255,255,0.08)",
-                                backdropFilter: "blur(10px)",
-                                padding: "24px",
-                            }}
+                            transition={{ duration: 0.5, delay: 0.1 + i * 0.12 }}
+                            whileHover={{ y: -6, scale: 1.01 }}
+                            className="group glass p-6 md:p-7"
                         >
                             {/* Top gradient line */}
-                            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#00d4ff] to-[#7b2ff7]" />
-
-                            {/* Hover glow */}
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-                                style={{ boxShadow: "inset 0 0 60px rgba(0,212,255,0.03)" }} />
+                            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#00aaff] to-[#38c1ff] opacity-60 group-hover:opacity-100 transition-opacity z-10" />
 
                             {/* Badge */}
                             {project.badge && (
-                                <div className="absolute top-4 right-4">
-                                    <span className="text-xs font-medium px-3 py-1 rounded-full bg-gradient-to-r from-[#00d4ff]/20 to-[#7b2ff7]/20 text-[#00d4ff] border border-[#00d4ff]/20">
+                                <div className="mb-4 relative z-10">
+                                    <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-gradient-to-r from-[rgba(0,170,255,0.15)] to-[rgba(56,193,255,0.15)] text-[#00aaff] border border-[rgba(0,170,255,0.2)] shadow-[0_4px_12px_rgba(0,170,255,0.1)]">
+                                        <Sparkles size={12} />
                                         {project.badge}
                                     </span>
                                 </div>
                             )}
 
-                            <div className="flex items-start gap-3 mb-4">
-                                <div className="p-2 rounded-lg bg-gradient-to-br from-[#00d4ff]/10 to-[#7b2ff7]/10 border border-white/5">
-                                    <ExternalLink
-                                        size={18}
-                                        className="text-[#00d4ff]"
-                                    />
+                            <div className="flex items-start gap-3 mb-4 relative z-10">
+                                <div className="p-2 rounded-lg bg-[rgba(0,170,255,0.1)] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+                                    <ExternalLink size={18} className="text-[#00aaff]" />
                                 </div>
-                                <h3 className="text-lg font-semibold text-white mt-1 flex-1">
+                                <h3 className="text-lg font-semibold text-white mt-1 flex-1 group-hover:text-[#00aaff] transition-colors duration-300">
                                     {project.title}
                                 </h3>
-                                {/* Arrow on hover */}
                                 <ArrowUpRight
                                     size={18}
-                                    className="text-[#6b7280] opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:text-[#00d4ff] shrink-0 mt-2"
+                                    className="text-[#9fb3c9] opacity-0 group-hover:opacity-100 group-hover:text-[#00aaff] transition-all duration-300 shrink-0 mt-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                                 />
                             </div>
 
-                            <p className="text-[#9ca3af] text-sm leading-relaxed mb-6">
+                            <p className="text-[#9fb3c9] text-sm leading-relaxed mb-6 relative z-10">
                                 {project.description}
                             </p>
 
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-2 relative z-10">
                                 {project.tags.map((tag) => (
                                     <span
                                         key={tag}
-                                        className="text-xs px-2.5 py-1 rounded-md bg-white/5 text-[#9ca3af] border border-white/[0.08]"
+                                        className="title-pill"
+                                        style={{ padding: "4px 10px", fontSize: "0.75rem", background: "rgba(255,255,255,0.03)" }}
                                     >
                                         {tag}
                                     </span>
