@@ -2,27 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-interface Star {
-    x: number;
-    y: number;
-    radius: number;
-    alpha: number;
-    baseAlpha: number;
-    twinkleSpeed: number;
-    twinkleDirection: number;
-}
-
-interface Comet {
-    x: number;
-    y: number;
-    length: number;
-    speed: number;
-    angle: number;
-    opacity: number;
-    thickness: number;
-    active: boolean;
-}
-
 export default function StarBackground() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -30,153 +9,81 @@ export default function StarBackground() {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { alpha: false }); // alpha: false optimizes the opaque background
         if (!ctx) return;
 
         // Configuration
-        const STAR_COUNT = 250;
-        const COMET_CHANCE = 0.001; // Chance per frame to spawn a comet
-        const USE_ANIMATION = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const STAR_COUNT = 1200; // Dense Milky Way look
 
-        // State
-        let stars: Star[] = [];
-        let comets: Comet[] = [];
-        let animationFrameId: number;
-
-        // Initialize Canvas Size
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            initStars();
+            drawRealisticSky();
         };
 
-        const initStars = () => {
-            stars = [];
+        const drawRealisticSky = () => {
+            // Background deep space gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, "#010510"); // Deep space black-blue
+            gradient.addColorStop(1, "#031022"); // Matches the theme variable --color-bg-primary
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             for (let i = 0; i < STAR_COUNT; i++) {
-                const baseAlpha = Math.random() * 0.5 + 0.1;
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    radius: Math.random() * 1.5 + 0.5,
-                    alpha: baseAlpha,
-                    baseAlpha,
-                    twinkleSpeed: Math.random() * 0.01 + 0.005,
-                    twinkleDirection: Math.random() > 0.5 ? 1 : -1,
-                });
-            }
-        };
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
 
-        const drawStars = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // Heavily bias towards very small, distant stars
+                const sizeRand = Math.random();
+                let radius = 0.3; // standard tiny dot
+                if (sizeRand > 0.85) radius = Math.random() * 0.4 + 0.3;
+                if (sizeRand > 0.98) radius = Math.random() * 0.7 + 0.5; // rare bright stars
 
-            // Draw Stars
-            stars.forEach((star) => {
+                // Bias opacity towards faint
+                const alpha = Math.random() > 0.7
+                    ? Math.random() * 0.5 + 0.3 // Some bright
+                    : Math.random() * 0.2 + 0.05; // Mostly faint
+
+                // Subtle color variations (mostly white, some faint blue, rare orange/yellow)
+                const colorRand = Math.random();
+                let color = `rgba(255, 255, 255, ${alpha})`;
+                if (colorRand > 0.8) {
+                    color = `rgba(180, 220, 255, ${alpha})`; // Blue giant
+                } else if (colorRand > 0.95) {
+                    color = `rgba(255, 230, 180, ${alpha})`; // Red/yellow dwarf
+                }
+
                 ctx.beginPath();
-                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = color;
 
-                // Add a subtle blue tint to some stars
-                const isBlue = Math.random() > 0.8;
-                ctx.fillStyle = isBlue
-                    ? `rgba(154, 230, 255, ${star.alpha})` // Cyan tint
-                    : `rgba(255, 255, 255, ${star.alpha})`; // White
+                // Add a tiny glow effect only to the largest/brightest stars
+                if (radius > 0.6) {
+                    ctx.shadowBlur = Math.random() * 3 + 1;
+                    ctx.shadowColor = color;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
 
                 ctx.fill();
-
-                if (USE_ANIMATION) {
-                    // Update star twinkle
-                    star.alpha += star.twinkleSpeed * star.twinkleDirection;
-
-                    // Reverse twinkle direction if limits reached
-                    if (star.alpha <= star.baseAlpha * 0.3) {
-                        star.twinkleDirection = 1;
-                        star.alpha = star.baseAlpha * 0.3;
-                    } else if (star.alpha >= star.baseAlpha * 1.5) {
-                        star.twinkleDirection = -1;
-                        star.alpha = star.baseAlpha * 1.5;
-                    }
-
-                    // Very slow drift
-                    star.x -= 0.05;
-                    star.y -= 0.02;
-
-                    // Wrap around
-                    if (star.x < 0) star.x = canvas.width;
-                    if (star.y < 0) star.y = canvas.height;
-                }
-            });
-
-            // Draw Comets
-            if (USE_ANIMATION) {
-                // Spawn new comets randomly
-                if (Math.random() < COMET_CHANCE) {
-                    comets.push({
-                        x: Math.random() * canvas.width + canvas.width * 0.2, // Start slightly off screen to the right
-                        y: -50, // Start above screen
-                        length: Math.random() * 100 + 150,
-                        speed: Math.random() * 5 + 8, // Fast!
-                        angle: Math.PI / 4 + (Math.random() * 0.2 - 0.1), // Angled down and left
-                        opacity: 1,
-                        thickness: Math.random() * 1.5 + 1,
-                        active: true,
-                    });
-                }
-
-                // Update and draw existing comets
-                comets.forEach((comet) => {
-                    if (!comet.active) return;
-
-                    const endX = comet.x - Math.cos(comet.angle) * comet.length;
-                    const endY = comet.y - Math.sin(comet.angle) * comet.length;
-
-                    // Create gradient for the tail
-                    const gradient = ctx.createLinearGradient(comet.x, comet.y, endX, endY);
-                    gradient.addColorStop(0, `rgba(255, 255, 255, ${comet.opacity})`);
-                    gradient.addColorStop(0.1, `rgba(0, 170, 255, ${comet.opacity * 0.8})`);
-                    gradient.addColorStop(1, "rgba(0, 170, 255, 0)");
-
-                    ctx.beginPath();
-                    ctx.moveTo(comet.x, comet.y);
-                    ctx.lineTo(endX, endY);
-                    ctx.strokeStyle = gradient;
-                    ctx.lineWidth = comet.thickness;
-                    ctx.lineCap = "round";
-                    ctx.stroke();
-
-                    // Move comet
-                    comet.x -= Math.cos(comet.angle) * comet.speed;
-                    comet.y += Math.sin(comet.angle) * comet.speed;
-
-                    // Fade out slightly if needed, or remove if off screen
-                    if (comet.x < -comet.length || comet.y > canvas.height + comet.length) {
-                        comet.active = false;
-                    }
-                });
-
-                // Clean up inactive comets
-                comets = comets.filter((c) => c.active);
-            }
-        };
-
-        const render = () => {
-            drawStars();
-            if (USE_ANIMATION) {
-                animationFrameId = requestAnimationFrame(render);
             }
         };
 
         // Initialize
         resizeCanvas();
-        render();
 
-        // Event Listeners
-        window.addEventListener("resize", resizeCanvas);
+        // Handle resize with debouncing for performance
+        let resizeTimeout: NodeJS.Timeout;
+        const handleResize = () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(resizeCanvas, 200);
+        };
 
-        // Cleanup
+        window.addEventListener("resize", handleResize);
+
         return () => {
-            window.removeEventListener("resize", resizeCanvas);
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
+            window.removeEventListener("resize", handleResize);
+            clearTimeout(resizeTimeout);
         };
     }, []);
 
