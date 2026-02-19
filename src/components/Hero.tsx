@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useEffect, useState } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
-import { Github, Linkedin, Mail, Download, ArrowDown, User } from "lucide-react";
+import { Github, Linkedin, Mail, Download, ArrowDown, UserPlus, Twitter } from "lucide-react";
 import { personalInfo, codeSnippet } from "@/data/resume";
 
 /* ─── syntax-highlighting helpers ──────────────────────── */
@@ -295,12 +295,13 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
-                        className="flex items-center gap-3 mb-8"
+                        className="flex items-center gap-4 mb-8"
                     >
                         {[
                             { icon: Github, href: personalInfo.github, label: "GitHub" },
                             { icon: Linkedin, href: personalInfo.linkedin, label: "LinkedIn" },
                             { icon: Mail, href: `mailto:${personalInfo.email}`, label: "Email" },
+                            { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
                         ].map(({ icon: Icon, href, label }) => (
                             <a
                                 key={label}
@@ -308,7 +309,7 @@ export default function Hero() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label={label}
-                                className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 transition-all duration-300 shadow-lg"
+                                className="flex items-center justify-center w-[54px] h-[54px] rounded-[18px] border border-white/5 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/10 transition-all duration-300 shadow-lg"
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = "translateY(-4px)";
                                     e.currentTarget.style.boxShadow = "var(--shadow-1), 0 10px 20px rgba(0,160,255,0.15)";
@@ -318,7 +319,7 @@ export default function Hero() {
                                     e.currentTarget.style.boxShadow = "var(--shadow-1), 0 2px 8px rgba(0,0,0,0.5)";
                                 }}
                             >
-                                <Icon size={20} className="text-white" strokeWidth={2.5} />
+                                <Icon size={24} className="text-white" strokeWidth={2} />
                             </a>
                         ))}
                     </motion.div>
@@ -328,29 +329,29 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-col sm:flex-row flex-wrap gap-5 sm:gap-6 w-full sm:w-auto"
+                        className="flex flex-col sm:flex-row flex-wrap gap-5 w-full sm:w-auto"
                     >
                         <a
                             href="#contact"
-                            className="flex items-center justify-center sm:justify-start gap-3 px-8 py-4 rounded-full text-[15px] font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto text-center glass"
+                            className="flex items-center justify-center sm:justify-start gap-4 px-9 py-4 rounded-[22px] text-[15px] font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto text-center"
                             style={{
-                                background: "linear-gradient(135deg, rgba(0, 119, 255, 0.85), rgba(0, 170, 255, 0.85))",
-                                boxShadow: "0 8px 30px rgba(0, 170, 255, 0.4)",
-                                border: "1px solid rgba(255, 255, 255, 0.25)"
+                                background: "linear-gradient(135deg, rgba(0, 119, 255, 0.9), rgba(0, 170, 255, 0.9))",
+                                boxShadow: "0 8px 30px rgba(0, 170, 255, 0.35)",
+                                border: "1px solid rgba(255, 255, 255, 0.15)"
                             }}
                         >
-                            LET'S COLLABORATE <User size={20} strokeWidth={2.5} />
+                            LET'S COLLABORATE <UserPlus size={22} className="ml-1" strokeWidth={2.5} />
                         </a>
                         <a
                             href="/resume.pdf"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="glass flex items-center justify-center sm:justify-start gap-3 px-8 py-4 rounded-full text-[15px] font-bold text-white tracking-wide transition-all duration-300 hover:bg-white/5 shadow-lg w-full sm:w-auto text-center"
+                            className="flex items-center justify-center sm:justify-start gap-3 px-9 py-4 rounded-[22px] text-[15px] font-bold text-white tracking-wide transition-all duration-300 hover:bg-white/5 shadow-lg w-full sm:w-auto text-center bg-[#0a1120]"
                             style={{
                                 border: "1px solid rgba(255, 255, 255, 0.15)"
                             }}
                         >
-                            GET RESUME <Download size={20} strokeWidth={2.5} />
+                            GET RESUME <Download size={20} className="ml-1" strokeWidth={2.5} />
                         </a>
                     </motion.div>
                 </div>

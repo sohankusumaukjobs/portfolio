@@ -1,6 +1,6 @@
 "use client";
 
-import { Github, Linkedin, Mail, Phone, ArrowUp } from "lucide-react";
+import { Github, Linkedin, Mail, Phone, ArrowUp, Twitter } from "lucide-react";
 import Image from "next/image";
 import { personalInfo, navLinks } from "@/data/resume";
 
@@ -36,14 +36,15 @@ export default function Footer() {
                                 { icon: Github, href: personalInfo.github, label: "GitHub" },
                                 { icon: Linkedin, href: personalInfo.linkedin, label: "LinkedIn" },
                                 { icon: Mail, href: `mailto:${personalInfo.email}`, label: "Email" },
+                                { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
                             ].map(({ icon: Icon, href, label }) => (
                                 <a
-                                    key={href}
+                                    key={label}
                                     href={href}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label={label}
-                                    className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 transition-all duration-300 shadow-lg"
+                                    className="flex items-center justify-center w-[54px] h-[54px] rounded-[18px] border border-white/5 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/10 transition-all duration-300 shadow-lg"
                                     onMouseEnter={(e) => {
                                         e.currentTarget.style.transform = "translateY(-4px)";
                                         e.currentTarget.style.boxShadow = "var(--shadow-1), 0 10px 20px rgba(0,160,255,0.15)";
@@ -55,7 +56,7 @@ export default function Footer() {
                                         e.currentTarget.style.color = "#9fb3c9";
                                     }}
                                 >
-                                    <Icon size={20} className="text-current" strokeWidth={2.5} />
+                                    <Icon size={24} className="text-current" strokeWidth={2} />
                                 </a>
                             ))}
                         </div>
