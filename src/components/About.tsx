@@ -11,8 +11,8 @@ export default function About() {
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <section id="about" className="section-padding">
-            <div className="max-w-5xl mx-auto" ref={ref}>
+        <section id="about" className="section-padding flex flex-col items-center justify-center w-full">
+            <div className="max-w-5xl w-full mx-auto flex flex-col items-center" ref={ref}>
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -73,7 +73,7 @@ export default function About() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="relative"
+                        className="relative w-full max-w-4xl mx-auto"
                     >
                         {/* Vertical timeline line */}
                         <div className="absolute left-4 md:left-6 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[rgba(0,170,255,0.2)] to-transparent" />
@@ -101,7 +101,7 @@ export default function About() {
                                                 </span>
                                             )}
                                         </div>
-                                        <ul className="space-y-2.5 mb-5">
+                                        <ul className="space-y-2.5 mb-5 text-left">
                                             {exp.bullets.map((bullet, j) => (
                                                 <li
                                                     key={j}
@@ -114,7 +114,7 @@ export default function About() {
                                                 </li>
                                             ))}
                                         </ul>
-                                        <span className="inline-block text-xs font-medium px-3.5 py-1.5 rounded-full border border-[rgba(0,170,255,0.2)] text-[#00aaff] bg-[rgba(0,170,255,0.06)]">
+                                        <span className="inline-block text-xs font-medium px-3.5 py-1.5 rounded-full border border-[rgba(0,170,255,0.2)] text-[#00aaff] bg-[rgba(0,170,255,0.06)] self-start text-left float-left">
                                             {exp.role}
                                         </span>
                                     </div>
