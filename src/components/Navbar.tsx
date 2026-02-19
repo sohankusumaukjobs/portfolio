@@ -8,9 +8,25 @@ import { navLinks } from "@/data/resume";
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState("#home");
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 50);
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 50);
+
+            // Track active section
+            const sections = navLinks.map((l) => l.href.slice(1));
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const el = document.getElementById(sections[i]);
+                if (el) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top <= 120) {
+                        setActiveSection(`#${sections[i]}`);
+                        break;
+                    }
+                }
+            }
+        };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
@@ -21,7 +37,9 @@ export default function Navbar() {
         } else {
             document.body.style.overflow = "";
         }
-        return () => { document.body.style.overflow = ""; };
+        return () => {
+            document.body.style.overflow = "";
+        };
     }, [mobileOpen]);
 
     const handleClick = (href: string) => {
@@ -39,14 +57,17 @@ export default function Navbar() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-                        ? "bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5"
+                        ? "bg-black/70 backdrop-blur-md border-b border-white/10"
                         : "bg-transparent"
                     }`}
+                role="navigation"
+                aria-label="Main navigation"
             >
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <button
                         onClick={() => handleClick("#home")}
                         className="text-2xl font-bold gradient-text tracking-tight"
+                        aria-label="Go to homepage"
                     >
                         SK.
                     </button>
@@ -57,10 +78,18 @@ export default function Navbar() {
                             <button
                                 key={link.href}
                                 onClick={() => handleClick(link.href)}
-                                className="text-sm text-[#888] hover:text-white transition-colors duration-200 relative group"
+                                className={`text-sm transition-colors duration-200 relative group ${activeSection === link.href
+                                        ? "text-white"
+                                        : "text-[#6b7280] hover:text-white"
+                                    }`}
                             >
                                 {link.label}
-                                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-[#00d4ff] to-[#7b2ff7] group-hover:w-full transition-all duration-300" />
+                                <span
+                                    className={`absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-[#00d4ff] to-[#7b2ff7] transition-all duration-300 ${activeSection === link.href
+                                            ? "w-full"
+                                            : "w-0 group-hover:w-full"
+                                        }`}
+                                />
                             </button>
                         ))}
                     </div>
@@ -84,7 +113,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="fixed inset-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
+                        className="fixed inset-0 z-40 bg-[#080808]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
                     >
                         {navLinks.map((link, i) => (
                             <motion.button
@@ -93,7 +122,10 @@ export default function Navbar() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.08 }}
                                 onClick={() => handleClick(link.href)}
-                                className="text-2xl text-white/80 hover:text-white transition-colors"
+                                className={`text-2xl transition-colors ${activeSection === link.href
+                                        ? "text-white"
+                                        : "text-white/60 hover:text-white"
+                                    }`}
                             >
                                 {link.label}
                             </motion.button>

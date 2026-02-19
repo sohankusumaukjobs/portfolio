@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { techStack } from "@/data/resume";
 import {
     SiPython,
@@ -72,32 +73,37 @@ const iconMap: Record<string, AnyIcon> = {
 };
 
 export default function TechStack() {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
+
     return (
         <section id="stack" className="section-padding">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-6xl mx-auto" ref={ref}>
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
                     className="text-center mb-14"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold mb-3">
+                    <p className="section-label">{"// tech-stack"}</p>
+                    <h2 className="text-4xl font-bold text-white mb-4">
                         The <span className="gradient-text">Arsenal</span>
                     </h2>
-                    <p className="text-[#888] text-sm">Tech Stack</p>
+                    <p className="text-[#6b7280] max-w-2xl mx-auto">
+                        Technologies & tools I use to bring ideas to life
+                    </p>
+                    <div className="section-underline mx-auto" />
                 </motion.div>
 
                 <div className="space-y-12">
                     {techStack.map((category, ci) => (
                         <motion.div
                             key={category.category}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: ci * 0.1 }}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={isInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.5, delay: 0.1 + ci * 0.1 }}
                         >
-                            <h3 className="text-sm font-medium text-[#00d4ff] mb-4 uppercase tracking-wider">
+                            <h3 className="text-sm font-medium text-[#00d4ff] mb-4 uppercase tracking-wider font-[var(--font-jetbrains)]">
                                 {category.category}
                             </h3>
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -107,19 +113,32 @@ export default function TechStack() {
                                         <motion.div
                                             key={item}
                                             initial={{ opacity: 0, scale: 0.9 }}
-                                            whileInView={{ opacity: 1, scale: 1 }}
-                                            viewport={{ once: true }}
-                                            transition={{ duration: 0.3, delay: ii * 0.05 }}
-                                            whileHover={{ scale: 1.05, y: -2 }}
-                                            className="glass-card glow-hover flex items-center gap-3 p-4 cursor-default"
+                                            animate={
+                                                isInView
+                                                    ? { opacity: 1, scale: 1 }
+                                                    : {}
+                                            }
+                                            transition={{
+                                                duration: 0.3,
+                                                delay: 0.2 + ii * 0.05,
+                                            }}
+                                            whileHover={{
+                                                scale: 1.05,
+                                                y: -2,
+                                                boxShadow:
+                                                    "0 0 20px rgba(0,212,255,0.3)",
+                                            }}
+                                            className="glass-card flex flex-col items-center justify-center gap-3 p-5 cursor-default transition-all duration-300 hover:border-[#00d4ff]/30"
                                         >
                                             {Icon && (
                                                 <Icon
-                                                    size={20}
-                                                    className="text-[#00d4ff] shrink-0"
+                                                    size={32}
+                                                    className="text-[#00d4ff]"
                                                 />
                                             )}
-                                            <span className="text-sm text-[#ccc]">{item}</span>
+                                            <span className="text-xs text-[#9ca3af] text-center">
+                                                {item}
+                                            </span>
                                         </motion.div>
                                     );
                                 })}

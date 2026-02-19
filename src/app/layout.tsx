@@ -17,21 +17,12 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Sohan Kusuma | Data Analyst & ML Engineer",
   description:
-    "Sohan Kusuma — Data Analyst, Machine Learning Engineer & Business Analyst. Transforming raw data into powerful insights and intelligent systems.",
-  keywords: [
-    "Sohan Kusuma",
-    "Data Analyst",
-    "ML Engineer",
-    "Machine Learning",
-    "Python",
-    "Power BI",
-    "TensorFlow",
-    "Business Analyst",
-  ],
+    "Data Analytics and ML graduate with expertise in Python, SQL, Power BI, TensorFlow, and GenAI. Open to data analyst and ML roles in London, UK.",
+  keywords: ["Data Analyst", "ML Engineer", "Python", "Power BI", "London"],
   openGraph: {
-    title: "Sohan Kusuma | Data Analyst & ML Engineer",
-    description:
-      "Data Analyst & ML Engineer — Transforming raw data into powerful insights and intelligent systems.",
+    title: "Sohan Kusuma | Data Analyst",
+    description: "Turning data into decisions.",
+    url: "https://sohankusumaukjobs.github.io/portfolio",
     type: "website",
   },
 };
@@ -42,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="font-[var(--font-inter)] antialiased">
-        <div className="noise-overlay" />
+        <div className="noise-overlay" aria-hidden="true" />
         {children}
       </body>
     </html>

@@ -1,14 +1,14 @@
 export const personalInfo = {
     name: "Sohan Kusuma",
     initials: "SK",
-    title: "Data Analyst & ML Engineer",
+    title: "Data Analyst • Machine Learning Engineer • Business Analyst",
     tagline: "Turning Data Into",
     taglineHighlight: "Decisions",
     subtitle:
         "I'm Sohan Kusuma, a Data Analyst & ML Engineer dedicated to transforming raw data into powerful insights and intelligent systems.",
     email: "sohankusumaukjobs@gmail.com",
     phone: "+44 7310 021889",
-    location: "England, UK",
+    location: "London, England, UK",
     linkedin: "https://www.linkedin.com/in/sohan-kusuma-a00048348",
     github: "https://github.com/sohankusumaukjobs",
     responseTime: "I'll respond within 24 hours.",
@@ -116,7 +116,7 @@ export const projects: Project[] = [
         description:
             "An end-to-end deep learning pipeline for early wildfire detection using DenseNet-based CNNs trained on 2,700+ high-resolution images. Achieved 98.84% accuracy with augmentation, Multi-Scale Retinex preprocessing, and GridSearchCV optimization. Results visualized with Matplotlib/Seaborn.",
         tags: ["Python", "TensorFlow", "Keras", "DenseNet", "CNN", "Scikit-learn", "Matplotlib"],
-        badge: "Distinction Project",
+        badge: "Featured · Distinction",
     },
     {
         title: "AI Financial Chatbot (BCG GenAI Simulation)",
