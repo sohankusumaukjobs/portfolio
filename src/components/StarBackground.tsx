@@ -216,8 +216,8 @@ export default function StarBackground() {
                     y: randomStar.y,
                     originX: randomStar.x,
                     originY: randomStar.y,
-                    length: Math.random() * 100 + 50,
-                    speed: Math.random() * 8 + 6,
+                    length: Math.random() * 150 + 80, // Slightly longer tails to compensate for slower speed
+                    speed: Math.random() * 3 + 2, // SLOWED DOWN: Was 8-14, now 2-5 for majestic smooth glides
                     // Angle radiating somewhat towards bottom/left or top/right 
                     angle: Math.PI / 4 + (Math.random() * 1.5 - 0.75),
                     opacity: 1,
@@ -225,7 +225,7 @@ export default function StarBackground() {
                     active: true,
                     state: "charging",
                     chargeTimer: 0,
-                    maxChargeTime: Math.random() * 20 + 10 // 10-30 frames of brightening
+                    maxChargeTime: Math.random() * 40 + 20 // Slower charge up (20-60 frames)
                 });
             }
 
