@@ -17,16 +17,16 @@ export default function About() {
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-16"
+                    className="flex flex-col items-center text-center mb-16 w-full"
                 >
                     <p className="section-label">{"// about"}</p>
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
                         About <span className="gradient-text">The Analyst</span>
                     </h2>
-                    <p className="text-[#9fb3c9] max-w-2xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-2xl">
                         Built with Passion
                     </p>
-                    <div className="section-underline mx-auto" />
+                    <div className="section-underline" />
                 </motion.div>
 
                 {/* Tabs */}
@@ -61,9 +61,9 @@ export default function About() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="glass p-6 sm:p-8 md:p-10"
+                        className="glass p-6 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center w-full"
                     >
-                        <p className="text-[#e6f0ff] leading-relaxed text-base md:text-lg">
+                        <p className="text-[#e6f0ff] leading-relaxed text-base md:text-lg text-center max-w-4xl">
                             {professionalSummary}
                         </p>
                     </motion.div>

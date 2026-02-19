@@ -83,16 +83,16 @@ export default function TechStack() {
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-14"
+                    className="flex flex-col items-center text-center mb-14 w-full"
                 >
                     <p className="section-label">{"// tech-stack"}</p>
                     <h2 className="text-4xl font-bold text-white mb-4">
                         The <span className="gradient-text">Arsenal</span>
                     </h2>
-                    <p className="text-[#9fb3c9] max-w-2xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-2xl">
                         Technologies & tools I use to bring ideas to life
                     </p>
-                    <div className="section-underline mx-auto" />
+                    <div className="section-underline" />
                 </motion.div>
 
                 <div className="space-y-12">
@@ -104,7 +104,7 @@ export default function TechStack() {
                             transition={{ duration: 0.5, delay: 0.1 + ci * 0.1 }}
                             className="glass p-6 sm:p-8 rounded-3xl"
                         >
-                            <h3 className="text-sm font-medium text-[#00aaff] mb-4 uppercase tracking-wider font-[var(--font-jetbrains)]">
+                            <h3 className="text-center text-sm font-medium text-[#00aaff] mb-6 uppercase tracking-wider font-[var(--font-jetbrains)] w-full block">
                                 {category.category}
                             </h3>
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">

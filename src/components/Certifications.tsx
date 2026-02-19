@@ -16,16 +16,16 @@ export default function Certifications() {
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-14"
+                    className="flex flex-col items-center text-center mb-14 w-full"
                 >
                     <p className="section-label">{"// credentials"}</p>
                     <h2 className="text-4xl font-bold text-white mb-4">
                         <span className="gradient-text">Credentials</span>
                     </h2>
-                    <p className="text-center text-[#9fb3c9] max-w-2xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-2xl">
                         Certifications & Professional Development
                     </p>
-                    <div className="section-underline mx-auto" />
+                    <div className="section-underline" />
                 </motion.div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

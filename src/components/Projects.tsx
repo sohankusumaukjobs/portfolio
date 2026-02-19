@@ -16,17 +16,17 @@ export default function Projects() {
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-16"
+                    className="flex flex-col items-center text-center mb-16 w-full"
                 >
                     <p className="section-label">{"// projects"}</p>
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
                         Featured <span className="gradient-text">Creations</span>
                     </h2>
-                    <p className="text-[#9fb3c9] max-w-2xl mx-auto">
+                    <p className="text-[#9fb3c9] max-w-2xl">
                         A selection of high-impact data and ML solutions, built with focus
                         on scalability, performance, and real-world impact.
                     </p>
-                    <div className="section-underline mx-auto" />
+                    <div className="section-underline" />
                 </motion.div>
 
                 <div className="grid md:grid-cols-2 gap-6">
