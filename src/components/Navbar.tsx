@@ -65,7 +65,7 @@ export default function Navbar() {
                 role="navigation"
                 aria-label="Main navigation"
             >
-                <div className="max-w-[1600px] mx-auto px-8 md:px-16 h-20 flex items-center justify-between">
+                <div className="max-w-7xl w-full mx-auto h-20 flex items-center justify-between" style={{ padding: "0 5%" }}>
                     <button
                         onClick={() => handleClick("#home")}
                         aria-label="Go to homepage"
@@ -77,7 +77,7 @@ export default function Navbar() {
                             width={360}
                             height={160}
                             className="w-[140px] sm:w-[180px] md:w-[260px] lg:w-[360px] h-auto object-contain"
-                            style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,0.6))" }}
+                            style={{ filter: "brightness(0) invert(1)" }}
                         />
                     </button>
 

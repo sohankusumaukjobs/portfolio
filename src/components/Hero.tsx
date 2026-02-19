@@ -116,7 +116,7 @@ function CodeEditor() {
             className="glass"
             style={{
                 width: "100%",
-                maxWidth: "480px",
+                maxWidth: "720px",
                 transformStyle: "preserve-3d",
             }}
             onMouseMove={handleMouseMove}
@@ -125,22 +125,22 @@ function CodeEditor() {
             {/* Title bar */}
             <div
                 style={{
-                    padding: "12px 16px",
+                    padding: "18px 24px",
                     display: "flex",
                     alignItems: "center",
                     borderBottom: "1px solid rgba(255,255,255,0.04)"
                 }}
             >
-                <div style={{ display: "flex", gap: "8px" }}>
-                    <div className="w-3 h-3 rounded-full bg-[#31b0ff]" />
-                    <div className="w-3 h-3 rounded-full bg-[#5ad3ff]" />
-                    <div className="w-3 h-3 rounded-full bg-[#8ee9ff]" />
+                <div style={{ display: "flex", gap: "12px" }}>
+                    <div className="w-[18px] h-[18px] rounded-full bg-[#31b0ff]" />
+                    <div className="w-[18px] h-[18px] rounded-full bg-[#5ad3ff]" />
+                    <div className="w-[18px] h-[18px] rounded-full bg-[#8ee9ff]" />
                 </div>
                 <span
                     style={{
-                        fontSize: "12px",
+                        fontSize: "18px",
                         color: "#9fb3c9",
-                        marginLeft: "12px",
+                        marginLeft: "18px",
                         fontFamily: "var(--font-jetbrains), 'JetBrains Mono', monospace",
                         fontWeight: 500,
                     }}
@@ -152,7 +152,7 @@ function CodeEditor() {
             {/* Darker inner glass fill for terminal content */}
             <div style={{
                 background: "rgba(2, 6, 12, 0.4)",
-                padding: "20px 20px 20px 0",
+                padding: "30px 30px 30px 0",
                 position: "relative",
                 zIndex: 1 // Above the glass rim/highlight pseudo elements if any
             }}>
@@ -167,18 +167,18 @@ function CodeEditor() {
                             style={{
                                 display: "flex",
                                 alignItems: "baseline",
-                                gap: "12px",
+                                gap: "18px",
                             }}
                         >
                             <span
                                 style={{
                                     color: "#38c1ff",
                                     opacity: 0.5,
-                                    minWidth: "28px",
+                                    minWidth: "42px",
                                     textAlign: "right",
                                     flexShrink: 0,
                                     fontFamily: "var(--font-jetbrains), 'JetBrains Mono', monospace",
-                                    fontSize: "13px",
+                                    fontSize: "19px",
                                     lineHeight: "1.7",
                                     userSelect: "none",
                                 }}
@@ -189,7 +189,7 @@ function CodeEditor() {
                                 style={{
                                     flex: 1,
                                     fontFamily: "var(--font-jetbrains), 'JetBrains Mono', monospace",
-                                    fontSize: "13px",
+                                    fontSize: "19px",
                                     lineHeight: "1.7",
                                     whiteSpace: "pre",
                                 }}
@@ -227,9 +227,9 @@ export default function Hero() {
             className="relative flex items-center section-padding pt-24"
             style={{ minHeight: "100vh", padding: "0 5%" }}
         >
-            <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row gap-12 lg:gap-20 items-center relative z-10">
+            <div className="max-w-7xl mx-auto w-full flex flex-col xl:flex-row gap-12 xl:gap-8 items-center relative z-10">
                 {/* Left — Text */}
-                <div className="w-full lg:w-1/2 flex flex-col justify-center" style={{ paddingRight: "clamp(0px, 2vw, 40px)" }}>
+                <div className="w-full xl:w-[45%] flex flex-col justify-center" style={{ paddingRight: "clamp(0px, 2vw, 40px)" }}>
 
                     {/* Welcome Pill */}
                     <motion.div
@@ -384,7 +384,7 @@ export default function Hero() {
 
                 {/* Right — Code editor */}
                 <div
-                    className="w-full lg:w-1/2 flex items-center justify-center"
+                    className="w-full xl:w-[55%] flex items-center justify-center xl:justify-end mt-12 xl:mt-0"
                     style={{ perspective: "1000px" }}
                 >
                     <CodeEditor />
