@@ -210,13 +210,16 @@ function CodeEditor() {
 
 /* ─── Hero Section ─────────────────────────────────────── */
 const ROLES = ["Software Developer", "Data Analyst", "AI/ML Engineer", "Business Analyst"];
+const FOCUS_AREAS = ["Data Insights", "Web Applications", "CI/CD Pipelines", "Webpages", "Automations", "Chatbots"];
 
 export default function Hero() {
     const [roleIndex, setRoleIndex] = useState(0);
+    const [focusIndex, setFocusIndex] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setRoleIndex((prev) => (prev + 1) % ROLES.length);
+            setFocusIndex((prev) => (prev + 1) % FOCUS_AREAS.length);
         }, 2000);
         return () => clearInterval(interval);
     }, []);
@@ -286,7 +289,24 @@ export default function Hero() {
                             </span>.
                         </p>
                         <p>
-                            dedicated to building high-performance, user-centric web applications.
+                            dedicated to building high-performance, user-centric{" "}
+                            <span className="relative inline-grid align-baseline">
+                                <AnimatePresence mode="popLayout">
+                                    <motion.span
+                                        key={FOCUS_AREAS[focusIndex]}
+                                        initial={{ opacity: 0, filter: "blur(12px)", x: -20 }}
+                                        animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
+                                        exit={{ opacity: 0, filter: "blur(12px)", x: 40, scale: 1.05 }}
+                                        transition={{ duration: 0.8, ease: "easeOut" }}
+                                        className="text-[#00aaff] font-bold col-start-1 row-start-1"
+                                    >
+                                        {FOCUS_AREAS[focusIndex]}
+                                    </motion.span>
+                                </AnimatePresence>
+                                <span className="opacity-0 font-bold pointer-events-none col-start-1 row-start-1">
+                                    Web Applications
+                                </span>
+                            </span>.
                         </p>
                     </motion.div>
 
