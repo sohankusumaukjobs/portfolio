@@ -70,6 +70,8 @@ export default function StarBackground() {
         let satellites: Satellite[] = [];
         let animationFrameId: number;
         let time = 0;
+        let lastCometSpawnTime = 0;
+        let lastSatSpawnTime = 0;
 
         const randomGauss = () => {
             let u = 0, v = 0;
@@ -207,8 +209,9 @@ export default function StarBackground() {
             time++;
 
             // Handle Comets
-            // Increased comet frequency. Spawns directly from an existing star.
-            if (stars.length > 0 && Math.random() < 0.03) { // 3% chance per frame to spawn a comet charging
+            // Gap of ~2 seconds (120 frames at 60fps)
+            if (stars.length > 0 && time - lastCometSpawnTime > 120 && Math.random() < 0.05) {
+                lastCometSpawnTime = time;
                 const randomStar = stars[Math.floor(Math.random() * stars.length)];
 
                 comets.push({
@@ -216,8 +219,8 @@ export default function StarBackground() {
                     y: randomStar.y,
                     originX: randomStar.x,
                     originY: randomStar.y,
-                    length: Math.random() * 150 + 80, // Slightly longer tails to compensate for slower speed
-                    speed: Math.random() * 3 + 2, // SLOWED DOWN: Was 8-14, now 2-5 for majestic smooth glides
+                    length: Math.random() * 150 + 80,
+                    speed: Math.random() * 1.5 + 0.5, // VERY SLOW: 0.5 to 2.0 for majestic smooth glide
                     // Angle radiating somewhat towards bottom/left or top/right 
                     angle: Math.PI / 4 + (Math.random() * 1.5 - 0.75),
                     opacity: 1,
@@ -225,7 +228,7 @@ export default function StarBackground() {
                     active: true,
                     state: "charging",
                     chargeTimer: 0,
-                    maxChargeTime: Math.random() * 40 + 20 // Slower charge up (20-60 frames)
+                    maxChargeTime: Math.random() * 40 + 20
                 });
             }
 
@@ -285,19 +288,26 @@ export default function StarBackground() {
             });
             comets = comets.filter((c) => c.active);
 
-            // Limited satellites passing over
-            if (Math.random() < 0.001 && satellites.length < 2) {
+            // Frequent 3 spaceships passing every 5 seconds (~300 frames)
+            if (time - lastSatSpawnTime > 300) {
+                lastSatSpawnTime = time;
                 const isLeftToRight = Math.random() > 0.5;
-                satellites.push({
-                    x: isLeftToRight ? -10 : fgCanvas.width + 10,
-                    y: Math.random() * (fgCanvas.height * 0.8),
-                    speed: Math.random() * 0.4 + 0.1,
-                    angle: isLeftToRight ? (0 + Math.random() * 0.1) : (Math.PI - Math.random() * 0.1),
-                    size: Math.random() * 0.6 + 0.4,
-                    active: true,
-                    blinkTimer: 0,
-                    blinkState: true,
-                });
+                const baseY = Math.random() * (fgCanvas.height * 0.8);
+                const baseAngle = isLeftToRight ? (0 + Math.random() * 0.1) : (Math.PI - Math.random() * 0.1);
+
+                // Spawn 3 in a loose formation
+                for (let i = 0; i < 3; i++) {
+                    satellites.push({
+                        x: isLeftToRight ? -10 - (i * 80) : fgCanvas.width + 10 + (i * 80),
+                        y: baseY + (Math.random() * 60 - 30),
+                        speed: Math.random() * 0.5 + 0.8, // Faster so they clear the screen
+                        angle: baseAngle,
+                        size: Math.random() * 0.6 + 0.6,
+                        active: true,
+                        blinkTimer: i * 20, // staggered blinking
+                        blinkState: true,
+                    });
+                }
             }
 
             satellites.forEach((sat) => {

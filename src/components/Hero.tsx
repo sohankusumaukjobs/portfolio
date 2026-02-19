@@ -159,8 +159,11 @@ function CodeEditor() {
                 {codeSnippet.map((line, i) => {
                     const tokens = tokenizeLine(line);
                     return (
-                        <div
+                        <motion.div
                             key={i}
+                            initial={{ opacity: 0, filter: "blur(10px)", x: -10 }}
+                            animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.6 + i * 0.1, ease: "easeOut" }}
                             style={{
                                 display: "flex",
                                 alignItems: "baseline",
@@ -197,7 +200,7 @@ function CodeEditor() {
                                     </span>
                                 ))}
                             </span>
-                        </div>
+                        </motion.div>
                     );
                 })}
             </div>

@@ -74,9 +74,10 @@ export default function Navbar() {
                         <Image
                             src="/logo.png"
                             alt="Sohan Kusuma Logo"
-                            width={40}
-                            height={40}
-                            className="drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] object-contain"
+                            width={100}
+                            height={44}
+                            className="object-contain"
+                            style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,0.6))" }}
                         />
                     </button>
 
