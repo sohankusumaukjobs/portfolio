@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Github, Linkedin, Mail, Download, ArrowDown, User } from "lucide-react";
 import { personalInfo, codeSnippet } from "@/data/resume";
 
@@ -209,7 +209,18 @@ function CodeEditor() {
 }
 
 /* ─── Hero Section ─────────────────────────────────────── */
+const ROLES = ["Software Developer", "Data Analyst", "AI/ML Engineer", "Business Analyst"];
+
 export default function Hero() {
+    const [roleIndex, setRoleIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setRoleIndex((prev) => (prev + 1) % ROLES.length);
+        }, 2000);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <section
             id="home"
@@ -225,9 +236,9 @@ export default function Hero() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5 }}
-                        className="inline-flex items-center px-4 py-1.5 rounded-full border border-[#00aaff]/20 bg-[#00aaff]/10 self-start mb-5"
+                        className="glass inline-flex items-center px-6 py-2.5 rounded-full border border-white/10 self-start mb-6"
                     >
-                        <span className="text-[#00aaff] text-[11px] font-bold tracking-[0.2em] uppercase">
+                        <span className="text-[#00aaff] text-xs font-bold tracking-[0.2em] uppercase">
                             Welcome To My Universe
                         </span>
                     </motion.div>
@@ -252,10 +263,27 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-[#9fb3c9] text-base md:text-lg leading-relaxed mb-8 max-w-xl"
+                        className="text-[#9fb3c9] text-base md:text-lg leading-relaxed mb-10 max-w-xl"
                     >
                         <p className="mb-1">
-                            I'm <span className="text-white font-bold">Sohan Kusuma</span>, a professional <span className="text-[#00aaff] font-bold">Innovator.</span>
+                            I'm <span className="text-white font-bold">Sohan Kusuma</span>, a professional{" "}
+                            <span className="relative inline-grid align-baseline">
+                                <AnimatePresence mode="popLayout">
+                                    <motion.span
+                                        key={ROLES[roleIndex]}
+                                        initial={{ opacity: 0, filter: "blur(12px)", x: -20 }}
+                                        animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
+                                        exit={{ opacity: 0, filter: "blur(12px)", x: 40, scale: 1.05 }}
+                                        transition={{ duration: 0.8, ease: "easeOut" }}
+                                        className="text-[#00aaff] font-bold col-start-1 row-start-1"
+                                    >
+                                        {ROLES[roleIndex]}
+                                    </motion.span>
+                                </AnimatePresence>
+                                <span className="opacity-0 font-bold pointer-events-none col-start-1 row-start-1">
+                                    Software Developer
+                                </span>
+                            </span>.
                         </p>
                         <p>
                             dedicated to building high-performance, user-centric web applications.
@@ -300,25 +328,29 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-col sm:flex-row flex-wrap gap-4 w-full sm:w-auto"
+                        className="flex flex-col sm:flex-row flex-wrap gap-5 sm:gap-6 w-full sm:w-auto"
                     >
                         <a
                             href="#contact"
-                            className="flex items-center justify-center sm:justify-start gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto text-center"
+                            className="flex items-center justify-center sm:justify-start gap-3 px-8 py-4 rounded-full text-[15px] font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto text-center glass"
                             style={{
-                                background: "linear-gradient(135deg, #0077ff, #00aaff)",
-                                boxShadow: "0 8px 25px rgba(0, 170, 255, 0.4)"
+                                background: "linear-gradient(135deg, rgba(0, 119, 255, 0.85), rgba(0, 170, 255, 0.85))",
+                                boxShadow: "0 8px 30px rgba(0, 170, 255, 0.4)",
+                                border: "1px solid rgba(255, 255, 255, 0.25)"
                             }}
                         >
-                            LET'S COLLABORATE <User size={18} strokeWidth={2.5} />
+                            LET'S COLLABORATE <User size={20} strokeWidth={2.5} />
                         </a>
                         <a
                             href="/resume.pdf"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center sm:justify-start gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white tracking-wide transition-all duration-300 border border-white/10 bg-[#0a1120] hover:bg-[#1a253a] hover:border-white/20 shadow-lg w-full sm:w-auto text-center"
+                            className="glass flex items-center justify-center sm:justify-start gap-3 px-8 py-4 rounded-full text-[15px] font-bold text-white tracking-wide transition-all duration-300 hover:bg-white/5 shadow-lg w-full sm:w-auto text-center"
+                            style={{
+                                border: "1px solid rgba(255, 255, 255, 0.15)"
+                            }}
                         >
-                            GET RESUME <Download size={18} strokeWidth={2.5} />
+                            GET RESUME <Download size={20} strokeWidth={2.5} />
                         </a>
                     </motion.div>
                 </div>
