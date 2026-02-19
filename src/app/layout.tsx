@@ -38,8 +38,9 @@ export default function RootLayout({
         <div className="noise-overlay" aria-hidden="true" />
         {/* Edge glow effects */}
         <div className="edge-glow-left" aria-hidden="true" />
-        <div className="edge-glow-right" aria-hidden="true" />
-        {children}
+        <div className="max-w-[1920px] mx-auto w-full relative">
+          {children}
+        </div>
       </body>
     </html>
   );
