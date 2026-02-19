@@ -20,8 +20,8 @@ export default function Footer() {
                             <Image
                                 src="/logo.png"
                                 alt="Sohan Kusuma Logo"
-                                width={120}
-                                height={54}
+                                width={220}
+                                height={100}
                                 className="object-contain"
                                 style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,0.6))" }}
                             />

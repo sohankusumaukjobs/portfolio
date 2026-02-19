@@ -74,8 +74,8 @@ export default function Navbar() {
                         <Image
                             src="/logo.png"
                             alt="Sohan Kusuma Logo"
-                            width={100}
-                            height={44}
+                            width={180}
+                            height={80}
                             className="object-contain"
                             style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 10px rgba(255,255,255,0.6))" }}
                         />
