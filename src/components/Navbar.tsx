@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -66,10 +68,16 @@ export default function Navbar() {
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <button
                         onClick={() => handleClick("#home")}
-                        className="text-2xl font-bold gradient-text tracking-tight"
                         aria-label="Go to homepage"
+                        className="relative flex items-center justify-center transition-transform hover:scale-105"
                     >
-                        SK.
+                        <Image
+                            src="/logo.png"
+                            alt="Sohan Kusuma Logo"
+                            width={40}
+                            height={40}
+                            className="drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] object-contain"
+                        />
                     </button>
 
                     {/* Desktop nav */}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Github, Linkedin, Mail, Phone, ArrowUp } from "lucide-react";
+import Image from "next/image";
 import { personalInfo, navLinks } from "@/data/resume";
 
 export default function Footer() {
@@ -15,9 +16,15 @@ export default function Footer() {
                 <div className="grid md:grid-cols-3 gap-12 mb-12">
                     {/* Brand */}
                     <div>
-                        <h3 className="text-2xl font-bold gradient-text mb-4">
-                            SK.
-                        </h3>
+                        <div className="mb-4">
+                            <Image
+                                src="/logo.png"
+                                alt="Sohan Kusuma Logo"
+                                width={48}
+                                height={48}
+                                className="drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] object-contain"
+                            />
+                        </div>
                         <p className="text-[#9fb3c9] text-sm leading-relaxed max-w-xs mb-6">
                             Data Analyst &amp; ML Engineer dedicated to
                             transforming raw data into powerful insights and
