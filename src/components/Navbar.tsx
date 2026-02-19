@@ -65,7 +65,7 @@ export default function Navbar() {
                 role="navigation"
                 aria-label="Main navigation"
             >
-                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+                <div className="max-w-[1600px] mx-auto px-8 md:px-16 h-20 flex items-center justify-between">
                     <button
                         onClick={() => handleClick("#home")}
                         aria-label="Go to homepage"
@@ -82,14 +82,14 @@ export default function Navbar() {
                     </button>
 
                     {/* Desktop nav */}
-                    <div className="hidden md:flex items-center gap-4">
+                    <div className="hidden md:flex ml-auto items-center gap-12 mr-2">
                         {navLinks.map((link) => (
                             <button
                                 key={link.href}
                                 onClick={() => handleClick(link.href)}
-                                className={`title-pill ${activeSection === link.href ? "title-pill--active" : ""}`}
+                                className={`text-sm font-semibold transition-colors duration-300 tracking-wide ${activeSection === link.href ? "text-white" : "text-[#9fb3c9] hover:text-white"}`}
                             >
-                                <span className="font-medium text-sm">{link.label}</span>
+                                {link.label}
                             </button>
                         ))}
                     </div>
@@ -122,8 +122,8 @@ export default function Navbar() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.08 }}
                                 onClick={() => handleClick(link.href)}
-                                className={`title-pill ${activeSection === link.href ? "title-pill--active" : ""}`}
-                                style={{ fontSize: "1.25rem", padding: "1rem 2rem" }}
+                                className={`text-2xl font-bold transition-colors ${activeSection === link.href ? "text-white" : "text-[#9fb3c9] hover:text-white"}`}
+                                style={{ padding: "1rem 2rem" }}
                             >
                                 {link.label}
                             </motion.button>
