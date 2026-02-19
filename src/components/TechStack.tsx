@@ -127,16 +127,16 @@ export default function TechStack() {
                                         return (
                                             <div
                                                 key={`${tech.item}-${idx}`}
-                                                className="flex items-center gap-4 bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] px-6 py-4 rounded-2xl min-w-[260px] max-w-[260px] cursor-default transition-colors hover:bg-[rgba(255,255,255,0.04)] hover:border-[rgba(0,170,255,0.3)] hover:shadow-[0_0_20px_rgba(0,170,255,0.1)]"
+                                                className="tech-card min-w-[260px] max-w-[260px] cursor-default"
                                             >
-                                                <div className="p-3 rounded-xl bg-[rgba(0,170,255,0.08)] border border-[rgba(0,170,255,0.15)] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] shrink-0">
-                                                    {Icon && <Icon size={24} className="text-[#00aaff]" />}
+                                                <div className="icon shrink-0">
+                                                    {Icon && <Icon size={24} />}
                                                 </div>
-                                                <div className="flex flex-col truncate">
-                                                    <span className="text-white font-bold text-[15px] tracking-wide uppercase truncate">
+                                                <div className="flex flex-col truncate overflow-hidden">
+                                                    <span className="title truncate uppercase tracking-wide text-[15px]">
                                                         {tech.item}
                                                     </span>
-                                                    <span className="text-[#00aaff] text-[11px] font-[var(--font-jetbrains)] tracking-wider opacity-80 uppercase mt-0.5 truncate">
+                                                    <span className="subtitle truncate uppercase tracking-wider font-[var(--font-jetbrains)] text-[11px]">
                                                         {tech.category}
                                                     </span>
                                                 </div>
