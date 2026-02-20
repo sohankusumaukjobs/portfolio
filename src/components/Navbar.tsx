@@ -83,15 +83,26 @@ export default function Navbar() {
 
                     {/* Desktop nav */}
                     <div className="hidden md:flex ml-auto items-center gap-12 mr-2">
-                        {navLinks.map((link) => (
-                            <button
-                                key={link.label}
-                                onClick={() => handleClick(link.href)}
-                                className={`text-sm font-semibold transition-colors duration-300 tracking-wide ${activeSection === link.href ? "text-white" : "text-[#9fb3c9] hover:text-white"}`}
-                            >
-                                {link.label}
-                            </button>
-                        ))}
+                        {navLinks.map((link) => {
+                            const isActive = activeSection === link.href;
+                            return (
+                                <button
+                                    key={link.label}
+                                    onClick={() => handleClick(link.href)}
+                                    className={`text-sm font-semibold transition-all duration-300 tracking-wide ${isActive ? "text-[#19a6ff]" : "text-[#9fb3c9] hover:text-white"}`}
+                                    style={isActive ? {
+                                        background: "rgba(25,166,255,0.12)",
+                                        padding: "6px 16px",
+                                        borderRadius: "999px",
+                                        boxShadow: "0 0 12px rgba(25,166,255,0.15)",
+                                    } : {
+                                        padding: "6px 16px",
+                                    }}
+                                >
+                                    {link.label}
+                                </button>
+                            );
+                        })}
                     </div>
 
                     {/* Mobile toggle */}
