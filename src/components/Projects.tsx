@@ -73,7 +73,7 @@ export default function Projects() {
                     >
                         <motion.div
                             layoutId={`project-card-${selectedProject.title}`}
-                            className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[#060d1a] border border-[#00ffff]/30 rounded-2xl shadow-[0_0_50px_rgba(0,170,255,0.2)] scrollbar-hide flex flex-col"
+                            className="relative w-full max-w-[760px] m-auto max-h-[90vh] overflow-y-auto bg-[#060d1a] border border-[#00ffff]/30 rounded-2xl shadow-[0_0_50px_rgba(0,170,255,0.2)] scrollbar-hide flex flex-col"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Close Button */}
@@ -86,7 +86,7 @@ export default function Projects() {
 
                             {/* Modal Content - Dispersion Animation */}
                             <motion.div
-                                className="p-8 md:p-14 lg:p-16"
+                                className="p-[20px_16px] md:p-[32px_36px]"
                                 initial="hidden"
                                 animate="visible"
                                 variants={{
@@ -98,55 +98,55 @@ export default function Projects() {
                                 }}
                             >
                                 {/* Hero Section */}
-                                <div className="relative flex flex-col md:flex-row gap-6 items-start md:items-center mb-10 border-b border-[rgba(0,170,255,0.15)] pb-8 mt-4 md:mt-0">
-                                    <motion.div layoutId={`project-logo-${selectedProject.title}`} className="relative w-24 h-24 md:w-32 md:h-32 shrink-0 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(0,255,255,0.3)] z-10">
+                                <div className="relative flex items-center gap-[16px] mb-[24px]">
+                                    <motion.div layoutId={`project-logo-${selectedProject.title}`} className="relative w-[72px] h-[72px] shrink-0 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(0,255,255,0.3)] z-10">
                                         <div className="absolute inset-0 mix-blend-screen bg-black/50" />
                                         {selectedProject.image && <Image src={selectedProject.image} alt="Logo" fill className="object-cover" />}
                                     </motion.div>
                                     <motion.div variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="text-left flex-1">
-                                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] to-[#0080ff] drop-shadow-[0_0_10px_rgba(0,240,255,0.5)]">
+                                        <h2 className="text-[1.6rem] font-bold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] to-[#0080ff] drop-shadow-[0_0_10px_rgba(0,240,255,0.5)] leading-tight">
                                             {selectedProject.title}
                                         </h2>
-                                        <p className="text-[#9fb3c9] text-lg font-medium">
+                                        <p className="text-[#9fb3c9] text-[0.9rem] opacity-75 font-medium leading-snug">
                                             Deep learning-powered early wildfire detection using DenseNet121 — 98.84% accuracy
                                         </p>
                                     </motion.div>
                                 </div>
 
                                 {/* Key Highlights */}
-                                <motion.div variants={{ hidden: { opacity: 0, y: 20, filter: "blur(5px)", scale: 0.95 }, visible: { opacity: 1, y: 0, filter: "blur(0px)", scale: 1, transition: { type: "spring", damping: 20, stiffness: 100 } } }} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+                                <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="grid grid-cols-4 gap-[12px] mb-[24px]">
                                     {[
                                         { icon: "✅", title: "Test Accuracy", value: "98.84%" },
                                         { icon: "📊", title: "Training Images", value: "2,700+" },
                                         { icon: "🧠", title: "Architecture", value: "DenseNet121" },
                                         { icon: "⚡", title: "Accuracy Boost", value: "+8% via MSR" },
                                     ].map((stat, idx) => (
-                                        <div key={idx} className="bg-[#030812]/50 border border-[rgba(0,170,255,0.1)] rounded-xl p-4 flex flex-col items-center text-center hover:border-[#00ffff]/30 transition-colors">
-                                            <span className="text-2xl mb-2">{stat.icon}</span>
-                                            <span className="text-[#00ffff] font-bold text-xl mb-1">{stat.value}</span>
-                                            <span className="text-xs text-[#9fb3c9] uppercase tracking-wider">{stat.title}</span>
+                                        <div key={idx} className="bg-[#030812]/50 border border-[rgba(0,170,255,0.1)] rounded-[10px] p-[12px_8px] flex flex-col items-center text-center hover:border-[#00ffff]/30 transition-colors">
+                                            <span className="text-2xl mb-1">{stat.icon}</span>
+                                            <span className="text-[#00ffff] font-bold text-[1.1rem] leading-none mb-1">{stat.value}</span>
+                                            <span className="text-[0.7rem] text-[#9fb3c9] uppercase tracking-[0.05em] opacity-60">{stat.title}</span>
                                         </div>
                                     ))}
                                 </motion.div>
 
                                 {/* Overview */}
-                                <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="mb-10">
-                                    <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                                        <span className="w-1.5 h-6 bg-[#00ffff] rounded-full inline-block"></span> Overview
+                                <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="mb-[24px]">
+                                    <h3 className="mt-[20px] mb-[10px] text-[1rem] font-semibold text-white border-l-[3px] border-[#00CFFF] pl-[10px]">
+                                        Overview
                                     </h3>
-                                    <p className="text-[#9fb3c9] leading-relaxed text-lg">
+                                    <p className="text-[#9fb3c9] leading-relaxed text-[0.95rem]">
                                         An end-to-end deep learning pipeline for early wildfire detection. Combines Multi-Scale Retinex (MSR) illumination correction and RGB-to-YCbCr color space transformation with a DenseNet121 classifier. Trained on the Wildfire Dataset (El-Madafri et al., 2023) with 2,700+ high-resolution images, achieving 98.84% test accuracy versus 82.89% for the CNN baseline.
                                     </p>
                                 </motion.div>
 
                                 {/* Tech Stack */}
-                                <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="mb-10">
-                                    <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                                        <span className="w-1.5 h-6 bg-[#ff8c00] rounded-full inline-block drop-shadow-[0_0_5px_rgba(255,140,0,0.8)]"></span> Tech Stack
+                                <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="mb-[24px]">
+                                    <h3 className="mt-[20px] mb-[10px] text-[1rem] font-semibold text-white border-l-[3px] border-[#ff8c00] pl-[10px] drop-shadow-[0_0_5px_rgba(255,140,0,0.8)]">
+                                        Tech Stack
                                     </h3>
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap gap-[8px]">
                                         {["Python", "TensorFlow", "Keras", "DenseNet", "CNN", "Scikit-learn", "Matplotlib", "OpenCV"].map((tag) => (
-                                            <span key={tag} className="px-4 py-1.5 text-sm rounded-full bg-[rgba(255,140,0,0.08)] text-[#ff8c00] border border-[rgba(255,140,0,0.3)] shadow-[0_0_10px_rgba(255,140,0,0.1)]">
+                                            <span key={tag} className="px-[10px] py-[4px] text-[0.75rem] rounded-[20px] bg-[rgba(255,140,0,0.08)] text-[#ff8c00] border border-[rgba(255,140,0,0.3)] shadow-[0_0_10px_rgba(255,140,0,0.1)]">
                                                 {tag}
                                             </span>
                                         ))}
@@ -154,17 +154,17 @@ export default function Projects() {
                                 </motion.div>
 
                                 {/* Results Table */}
-                                <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="mb-10 overflow-x-auto">
-                                    <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                                        <span className="w-1.5 h-6 bg-[#00ffff] rounded-full inline-block drop-shadow-[0_0_5px_rgba(0,255,255,0.8)]"></span> Results Comparison
+                                <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="mb-[20px] overflow-x-auto">
+                                    <h3 className="mt-[20px] mb-[10px] text-[1rem] font-semibold text-white border-l-[3px] border-[#00CFFF] pl-[10px] drop-shadow-[0_0_5px_rgba(0,255,255,0.8)]">
+                                        Results Comparison
                                     </h3>
-                                    <div className="border border-[rgba(0,170,255,0.2)] rounded-xl overflow-hidden min-w-[600px]">
-                                        <table className="w-full text-left border-collapse">
+                                    <div className="border border-[rgba(0,170,255,0.2)] rounded-xl overflow-hidden min-w-[500px] w-full">
+                                        <table className="w-full text-left border-collapse text-[0.82rem]">
                                             <thead>
                                                 <tr className="bg-[#030812] border-b border-[rgba(0,170,255,0.2)]">
-                                                    <th className="p-4 text-[#00ffff] font-medium tracking-wide">Model</th>
-                                                    <th className="p-4 text-[#00ffff] font-medium tracking-wide">Preprocessing</th>
-                                                    <th className="p-4 text-[#00ffff] font-medium tracking-wide">Accuracy</th>
+                                                    <th className="p-[8px_10px] w-[30%] text-[#00CFFF] font-bold text-[0.78rem] uppercase tracking-[0.04em]">Model</th>
+                                                    <th className="p-[8px_10px] w-[40%] text-[#00CFFF] font-bold text-[0.78rem] uppercase tracking-[0.04em]">Preprocessing</th>
+                                                    <th className="p-[8px_10px] w-[30%] text-[#00CFFF] font-bold text-[0.78rem] uppercase tracking-[0.04em]">Accuracy</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -174,10 +174,10 @@ export default function Projects() {
                                                     { model: "CNN", pre: "MSR + YCbCr", acc: "92.11%" },
                                                     { model: "DenseNet", pre: "MSR + YCbCr", acc: "98.84%", highlight: true },
                                                 ].map((row, idx) => (
-                                                    <tr key={idx} className={`border-b border-[rgba(255,255,255,0.05)] transition-colors hover:bg-[rgba(0,170,255,0.1)] ${row.highlight ? 'bg-[rgba(0,170,255,0.08)]' : ''}`}>
-                                                        <td className="p-4 text-white font-medium">{row.model}</td>
-                                                        <td className="p-4 text-[#9fb3c9]">{row.pre}</td>
-                                                        <td className={`p-4 font-bold ${row.highlight ? 'text-[#00ffff] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]' : 'text-[#e6f0ff]'}`}>{row.acc}</td>
+                                                    <tr key={idx} className={`border-b border-[rgba(255,255,255,0.05)] transition-colors ${row.highlight ? 'bg-[rgba(0,170,255,0.08)]' : (idx % 2 === 0 ? 'bg-[rgba(255,255,255,0.03)]' : '')}`}>
+                                                        <td className={`p-[8px_10px] ${row.highlight ? 'text-[#00CFFF] font-bold' : 'text-white font-medium'}`}>{row.model}</td>
+                                                        <td className={`p-[8px_10px] ${row.highlight ? 'text-[#00CFFF] font-bold' : 'text-[#9fb3c9]'}`}>{row.pre}</td>
+                                                        <td className={`p-[8px_10px] ${row.highlight ? 'text-[#00CFFF] font-bold drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]' : 'text-[#e6f0ff]'}`}>{row.acc}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
@@ -186,11 +186,11 @@ export default function Projects() {
                                 </motion.div>
 
                                 {/* Visual Figures Section */}
-                                <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="mb-10">
-                                    <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                                        <span className="w-1.5 h-6 bg-[#00ffff] rounded-full inline-block"></span> Technical Analysis
+                                <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.4 } } }} className="mb-[24px]">
+                                    <h3 className="mt-[20px] mb-[10px] text-[1rem] font-semibold text-white border-l-[3px] border-[#00CFFF] pl-[10px]">
+                                        Technical Analysis
                                     </h3>
-                                    <div className="grid md:grid-cols-2 gap-4">
+                                    <div className="grid md:grid-cols-2 gap-[16px]">
                                         {/* Image 1 */}
                                         <div className="bg-[#030812]/50 border border-[rgba(0,170,255,0.1)] rounded-xl p-4 flex flex-col items-center justify-center text-center group hover:border-[#00ffff]/30 transition-colors">
                                             <div className="relative w-full aspect-square md:aspect-video mb-4 rounded-lg overflow-hidden border border-[rgba(0,170,255,0.2)]">
@@ -222,12 +222,12 @@ export default function Projects() {
                                 </motion.div>
 
                                 {/* Github Button */}
-                                <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1, transition: { type: "spring", damping: 20, stiffness: 150 } } }} className="mt-12 flex justify-center pb-6">
+                                <motion.div variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1, transition: { type: "spring", damping: 20, stiffness: 150 } } }} className="mt-[24px] flex justify-center pb-[24px]">
                                     <a
                                         href="https://github.com/sohankusumaukjobs"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#00f0ff] to-[#0080ff] text-[#030812] font-bold rounded-full shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] hover:scale-105 transition-all duration-300"
+                                        className="inline-flex items-center gap-[8px] px-[24px] py-[10px] bg-[#00CFFF] text-[#000] font-semibold text-[0.9rem] rounded-full shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] hover:scale-105 transition-all duration-300"
                                     >
                                         <Github size={20} className="fill-current" />
                                         View Code on GitHub
