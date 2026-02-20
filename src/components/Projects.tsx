@@ -69,7 +69,7 @@ export default function Projects() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setSelectedProject(null)}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-[#030812]/90 backdrop-blur-md"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-[0.7cm] md:p-[1.5cm] bg-[#030812]/90 backdrop-blur-md"
                     >
                         <motion.div
                             layoutId={`project-card-${selectedProject.title}`}
