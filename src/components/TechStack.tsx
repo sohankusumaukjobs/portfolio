@@ -76,10 +76,15 @@ export default function TechStack() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-    // Flatten all tech items for the grid
+    // Flatten logic for continuous marquees
     const allTech = techStack.flatMap((c) =>
         c.items.map((item) => ({ item, category: c.category }))
     );
+
+    // Split into 3 rows for the marquee
+    const row1 = allTech.slice(0, Math.ceil(allTech.length / 3));
+    const row2 = allTech.slice(Math.ceil(allTech.length / 3), Math.ceil((allTech.length * 2) / 3));
+    const row3 = allTech.slice(Math.ceil((allTech.length * 2) / 3));
 
     return (
         <section id="stack" className="section-padding flex flex-col items-center justify-center w-full">
@@ -100,33 +105,46 @@ export default function TechStack() {
                     <div className="section-underline" />
                 </motion.div>
 
-                <div className="tech-card-grid w-full mt-8">
-                    {allTech.map((tech, idx) => {
-                        const Icon = iconMap[tech.item];
+                <div className="w-full mt-8 overflow-hidden flex flex-col gap-6">
+                    {[row1, row2, row3].map((rowItems, rowIndex) => {
+                        const direction = rowIndex % 2 === 0 ? "left" : "right";
+                        const baseSpeed = 40;
+                        const speed = rowIndex % 2 === 0 ? baseSpeed : baseSpeed + 8;
+
                         return (
-                            <motion.div
-                                key={tech.item}
-                                initial={{ opacity: 0, y: 8 }}
-                                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                                transition={{
-                                    duration: 0.4,
-                                    delay: idx * 0.06,
-                                    ease: [0.2, 0.9, 0.3, 1],
-                                }}
-                                className="tech-card cursor-default"
-                            >
-                                <div className="icon shrink-0">
-                                    {Icon && <Icon size={24} />}
+                            <div key={rowIndex} className="flex overflow-hidden relative w-full marquee-container py-2">
+                                {/* Fade masks for smooth entry/exit */}
+                                <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#031022] to-transparent z-10 pointer-events-none" />
+                                <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#031022] to-transparent z-10 pointer-events-none" />
+
+                                <div
+                                    className={`flex gap-6 px-3 ${direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
+                                        }`}
+                                    style={{ animationDuration: `${speed}s` }}
+                                >
+                                    {[...rowItems, ...rowItems].map((tech, idx) => {
+                                        const Icon = iconMap[tech.item];
+                                        return (
+                                            <div
+                                                key={`${tech.item}-${idx}`}
+                                                className="tech-card min-w-[260px] max-w-[260px] cursor-default"
+                                            >
+                                                <div className="icon shrink-0">
+                                                    {Icon && <Icon size={24} />}
+                                                </div>
+                                                <div className="flex flex-col truncate overflow-hidden">
+                                                    <span className="title truncate uppercase tracking-wide text-[15px]">
+                                                        {tech.item}
+                                                    </span>
+                                                    <span className="subtitle truncate uppercase tracking-wider font-[var(--font-jetbrains)] text-[11px]">
+                                                        {tech.category}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                                <div className="flex flex-col truncate overflow-hidden">
-                                    <span className="title truncate uppercase tracking-wide text-[15px]">
-                                        {tech.item}
-                                    </span>
-                                    <span className="subtitle truncate uppercase tracking-wider font-[var(--font-jetbrains)] text-[11px]">
-                                        {tech.category}
-                                    </span>
-                                </div>
-                            </motion.div>
+                            </div>
                         );
                     })}
                 </div>
