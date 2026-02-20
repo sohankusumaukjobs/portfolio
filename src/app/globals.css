@@ -372,3 +372,94 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── Spaceship Exhaust Flames ───────────────────────── */
+.spaceship-exhaust {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.flame {
+  border-radius: 50% 0 50% 50%;
+  transform: rotate(225deg);
+}
+
+.flame-core {
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, #fff 0%, #ffeb3b 40%, #ff9800 100%);
+  animation: flame-pulse-core 0.12s ease-in-out infinite alternate;
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%) rotate(225deg);
+  z-index: 3;
+}
+
+.flame-mid {
+  width: 20px;
+  height: 16px;
+  background: radial-gradient(circle, #ffc107 0%, #ff5722 60%, transparent 100%);
+  animation: flame-pulse-mid 0.18s ease-in-out infinite alternate;
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  transform: translateY(-50%) rotate(225deg);
+  opacity: 0.9;
+  z-index: 2;
+}
+
+.flame-outer {
+  width: 32px;
+  height: 24px;
+  background: radial-gradient(circle, #ff980055 0%, #e64a1933 50%, transparent 100%);
+  animation: flame-pulse-outer 0.25s ease-in-out infinite alternate;
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  transform: translateY(-50%) rotate(225deg);
+  opacity: 0.7;
+  z-index: 1;
+}
+
+@keyframes flame-pulse-core {
+  0% {
+    transform: translateY(-50%) rotate(225deg) scale(0.85);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-50%) rotate(225deg) scale(1.15);
+    opacity: 0.9;
+  }
+}
+
+@keyframes flame-pulse-mid {
+  0% {
+    transform: translateY(-50%) rotate(225deg) scale(0.9) translateX(0);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateY(-50%) rotate(225deg) scale(1.1) translateX(-2px);
+    opacity: 0.9;
+  }
+}
+
+@keyframes flame-pulse-outer {
+  0% {
+    transform: translateY(-50%) rotate(225deg) scale(0.85) translateX(0);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateY(-50%) rotate(225deg) scale(1.2) translateX(-3px);
+    opacity: 0.7;
+  }
+}
+
+/* Active journey card glow border */
+.journey-card {
+  position: relative;
+}

@@ -33,7 +33,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-[var(--font-inter)] antialiased relative">
+      <body className="font-[var(--font-inter)] antialiased relative overflow-x-hidden">
         <StarBackground />
         <div className="noise-overlay" aria-hidden="true" />
         <div className="w-full relative">
