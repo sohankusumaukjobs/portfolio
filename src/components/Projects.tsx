@@ -86,7 +86,7 @@ export default function Projects() {
 
                             {/* Modal Content - Dispersion Animation */}
                             <motion.div
-                                className="p-6 md:p-10"
+                                className="p-8 md:p-14 lg:p-16"
                                 initial="hidden"
                                 animate="visible"
                                 variants={{
