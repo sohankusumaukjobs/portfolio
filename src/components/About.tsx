@@ -20,7 +20,7 @@ export default function About() {
                     className="flex flex-col items-center text-center mb-16 w-full"
                 >
                     <p className="section-label">{"// about"}</p>
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                    <h2 className="text-5xl md:text-6xl text-white mb-4" style={{ fontWeight: 900, letterSpacing: '-0.02em' }}>
                         About <span className="gradient-text">The Analyst</span>
                     </h2>
                     <p className="text-[#9fb3c9] max-w-2xl">
