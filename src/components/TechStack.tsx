@@ -87,8 +87,9 @@ export default function TechStack() {
     const row3 = allTech.slice(Math.ceil((allTech.length * 2) / 3));
 
     return (
-        <section id="stack" className="section-padding flex flex-col items-center justify-center w-full">
-            <div className="max-w-6xl w-full mx-auto flex flex-col items-center" ref={ref}>
+        <section id="stack" className="flex flex-col items-center justify-center w-full" style={{ paddingTop: '7rem', paddingBottom: '7rem' }} ref={ref}>
+            {/* Heading stays centered */}
+            <div className="max-w-6xl w-full mx-auto flex flex-col items-center px-6 md:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -104,50 +105,47 @@ export default function TechStack() {
                     </p>
                     <div className="section-underline" />
                 </motion.div>
+            </div>
 
-                <div className="w-full mt-8 overflow-hidden flex flex-col gap-6">
-                    {[row1, row2, row3].map((rowItems, rowIndex) => {
-                        const direction = rowIndex % 2 === 0 ? "left" : "right";
-                        const baseSpeed = 40;
-                        const speed = rowIndex % 2 === 0 ? baseSpeed : baseSpeed + 8;
+            {/* Marquee rows break out to full viewport width */}
+            <div className="w-full mt-8 flex flex-col gap-6" style={{ overflowX: 'clip', overflowY: 'visible' }}>
+                {[row1, row2, row3].map((rowItems, rowIndex) => {
+                    const direction = rowIndex % 2 === 0 ? "left" : "right";
+                    const baseSpeed = 40;
+                    const speed = rowIndex % 2 === 0 ? baseSpeed : baseSpeed + 8;
 
-                        return (
-                            <div key={rowIndex} className="flex overflow-hidden relative w-full marquee-container py-2">
-                                {/* Fade masks for smooth entry/exit */}
-                                <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#031022] to-transparent z-10 pointer-events-none" />
-                                <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#031022] to-transparent z-10 pointer-events-none" />
-
-                                <div
-                                    className={`flex gap-6 px-3 ${direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
-                                        }`}
-                                    style={{ animationDuration: `${speed}s` }}
-                                >
-                                    {[...rowItems, ...rowItems].map((tech, idx) => {
-                                        const Icon = iconMap[tech.item];
-                                        return (
-                                            <div
-                                                key={`${tech.item}-${idx}`}
-                                                className="tech-card min-w-[260px] max-w-[260px] cursor-default"
-                                            >
-                                                <div className="icon shrink-0">
-                                                    {Icon && <Icon size={24} />}
-                                                </div>
-                                                <div className="flex flex-col truncate overflow-hidden">
-                                                    <span className="title truncate uppercase tracking-wide text-[15px]">
-                                                        {tech.item}
-                                                    </span>
-                                                    <span className="subtitle truncate uppercase tracking-wider font-[var(--font-jetbrains)] text-[11px]">
-                                                        {tech.category}
-                                                    </span>
-                                                </div>
+                    return (
+                        <div key={rowIndex} className="flex relative w-full marquee-container" style={{ overflowX: 'clip', overflowY: 'visible', paddingTop: '10px', paddingBottom: '10px' }}>
+                            <div
+                                className={`flex gap-6 px-3 ${direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
+                                    }`}
+                                style={{ animationDuration: `${speed}s` }}
+                            >
+                                {[...rowItems, ...rowItems].map((tech, idx) => {
+                                    const Icon = iconMap[tech.item];
+                                    return (
+                                        <div
+                                            key={`${tech.item}-${idx}`}
+                                            className="tech-card min-w-[260px] max-w-[260px] cursor-default"
+                                        >
+                                            <div className="icon shrink-0">
+                                                {Icon && <Icon size={24} />}
                                             </div>
-                                        );
-                                    })}
-                                </div>
+                                            <div className="flex flex-col truncate overflow-hidden">
+                                                <span className="title truncate uppercase tracking-wide text-[15px]">
+                                                    {tech.item}
+                                                </span>
+                                                <span className="subtitle truncate uppercase tracking-wider font-[var(--font-jetbrains)] text-[11px]">
+                                                    {tech.category}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
-                        );
-                    })}
-                </div>
+                        </div>
+                    );
+                })}
             </div>
         </section>
     );

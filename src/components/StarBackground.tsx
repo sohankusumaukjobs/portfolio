@@ -208,28 +208,31 @@ export default function StarBackground() {
             fgCtx.clearRect(0, 0, fgCanvas.width, fgCanvas.height);
             time++;
 
-            // Handle Comets
-            // Gap of ~5-8 seconds (300 frames at 60fps)
-            if (stars.length > 0 && time - lastCometSpawnTime > 300 && Math.random() < 0.02) {
+            // Spawn exactly 4 comets every 4 seconds (240 frames at 60fps)
+            if (stars.length > 0 && time - lastCometSpawnTime >= 240) {
                 lastCometSpawnTime = time;
-                const randomStar = stars[Math.floor(Math.random() * stars.length)];
 
-                comets.push({
-                    x: randomStar.x,
-                    y: randomStar.y,
-                    originX: randomStar.x,
-                    originY: randomStar.y,
-                    length: Math.random() * 150 + 80,
-                    speed: Math.random() * 1.0 + 0.3, // VERY SLOW: 0.3 to 1.3 for majestic smooth glide
-                    // Angle radiating somewhat towards bottom/left or top/right 
-                    angle: Math.PI / 4 + (Math.random() * 1.5 - 0.75),
-                    opacity: 1,
-                    thickness: Math.random() * 1.5 + 1.5,
-                    active: true,
-                    state: "charging",
-                    chargeTimer: 0,
-                    maxChargeTime: Math.random() * 40 + 20
-                });
+                for (let i = 0; i < 4; i++) {
+                    const randomStar = stars[Math.floor(Math.random() * stars.length)];
+
+                    comets.push({
+                        x: randomStar.x,
+                        y: randomStar.y,
+                        originX: randomStar.x,
+                        originY: randomStar.y,
+                        length: Math.random() * 180 + 100,
+                        speed: Math.random() * 0.35 + 0.15, // Very slow: 0.15 to 0.5 for majestic glide
+                        angle: Math.PI / 4 + (Math.random() * 1.5 - 0.75),
+                        opacity: 1,
+                        thickness: Math.random() * 1.5 + 1.5,
+                        active: true,
+                        state: "charging",
+                        chargeTimer: 0,
+                        // Staggered charge: each comet in the batch starts at a slightly different time
+                        // ~1.5–2.5 seconds of brightening (90–150 frames)
+                        maxChargeTime: Math.random() * 60 + 90 + (i * 25)
+                    });
+                }
             }
 
             comets.forEach((comet) => {
@@ -237,13 +240,29 @@ export default function StarBackground() {
 
                 if (comet.state === "charging") {
                     comet.chargeTimer++;
-                    const progress = comet.chargeTimer / comet.maxChargeTime;
+                    const progress = Math.min(comet.chargeTimer / comet.maxChargeTime, 1);
 
-                    // Draw a brightening glowing star
+                    // Star brightens and grows with a pulsing glow
+                    const pulseScale = 1 + Math.sin(comet.chargeTimer * 0.15) * 0.3;
+                    const glowRadius = (1.5 + progress * 3) * pulseScale;
+
+                    // Outer soft halo
                     fgCtx.beginPath();
-                    fgCtx.arc(comet.originX, comet.originY, 1.5 + (progress * 2), 0, Math.PI * 2);
-                    fgCtx.fillStyle = `rgba(180, 230, 255, ${progress})`;
-                    fgCtx.shadowBlur = progress * 15;
+                    fgCtx.arc(comet.originX, comet.originY, glowRadius * 4, 0, Math.PI * 2);
+                    fgCtx.fillStyle = `rgba(100, 200, 255, ${progress * 0.08})`;
+                    fgCtx.fill();
+
+                    // Mid glow
+                    fgCtx.beginPath();
+                    fgCtx.arc(comet.originX, comet.originY, glowRadius * 2, 0, Math.PI * 2);
+                    fgCtx.fillStyle = `rgba(150, 220, 255, ${progress * 0.25})`;
+                    fgCtx.fill();
+
+                    // Bright core
+                    fgCtx.beginPath();
+                    fgCtx.arc(comet.originX, comet.originY, glowRadius, 0, Math.PI * 2);
+                    fgCtx.fillStyle = `rgba(200, 240, 255, ${progress * 0.9})`;
+                    fgCtx.shadowBlur = progress * 20;
                     fgCtx.shadowColor = "rgba(100, 200, 255, 1)";
                     fgCtx.fill();
                     fgCtx.shadowBlur = 0;
@@ -252,14 +271,22 @@ export default function StarBackground() {
                         comet.state = "shooting";
                     }
                 } else {
-                    // Shooting state
+                    // Shooting state — comet head glow
+                    fgCtx.beginPath();
+                    fgCtx.arc(comet.x, comet.y, 2, 0, Math.PI * 2);
+                    fgCtx.fillStyle = `rgba(220, 240, 255, ${comet.opacity})`;
+                    fgCtx.shadowBlur = 8;
+                    fgCtx.shadowColor = `rgba(100, 200, 255, ${comet.opacity})`;
+                    fgCtx.fill();
+                    fgCtx.shadowBlur = 0;
+
+                    // Draw the comet tail
                     const tailEndX = comet.x - Math.cos(comet.angle) * comet.length;
                     const tailEndY = comet.y - Math.sin(comet.angle) * comet.length;
 
-                    // Draw the comet tail
                     const grad = fgCtx.createLinearGradient(comet.x, comet.y, tailEndX, tailEndY);
                     grad.addColorStop(0, `rgba(255, 255, 255, ${comet.opacity})`);
-                    grad.addColorStop(0.1, `rgba(150, 220, 255, ${comet.opacity * 0.8})`);
+                    grad.addColorStop(0.08, `rgba(150, 220, 255, ${comet.opacity * 0.7})`);
                     grad.addColorStop(1, "rgba(0, 170, 255, 0)");
 
                     fgCtx.beginPath();
@@ -272,16 +299,16 @@ export default function StarBackground() {
                     fgCtx.stroke();
                     fgCtx.globalCompositeOperation = "source-over";
 
-                    // Update position
+                    // Update position — very slow drift
                     comet.x += Math.cos(comet.angle) * comet.speed;
                     comet.y += Math.sin(comet.angle) * comet.speed;
 
-                    // Fade out slightly fast after it leaves the origin
-                    comet.opacity *= 0.95;
+                    // Very gradual fade so the comet streaks across the screen slowly
+                    comet.opacity *= 0.997;
 
-                    if (comet.opacity < 0.05 ||
-                        comet.x < -200 || comet.x > fgCanvas.width + 200 ||
-                        comet.y < -200 || comet.y > fgCanvas.height + 200) {
+                    if (comet.opacity < 0.03 ||
+                        comet.x < -300 || comet.x > fgCanvas.width + 300 ||
+                        comet.y < -300 || comet.y > fgCanvas.height + 300) {
                         comet.active = false;
                     }
                 }

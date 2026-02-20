@@ -36,9 +36,7 @@ export default function RootLayout({
       <body className="font-[var(--font-inter)] antialiased relative">
         <StarBackground />
         <div className="noise-overlay" aria-hidden="true" />
-        {/* Edge glow effects */}
-        <div className="edge-glow-left" aria-hidden="true" />
-        <div className="max-w-[1920px] mx-auto w-full relative">
+        <div className="w-full relative">
           {children}
         </div>
       </body>
