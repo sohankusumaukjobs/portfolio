@@ -1,0 +1,86 @@
+1 
+ 
+ 
+UNIVERSITY OF HERTFORDSHIRE 
+School of Physics, Engineering and Computer 
+Science 
+ 
+MSc Computer Science Masters Project 
+7COM1039-0206-2024 - Advanced Computer Science 
+Masters Project 
+21/04/2025 
+ 
+Wildfire detection using DenseNet 
+model. 
+ 
+ 
+Name: Sohan Kusuma  
+Student ID: 23022328 
+Supervisor:  Dr. Tamie Salter 
+ 
+2 
+ 
+MSc FPR Declaration 
+ 
+This report is submitted in partial fulfilment of the requirement for the degree of: 
+Master of Science in 7COM1039-0206-2024 - Advanced Computer Science Masters Project, 
+at the University of Hertfordshire (UH).  
+I hereby declare that the work presented in this project and report is entirely my own, except 
+where explicitly stated otherwise. All sources of information and ideas, whether quoted directly 
+or paraphrased, have been properly referenced in accordance with academic standards. I 
+understand that any failure to properly acknowledge the work of others could constitute 
+plagiarism and may result in academic penalties. 
+I did not use human participants in my MSc Project.  
+I hereby give permission for the report to be made available on the university website provided 
+the source is acknowledged. 
+ 
+ 
+3 
+ 
+Abstract 
+Wildfires represent a significant danger to ecosystems, economy, and human safety, with their 
+occurrence increasing owing to climate change and anthropogenic activities.  Prompt and 
+precise detection is crucial to mitigate damage and facilitate efficient emergency actions.  This 
+study presents a deep learning-based wildfire detection system that incorporates sophisticated 
+image preprocessing techniques, including Multi-Scale Retinex (MSR) and RGB-to-YCbCr 
+color space translation, with the DenseNet121 architecture.  The Wildfire Dataset, consisting 
+of various fire and non-fire photos, was utilized for model training and assessment.  
+Exploratory Data Analysis (EDA) identified significant difficulties including brightness 
+fluctuation, class imbalance, and resolution discrepancies.  Results indicate that DenseNet with 
+preprocessing attained an impressive 98.84% test accuracy, in contrast to 90.95% without 
+preprocessing, reflecting an 8% increase.  The accuracy of the CNN model increased from 
+82.89% to 92.11% following preprocessing.  Preprocessing significantly improved contrast, 
+feature visibility, and resilience, resulting in substantial decreases in misclassification rates.  
+The results confirm that improving input quality by MSR and color space conversion directly 
+enhances classification performance, particularly under difficult visual situations like smoke, 
+haze, and inadequate illumination.  This study enhances image-based wildfire detection 
+capabilities, providing a more precise and dependable solution than conventional raw-image 
+classification methods. 
+ 
+4 
+ 
+Acknowledgements 
+I like to convey my profound appreciation to Dr. Tamie Salter, my supervisor at University 
+of Hertfordshire, for their indispensable direction, unwavering support, and insightful input 
+during this research.  Their proficiency in deep learning and computer vision has significantly 
+enhanced the advancement of this project. 
+  
+Gratitude is extended to my colleagues and friends for their encouragement, enlightening talks, 
+and moral support during the project. I express my gratitude to my family for their steadfast 
+support and comprehension during this journey. 
+ 
+5 
+ 
+Table of Contents 
+MSc FPR Declaration ................................................................................................................ 2 
+Abstract ...................................................................................................................................... 3 
+Acknowledgements .................................................................................................................... 4 
+Section 1: Introduction ............................................................................................................... 8 
+1.1 Contemporary Challenges ................................................................................................ 8 
+1.2 Aim of the project ............................................................................................................ 8 
+1.3 Research questions ........................................................................................................... 9 
+1.4 Objectives of the project .................................................................................................. 9 
+1.5 Feasibility, Commercial Context, and Risk ................................................................... 10 
+1.6 Report Structure ............................................................................................................. 11 
+Section 2: Literature review ..................................................................................................... 12 
+2.1 Related works..........................................................................................

@@ -108,6 +108,7 @@ export interface Project {
     description: string;
     tags: string[];
     badge?: string;
+    image?: string;
 }
 
 export const projects: Project[] = [
@@ -117,24 +118,28 @@ export const projects: Project[] = [
             "An end-to-end deep learning pipeline for early wildfire detection using DenseNet-based CNNs trained on 2,700+ high-resolution images. Achieved 98.84% accuracy with augmentation, Multi-Scale Retinex preprocessing, and GridSearchCV optimization. Results visualized with Matplotlib/Seaborn.",
         tags: ["Python", "TensorFlow", "Keras", "DenseNet", "CNN", "Scikit-learn", "Matplotlib"],
         badge: "Featured · Distinction",
+        image: "/wildfire-logo.png",
     },
     {
         title: "AI Financial Chatbot (BCG GenAI Simulation)",
         description:
             "An AI-powered financial chatbot built for BCG's GenAI consulting team. Parses 10-K and 10-Q financial reports using Python and pandas, applying rule-based logic to deliver clear, user-friendly financial insights.",
         tags: ["Python", "Pandas", "GenAI", "Rule-Based Logic", "Financial Analysis"],
+        image: "/bcg-logo.png",
     },
     {
         title: "Deloitte Forensic Data Dashboard",
         description:
             "A Tableau dashboard built for a Deloitte forensic data analysis simulation. Used Excel-based data classification to surface critical insights and support strategic business decision-making.",
         tags: ["Tableau", "Excel", "Data Analysis", "Forensic Technology", "Power BI"],
+        image: "/deloitte-logo.png",
     },
     {
         title: "Power BI KPI Dashboards (Academic)",
         description:
             "Interactive Power BI dashboards built with DAX and advanced data modelling to surface regional KPIs and business trends. Integrated reproducible ML experiments using Scikit-learn for end-to-end analytics delivery.",
         tags: ["Power BI", "DAX", "Scikit-learn", "Feature Engineering", "Excel"],
+        image: "/powerbi-logo.png",
     },
 ];
 
