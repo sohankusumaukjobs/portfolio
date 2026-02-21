@@ -1,0 +1,1457 @@
+1 
+ 
+ 
+UNIVERSITY OF HERTFORDSHIRE 
+School of Physics, Engineering and Computer 
+Science 
+ 
+MSc Computer Science Masters Project 
+7COM1039-0206-2024 - Advanced Computer Science 
+Masters Project 
+21/04/2025 
+ 
+Wildfire detection using DenseNet 
+model. 
+ 
+ 
+Name: Sohan Kusuma  
+Student ID: 23022328 
+Supervisor:  Dr. Tamie Salter 
+ 
+
+======PAGE======
+2 
+ 
+MSc FPR Declaration 
+ 
+This report is submitted in partial fulfilment of the requirement for the degree of: 
+Master of Science in 7COM1039 -0206-2024 - Advanced Computer Science Masters Project, 
+at the University of Hertfordshire (UH).  
+I hereby declare that the work presented in this project and report is entirely my own, except 
+where explicitly stated otherwise. All sources of information and ideas, whether quoted directly 
+or paraphrased, have been properly referenced in accordance with  academic standards. I 
+understand that any failure to properly acknowledge the work of others could constitute 
+plagiarism and may result in academic penalties. 
+I did not use human participants in my MSc Project.  
+I hereby give permission for the report to be made available on the university website provided 
+the source is acknowledged. 
+  
+======PAGE======
+3 
+ 
+Abstract 
+Wildfires represent a significant danger to ecosystems, economy, and human safety, with their 
+occurrence increasing owing to climate change and anthropogenic activities.  Prompt and 
+precise detection is crucial to mitigate damage and facilitate efficient emergency actions.  This 
+study presents a deep learning-based wildfire detection system that incorporates sophisticated 
+image preprocessing techniques, including Multi -Scale Retinex (MSR) and RGB -to-YCbCr 
+color space translation, with the DenseNet121 archit ecture.  The Wildfire Dataset, consisting 
+of various fire and non -fire photos, was utilized for model training and assessment.  
+Exploratory Data Analysis (EDA) identified significant difficulties including brightness 
+fluctuation, class imbalance, and resolution discrepancies.  Results indicate that DenseNet with 
+preprocessing attained an impressive 98.84% test accuracy, in contrast to 90.95% without 
+preprocessing, reflecting an 8% increase.  The accuracy of the CNN model increased from 
+82.89% to 92.11% foll owing preprocessing.  Preprocessing significantly improved contrast, 
+feature visibility, and resilience, resulting in substantial decreases in misclassification rates.  
+The results confirm that improving input quality by MSR and color space conversion dire ctly 
+enhances classification performance, particularly under difficult visual situations like smoke, 
+haze, and inadequate illumination.  This study enhances image -based wildfire detection 
+capabilities, providing a more precise and dependable solution than conventional raw-image 
+classification methods.  
+======PAGE======
+4 
+ 
+Acknowledgements 
+I like to convey my profound appreciation to  Dr. Tamie Salter, my supervisor at University 
+of Hertfordshire, for their indispensable direction, unwavering support, and insightful input 
+during this research.  Their proficiency in deep learning and computer vision has significantly 
+enhanced the advancement of this project. 
+  
+Gratitude is extended to my colleagues and friends for their encouragement, enlightening talks, 
+and moral support during the project . I express my gratitude to my family for their steadfast 
+support and comprehension during this journey.  
+======PAGE======
+5 
+ 
+Table of Contents 
+MSc FPR Declaration ................................................................................................................ 2 
+Abstract ...................................................................................................................................... 3 
+Acknowledgements .................................................................................................................... 4 
+Section 1: Introduction ............................................................................................................... 8 
+1.1 Contemporary Challenges ................................................................................................ 8 
+1.2 Aim of the project ............................................................................................................ 8 
+1.3 Research questions ........................................................................................................... 9 
+1.4 Objectives of the project .................................................................................................. 9 
+1.5 Feasibility, Commercial Context, and Risk ................................................................... 10 
+1.6 Report Structure ............................................................................................................. 11 
+Section 2: Literature review ..................................................................................................... 12 
+2.1 Related works................................................................................................................. 12 
+2.2 Critical Assessment of existing Literature ..................................................................... 14 
+2.3 Gaps Identified in the Literature .................................................................................... 14 
+2.4 Relation to Research and Hypothesis ............................................................................ 15 
+Section 3: Methodology of the project..................................................................................... 17 
+3.1 Dataset Gathering........................................................................................................... 17 
+3.2 Exploratory Data Analysis ............................................................................................. 18 
+3.3 Data preprocessing: RGB-to-YCbCr ............................................................................. 23 
+3.4 Data preprocessing: Multi-Scale Retinex (MSR) .......................................................... 25 
+3.5 Data preprocessing: Combing both the algorithms ........................................................ 27 
+3.6 Classification model: DenseNet Model ......................................................................... 28 
+3.7 Evaluation Framework and metrics ............................................................................... 31 
+3.8 Ethical, Social, and Legal Considerations ..................................................................... 32 
+3.9 Use of Tools and Techniques ......................................................................................... 32 
+4. Results .................................................................................................................................. 34 
+4.1 CNN model without preprocessing ................................................................................ 34 
+4.2 DenseNet model without preprocessing ........................................................................ 35 
+4.3 CNN model with preprocessing ..................................................................................... 36 
+4.4 DenseNet model with preprocessing: Proposed Method ............................................... 37 
+4.5 Comparative Analysis of Model Performance ............................................................... 39 
+5. Analysis and Discussion ...................................................................................................... 40 
+======PAGE======
+6 
+ 
+5.1 The Optimal Model and Rationale for Its Pre-eminence ............................................... 40 
+5.2 Comparative Analysis with Existing Literature ............................................................. 40 
+5.3 Project Limitations ......................................................................................................... 40 
+5.4 Relationship between Outcomes and Project Aims ....................................................... 41 
+5.5 Correlation between Findings and Research Questions................................................. 41 
+5.6 Practical Implementation ............................................................................................... 42 
+6. Conclusion ........................................................................................................................... 43 
+6.1 Future works .................................................................................................................. 43 
+Reference ................................................................................................................................. 44 
+Appendix .................................................................................................................................. 47 
+ 
+  
+======PAGE======
+7 
+ 
+Table of Figures 
+Figure 1: Workflow of the project. .......................................................................................... 17 
+Figure 2: Sample images from the dataset. .............................................................................. 18 
+Figure 3: Class distribution of the dataset................................................................................ 19 
+Figure 4: Image size distribution of the dataset. ...................................................................... 20 
+Figure 5: Colour Distribution Analysis of each class. ............................................................. 21 
+Figure 6: Brightness, Contrast, and Standard Deviation Analysis of the dataset. ................... 22 
+Figure 7: TSNE plot of the dataset. ......................................................................................... 23 
+Figure 8: Output comparison of RGB image and RGB-to-YCbCr pre-processed image ........ 25 
+Figure 9: Output of Hyperparameter tuning ............................................................................ 26 
+Figure 10: Output comparison of raw image and pre-processed MSR image.4 ...................... 27 
+Figure 11: Output comparison of Raw image and combined data preprocessing ................... 28 
+Figure 12: Architecture of DenseNet. ...................................................................................... 29 
+Figure 13: Proposed Architecture. ........................................................................................... 29 
+Figure 14: Training of the CNN model without preprocessing. .............................................. 34 
+Figure 15: Results of CNN model without preprocessing on test data. ................................... 35 
+Figure 16: Training of the DenseNet model without preprocessing. ....................................... 35 
+Figure 17:Results of DenseNet model without preprocessing on test data. ............................ 36 
+Figure 18:Training of the CNN model with preprocessing. .................................................... 36 
+Figure 19:Results of CNN model with preprocessing on test data. ......................................... 37 
+Figure 20: Training of the DenseNet model with preprocessing. ............................................ 38 
+Figure 21: Results of DenseNet model with preprocessing on test data. ................................. 38 
+Figure 22: Comparative Analysis of Model Performance on test data. ................................... 39 
+ 
+  
+======PAGE======
+8 
+ 
+Section 1: Introduction 
+Forests are essential for maintaining ecological equilibrium, sometimes referred to as the 
+“lungs of the planet” due to their capacity to absorb CO₂ and emit O₂.  They promote 
+biodiversity, manage hydrological cycles, protect crops from wind, and enhance n ational 
+economies through resources and job opportunities.  These ecosystems are increasingly 
+imperilled by wildfires—unrestrained natural calamities that have escalated in frequency and 
+intensity due to climate change and anthropogenic activity. (Barmpoutis, P., et al,2020) 
+Wildfires annually devastate millions of acres, adversely affecting wildlife, agricultural output, 
+and human lives.  Prominent instances encompass the 2020 Australian bushfires and the 2018 
+California wildfires.  Although climate change exacerbates wildfir e conditions, research 
+indicates that around 85% of U.S. wildfires from 1992 to 2015 were attributable to human 
+activity. (Bouguettaya, A., et al,2022) 
+The essential factor in mitigating wildfire damage is prompt discovery.  Nevertheless, 
+conventional technologies such as satellites and watchtowers are constrained by constraints in 
+visibility, expense, and resolution  (Barmpoutis, P., et al,2020) .  This necessitates the 
+development of novel and dependable technology for the early and precise detection of 
+wildfires, facilitating prompt responses and reducing environmental and economic damage. 
+1.1 Contemporary Challenges 
+ Notwithstanding continuous developments, wildfire detection systems encounter several 
+significant hurdles.  Satellite -based methods, despite their extensive coverage, can have 
+inadequate spatial resolution and prolonged return intervals, hindering the detection of minor 
+or nascent fires  particularly in the presence of cloud cover or deep forest canopies  
+(Ororatech ,2023).  Ground -based techniques such as watchtowers and infrared cameras are 
+constrained by visibility range, substantial installation expenses, and environmen tal 
+disruptions, especially in adverse weather conditions or at night. 
+Moreover, several systems depend on human oversight, which is susceptible to delays and 
+inaccuracies resulting from exhaustion or insufficient real -time response.  Detection systems 
+frequently encounter false positives, mistakenly identifying sunlight refl ections or industrial 
+heat sources as genuine fires, so undermining faith and taxing emergency resources. (Johnston, 
+J.M., et al, 2018) 
+These concerns underscore the necessity for sophisticated, scalable, and accurate wildfire 
+detection techniques.  This study mitigates these deficiencies by using picture preprocessing 
+and DenseNet-based deep learning to improve classification accuracy and  reduce detection 
+latency. 
+1.2 Aim of the project 
+This research aims to create a reliable and precise wildfire detection system that incorporates 
+advanced picture preprocessing methods specifically Multi-Scale Retinex (MSR) and RGB-to-
+YCbCr color space transformation alongside the DenseNet deep learning a rchitecture for 
+classification.  This method aims to increase the quality of wildfire images, boost feature 
+======PAGE======
+9 
+ 
+extraction, and attain high-precision classification under various environmental circumstances, 
+including smoke, haze, and fluctuating light.  The primary objective is to facilitate prompt and 
+accurate wildfire detection, minimize false alarms, and enhance timely response initiatives. 
+Novelty of the project 
+This study examines a significant deficiency in wildfire detection studies.  Although several 
+deep learning models, have been utilized for this issue, most methods depend on unrefined or 
+lightly processed images.  These models frequently have difficulties in detection under 
+conditions of smoke, haze, or inadequate lighting, resulting in false positives and delayed 
+responses. 
+This study is innovative because to its hybrid methodology, integrating advanced image 
+preprocessing techniques (MSR and color space transformation) with the DenseNet model to 
+improve feature visibility and extraction.  This integration seeks to enhance detection precision 
+while minimizing false alarms.  The study provides value by conducting a comparison analysis 
+of DenseNet with alternative topologies, yielding insights into scalability, accuracy, and 
+practical use in wildfire detection systems. 
+1.3 Research questions 
+• What is the effect of using Multi -Scale Retinex (MSR), color space transformation 
+(RGB to YCbCr), and DenseNet on the accuracy and robustness of wildfire detection 
+relative to prior studies? 
+• What is the extent to which photo preprocessing techniques such as Multi-Scale Retinex 
+(MSR) and colour space conversion can enhance visibility, reduce noise, and improve 
+the classification accuracy of wildfire detection models? 
+• How does the DenseNet model improve feature extraction and classification accuracy 
+in wildfire detection compared to other deep learning architectures? 
+1.4 Objectives of the project 
+• To do a comprehensive literature analysis of current wildfire detection techniques, 
+highlighting significant shortcomings in conventional systems and contemporary deep 
+learning models, with an emphasis on preprocessing deficiencies and classification 
+obstacles. 
+• To create a wildfire detection system utilizing the DenseNet architecture, incorporating 
+sophisticated picture preprocessing methods to improve feature extraction and 
+classification precision. 
+• To implement and evaluate Multi -Scale Retinex (MSR) and RGB -to-YCbCr color 
+space transformation for enhancing picture clarity, contrast, and segmentation of fire 
+regions in adverse environmental circumstances. 
+• To assess the proposed model's efficacy through precision, recall, F1 -score, and 
+accuracy, while reducing false positives under several wildfire situations. 
+• To evaluate DenseNet in comparison to various deep learning architectures from 
+literature and to examine the system's scalability, robustness, and practical usefulness. 
+======PAGE======
+10 
+ 
+1.5 Feasibility, Commercial Context, and Risk 
+Feasibility and scope 
+This project aims to create a wildfire detection system utilizing image -based deep learning 
+methodologies, particularly the DenseNet architecture.  The system employs sophisticated 
+preprocessing techniques —Multi-Scale Retinex (MSR) and RGB -to-YCbCr color s pace 
+conversion—to augment picture quality and refine fire segmentation.  The project is achievable 
+within the academic schedule and resources by utilizing publicly accessible wildfire datasets. 
+The scope encompasses model training, testing, assessment, and comparison with other deep 
+learning models.  The proposal excludes real-time detection, IoT integration, drone or satellite 
+deployment, and fire management operations.  This study is exclusivel y focused on assessing 
+the efficacy of preprocessing -augmented DenseNet models for the categorization of wildfire 
+images. 
+Commercial and Economic Environment 
+The market for wildfire detection systems is seeing significant expansion.  The global market 
+for forest wildfire detection systems was valued at around USD 712.2 million in 2023 and is 
+anticipated to reach USD 1.20 billion by 2031, with a compound yearly growth rate (CAGR) 
+of 5.83% over the forecast period.  This expansion is propelled by the rising frequency of 
+wildfire occurrences and the resulting need for sophisticated detection methods.  (Joint 
+Economic Committee, 2023) 
+In the United States, climate-induced wildfires are projected to incur yearly costs ranging from 
+$394 billion to $893 billion, representing between 2 –4% of the nation's GDP.  In Europe, 
+wildfires have similarly caused substantial financial harm.  In 2023, wildfires caused €4.1 
+billion (£3.46 billion) in damages, predominantly affecting nations like as Greece, Spain, and 
+Italy. These expenses include property loss, health effects from smoke, and extensive economic 
+disruptions. (The Week, 2023) 
+This research aims to improve image -based wildfire detection using sophisticated 
+preprocessing and deep learning, in accordance with industry demands.  
+Risk Analysis 
+The risk register identifies six key risks (table 1): 
+======PAGE======
+11 
+ 
+Table 1: Risk assessment of the project. 
+ 
+1.6 Report Structure 
+This report is structured into six principal sections.   
+• Section 1 presents the project's origins, aims, innovation, and viability.   
+• Section 2 presents an extensive literature study, highlighting deficiencies in existing 
+wildfire detection techniques and substantiating the suggested methodology.   
+• Section 3 delineates the approach, encompassing dataset specifications, preprocessing 
+methods, model construction, and assessment framework.   
+• Section 4 delineates the experimental outcomes, encompassing performance 
+comparisons across models and the effects of preprocessing.   
+• Section 5 delineates principal findings, aligns results with study objectives, 
+acknowledges limits. 
+• Section 6: Suggests avenues for future research, ending in a conclusion that underscores 
+the project's relevance and contributions.  
+
+======PAGE======
+12 
+ 
+Section 2: Literature review  
+Wildfire detection is a vital study area propelled by the rising frequency and intensity of 
+wildfires worldwide.  Conventional techniques, such as satellite images, heat sensors, and 
+terrestrial watchtowers, frequently fail to provide prompt, high -resolution, and economical 
+detection especially in environments influenced by smoke, haze, or variable illumination.  
+Consequently, deep learning and computer vision methodologies have surfaced as viable 
+options for automating wildfire identification using picture data. 
+Convolutional Neural Networks (CNNs) like ResNet, VGG, and MobileNet have been 
+extensively utilized in the categorization of wildfire images.  Nevertheless, several models 
+depend on unrefined or weakly refined pictures, hence constraining their robustness and 
+precision in practical applications.  This approach mitigates that constraint by integrating 
+sophisticated preprocessing techniques  Multi-Scale Retinex (MSR) for light correction and 
+RGB-to-YCbCr color space transformation for improved fire feature isolation into a DenseNet-
+based classification framework. 
+2.1 Related works 
+Wu, et al. (2020) introduced a wildfire detection system employing MobileNetV2 and transfer 
+learning for rapid and precise picture categorization.  The model was trained using wildfire 
+photos acquired by UAVs and included a bespoke data augmentation pipeline t hat simulated 
+difficult circumstances such as Gaussian blur and noise.  The UAVs provide versatility, 
+security, and economic efficiency relative to conventional detecting methods.  The collection 
+comprised annotated aerial pictures featuring both fire and non-fire occurrences.  The model 
+attained 96.7% accuracy on the original dataset, 95.3% on blurred photos, and 95.3% on images 
+with Gaussian noise.  This exhibits significant generality and resilience across many visual 
+contexts, highlighting its applicability for real -time wildfire monitoring systems in practical 
+settings. 
+Treneska, and Stojkoska,  (2021) employed transfer learning with ResNet50 to identify 
+wildfires from photos captured by UAVs. Their methodology optimized many pre -trained 
+CNNs, such as ResNet50, Xception, and InceptionV3, utilizing the FLAME dataset, which 
+comprises approximately 3 9,000 annotated drone -captured photos of fire and non -fire 
+scenarios. Fine -tuning ResNet50 achieved the highest classification performance with an 
+accuracy of 88%, representing an 11% enhancement over baseline models. The researche rs 
+established that transfer learning markedly improves generalization and is appropriate for real-
+time wildfire detection. Their research underscored the increasing significance of UAV-based 
+data acquisition, especially for high-resolution, preliminary fire monitoring applications. 
+Ghali, et al. (2022) introduced an innovative ensemble wildfire detection system that integrates 
+EfficientNet-B5, and vision transformers —TransUNet and TransFire —for classification and 
+segmentation purposes.  Their dataset comprised UAV -acquired aerial photos, annotated for 
+fire and non-fire areas.  The classification model attained an accuracy of 95.12%, These models 
+tackled issues such as limited fire size, visual deterioration, and intricate backdrops.  This work 
+======PAGE======
+13 
+ 
+confirms the efficacy of integrating CNNs and transformers for precise fire localization and 
+detection in UAV surveillance applications. 
+Sathishkumar, et al.  (2023) employed transfer learning with VGG16, InceptionV3, and 
+Xception, augmented by Learning without Forgetting (LwF) to preserve model efficacy on 
+previous datasets. The research utilized the BowFire dataset for novel tasks and a distinct 
+foundational dataset . The Xception model achieved 79.23% accuracy on BowFire without 
+LwF. Utilizing LwF, the performance enhanced to 91.41% while preserving 96.89% on the 
+original dataset. This methodology mitigates catastrophic forgetting in transfer learning and is 
+effective for adapting wildfire models to novel geographies or data distributions. It is especially 
+advantageous when new training data is scarce, while preserving historical performance is 
+essential. 
+The CT -Fire model, developed by Ghali, and Akhloufi,  (2023), is a hybrid technique that 
+integrates CNN and Transformer architectures, specifically utilizing RegNetY and 
+EfficientFormer v2. The training and testing utilized a combination of terrestrial and airborne 
+wildfire datasets: FLAME, CorsicanFire, DeepFire, and Fire. CT -Fire attained 9 7.62% 
+accuracy on terrestrial pictures and 87.77% on aerial photos, surpassing benchmark CNNs and 
+transformers. The ensemble exhibited resistance to intricate backdrops,  minor burning areas, 
+and fluctuating fire intensities. This study demonstrates that the integration of CNNs and 
+transformers effectively captures both local and global picture data, rendering it appropriate 
+for thorough wildfire detection across diverse imaging situations. 
+Wang, et al, ( 2023) developed two wildfire detection modules: a Reduce -VGGNet for 
+classification and an improved CNN that integrates spatial and temporal information for 
+regional detection. The research sought to reconcile performance with accessibility in 
+educational settings. The project utilized a selected wildfire dataset appropriate for Machine 
+Vision course applications. The Reduce-VGGNet attained a classification accuracy of 91.20%, 
+but the spatio-temporal CNN acquired an accuracy of 97.35% in region detection. This modular 
+methodology delivers both scholarly and practical benefits, presenting a dependable detection 
+system characterized by high precision, while being appropriate for educational purposes. 
+Jonnalagadda, and Hashim, (2024) presented SegNet, a segmented convolutional neural 
+network designed for real -time wildfire identification utilizing drone (UAV) footage. The 
+approach emphasizes enhancing processing performance by minimizing superfluous feature 
+maps while preserving pixel-level accuracy for amorphous entities such as fire and smoke. A 
+bespoke UAV wildfire dataset was utilized, obtained through drone flights over fire -prone 
+regions. SegNet markedly enhanced inference speed and attained exceptionally high detection 
+accuracy; although the pre cise numerical precision was not specified, it outperformed 
+conventional CNN methods in both performance and computing economy. This research offers 
+a significant addition to real -time wildfire monitoring, particularly in bandwidth -limited or 
+mobile environments. 
+Yandouzi et al. utilized deep transfer learning with several pre -trained CNN architectures, 
+including VGG16, ResNet50, Xception, MobileNet, and NASNetMobile, for the detection of 
+forest fires. The scientists trained their models using a composite wildfire dataset obtained from 
+======PAGE======
+14 
+ 
+UAVs, satellites, and terrestrial platforms. Several models attained detection accuracy over 
+97.1%, demonstrating exceptional generalization. Their comparative analysis highlighted 
+DenseNet and InceptionResNetV2 as particularly formidable candidates. The study 
+emphasized the practical use of transfer learning, demonstrating that excellent accuracies were 
+attained even with very limited training datasets. This renders it appropriate for practical 
+applications using constrained labelled wildfire data. 
+2.2 Critical Assessment of existing Literature 
+The analysed papers together demonstrate substantial advancements in wildfire detection via 
+the implementation of deep learning, specifically utilizing transfer learning and CNN -based 
+frameworks.  Numerous studies, including those by Wu et al. (2020), Treneska and Stojkoska 
+(2021), and Ghali et al. (2022), illustrate that pretrained models such as MobileNetV2, 
+ResNet50, and EfficientNetB5 are very proficient when fine-tuned for fire classification tasks.  
+The use of vision transformers, shown by CT -Fire and TransFire, improves spatial awareness 
+and feature representation, facilitating precise detection in congested or intricate visual 
+environments.  Numerous models, such those introduced by Wang et al. (2023) and 
+Jonnalagadda and Hashim (2024), emphasize com puting efficiency, rendering them 
+appropriate for real -time UAV deployment.  Moreover, techniques like as Learning without 
+Forgetting (LwF) demonstrate potential in preserving knowledge during cross -domain 
+adaptation, and research by Yandouzi et al. (2022) validates that deep models may maintain 
+remarkable performance while having minimal labeled data. 
+Notwithstanding these developments, a significant drawback in most investigations is the 
+inadequate application of sophisticated picture preparation techniques.  Although several 
+articles utilize fundamental data augmentation techniques (e.g., rotations, f lips, noise), few 
+include more sophisticated approaches like as denoising filters, contrast improvement, Retinex 
+algorithms, or color space transformations.  This absence may diminish model robustness in 
+real-world scenarios marked by smoke, haze, low illu mination, or inadequate contrast.  
+Numerous approaches depend significantly on architectural complexity to get performance 
+improvements, which, although beneficial in controlled datasets, may not translate effectively 
+to noisy or damaged field data.  Research conducted by Wu et al. (2020) and Ghali et al. (2022) 
+demonstrates commendable performance on pristine datasets; nevertheless, there is little 
+exploration into the potential enhancements in accuracy and resilience through preprocessing 
+techniques.  The prevailing tendency indicates a disparity in the synergy between the increase 
+of input quality and classification, highlighting an opportunity for additional investigation such 
+as this project  which seeks to rectify this constraint by incorporating certain preprocessing 
+techniques with deep learning models. 
+2.3 Gaps Identified in the Literature 
+Current work on wildfire detection via deep learning has achieved significant advancements; 
+nonetheless, notable gaps persist, especially concerning picture preprocessing and the 
+equilibrium between model complexity and efficiency.  This study tackles thes e deficiencies 
+by employing an innovative pipeline that combines sophisticated preprocessing with an 
+efficient, lightweight model. 
+======PAGE======
+15 
+ 
+ 
+Insufficient Advanced Image Preprocessing Techniques:  Numerous research depends on 
+fundamental data augmentation methods such as rotation, flipping, and Gaussian noise (Govil, 
+et al 2020) .  Nonetheless, these methodologies fail to sufficiently equip models for practical 
+situations characterized by haze, smoke, or inadequate lighting. This effort mitigates this 
+deficiency by employing Multi-Scale Retinex (MSR) for lighting correction and transforming 
+RGB to YCbCr color space, therefore markedly improving picture clarity and contrast, which 
+renders the fire zones more discernible prior to classification. 
+Excessive Dependence on Deep Architectures Without Input Augmentation: Architectural 
+advancements like TransUNet or CT-Fire prioritize model depth at the expense of input quality. 
+This research integrates a somewhat intricate yet effective architecture (DenseNet) with 
+specific preprocessing, demonstrating that input augment ation can increase accuracy without 
+necessitating computationally intensive model layers. (Jain, et al 2020) 
+Insufficient Model Efficiency in Real -Time Contexts: Numerous high-performing models 
+are computationally demanding and inappropriate for real-time or embedded implementation. 
+( Saleh, et al,2024) 
+This project utilizes DenseNet’s  efficiency, since its dense connection minimizes duplicate 
+calculations and enhances feature reuse.  This guarantees rapid, memory -efficient inference, 
+rendering it optimal for real-time UAV-based wildfire surveillance systems. 
+2.4 Relation to Research and Hypothesis 
+The examined literature demonstrates substantial advancements in wildfire identification 
+utilizing deep learning and images obtained from UAVs.  Research conducted by Wu et al. 
+(2020), Treneska and Stojkoska (2021), and Ghali et al. (2022) has effectively utilized transfer 
+learning methodologies on CNN architectures, including MobileNetV2, ResNet50, and 
+EfficientNet-B5, to achieve significant accuracy in wildfire detection.  Other models, such as 
+CT-Fire and SegNet, have prioritized architectural innovation  and computing efficiency to 
+satisfy real-time operating requirements. 
+Nonetheless, a significant weakness in these investigations is the inadequate emphasis on 
+improving the visual quality of input data by sophisticated preprocessing approaches.  Many 
+models predominantly depend on data augmentation or increased architectura l depth to 
+enhance performance, neglecting the advantages of techniques like as denoising, illumination 
+correction, or color space transformation in intricate, real -world settings characterized by 
+smoke, haze, and inadequate lighting. 
+This study directly tackles this deficiency by including picture preprocessing techniques —
+specifically Multi-Scale Retinex (MSR) and RGB-to-YCbCr color space transformation—into 
+the classification pipeline.  The modifications are designed to enhance pictur e clarity and 
+feature differentiation prior to processing by the DenseNet model, recognized for its effective 
+feature propagation and reutilization. 
+======PAGE======
+16 
+ 
+This effort enhances previous breakthroughs in deep learning for wildfire detection while 
+introducing a more equitable and resilient methodology that enhances classification 
+performance under compromised visual circumstances.  It aligns with the overarching aims and 
+objectives of the study, which encompass minimizing false positives, enhancing detection 
+precision, and guaranteeing the model's efficiency and appropriateness for real -time 
+deployment contexts, such as UAV-based surveillance. 
+  
+======PAGE======
+17 
+ 
+Section 3: Methodology of the project 
+This section delineates the methodical strategy employed to create an effective and resilient 
+wildfire detection system utilizing deep learning, along with sophisticated image preprocessing 
+techniques.  The methodology aims to improve image clarity and cla ssification precision in 
+real-world visual problems, including smoke, haze, and variable lighting —conditions 
+frequently inadequately represented in current models. 
+The workflow, depicted in Figure 1, commences with data collection, succeeded by exploratory 
+data analysis (EDA) to comprehend data distribution, detect class imbalances, and visualize 
+sample attributes.  Thereafter, the raw pictures undergo preprocessing through RGB-to-YCbCr 
+color space translation to improve the distinction between fire and non-fire features, succeeded 
+by Multi -Scale Retinex (MSR) processing for illumination normalization and contrast 
+augmentation. 
+Upon completion of preprocessing, the augmented photos are utilized for model construction, 
+wherein the DenseNet architecture is trained to classify the existence of wildfires.  The model 
+is subjected to hyperparameter adjustment to enhance performance.  T he concluding phase 
+entails performance assessment utilizing metrics such as accuracy, precision, recall, and F1 -
+score to evaluate model efficacy under diverse environmental settings. 
+ 
+ 
+Figure 1: Workflow of the project. 
+3.1 Dataset Gathering 
+This project utilizes the Wildfire Dataset compiled by El -Madafri et al. (2023), consisting of 
+2700 high-resolution RGB photos depicting diverse wildfire and non -wildfire scenarios.  The 
+images derive from various public sources, including government repositories, Flickr, and 
+Unsplashed, encompassing a wide range of env ironmental contexts—such as different forest 
+types, geographic regions, fire intensities, and complicating visual elements (e.g., clouds, sun 
+glare, or fog).  The dataset is organized into two main categories fire and nofire. 
+Link to download dataset: https://www.kaggle.com/datasets/elmadafri/the-wildfire-dataset 
+Publication link: https://www.mdpi.com/1999-4907/14/9/1697  
+The dataset was developed to overcome significant shortcomings in current forest fire detection 
+datasets (figure 2): restricted diversity, inadequate representativeness, and poor management 
+of visual confounders.  These problems frequently result in limited generalizability and 
+
+======PAGE======
+18 
+ 
+elevated false positive rates in deep learning models.  This resource enhances training realism 
+for AI detection systems by providing a dataset with diverse topography, weather conditions, 
+camera angles, and aspects of fire and smoke. (El-Madafri et al. 2023) 
+ 
+ 
+Figure 2: Sample images from the dataset. 
+Ethical considerations were meticulously addressed: all photos were obtained from the public 
+domain or open -licensed platforms, assuring adherence to copyright and data -sharing 
+legislation.  This legal and ethical transparency facilitates repeatability and  promotes open 
+scientific inquiry. All pictures in the dataset are either open-source or publicly licensed, devoid 
+of personally identifying information (PII), and are intended exclusively for academic and 
+research purposes. The dataset is published under the Creative Commons Attribution 4.0 
+International License (CC BY 4.0), allowing unrestricted use, distribution, and modification 
+with proper attribution to the authors. Additional details regarding the license are available at 
+https://creativecommons.org/licenses/by/4.0/. 
+This dataset was chosen for the study because of its significant diversity, organized annotations, 
+and its congruence with the project's aim: to enhance wildfire detection efficacy by image 
+preprocessing and robust classification.  It functions as a standa rd for practical applicability 
+and facilitates testing under demanding visual situations, rendering it optimal for assessing 
+preprocessing-augmented deep learning models. (El-Madafri et al. 2023) 
+3.2 Exploratory Data Analysis  
+Class distribution of the dataset 
+An exploratory data analysis was performed to comprehend the dataset's structure and detect 
+potential biases, concentrating on class distribution among the training, validation, and test 
+sets.  The pie charts above illustrate the distribution of photos cat egorized as fire and nofire 
+within each subset. 
+The dataset exhibits a moderate class imbalance, with 61.3% of photos categori sed as nofire 
+and 38.7% as fire.  This disparity is consistently seen across all subsets (figure 3): 
+ 
+
+======PAGE======
+19 
+ 
+• Training Set: 61.3% non-fire, 38.7% fire 
+• Validation Set: 61.0% non-fire, 39.0% fire 
+• Test Set: 61.4% non-fire, 38.6% fire 
+This division of data partitions guarantees equitable model training and assessment, reducing 
+the likelihood of overfitting or biased performance favouring the majority class (Vasconcelos, 
+et al,2024).  Nonetheless, the minor class imbalance may still affect the model's propensity to 
+predict the nofire class more frequently, rendering precision and recall essential evaluation 
+metrics. 
+This imbalance will be addressed during training using strategies such image augmentation, to 
+provide strong learning and precise detection in both fire and no-fire scenarios. 
+ 
+Figure 3: Class distribution of the dataset. 
+Image size distribution 
+The examination of image size distribution (figure 4) indicates a broad spectrum of resolutions 
+in both the fire and nofire categories, with dimensions ranging from under 500×500 pixels to 
+exceeding 10,000 pixels in both width and height.  Images of fires typically aggregate at regular 
+resolutions, presumabl y originating from consistent sources like UAVs or surveillance 
+cameras.  Conversely, nofire photos demonstrate enhanced dimensional diversity, signifying a 
+range of image sources and content types. 
+This research was crucial for guiding preprocessing options, as convolutional neural networks 
+such as DenseNet necessitate fixed input dimensions.  It facilitates the selection of an optimal 
+resizing dimension that preserves critical visual attributes whil e preserving computational 
+efficiency.  It also underscores potential biases particular to classes in resolution that may 
+impact model generalization. 
+Standardizing image dimensions via scaling or padding guarantees uniform model input, 
+reduces distortion, and prevents GPU memory overload.  This stage is essential for attaining 
+balanced training efficacy and dependable wildfire detection under diverse en vironmental 
+conditions. 
+
+======PAGE======
+20 
+ 
+ 
+Figure 4: Image size distribution of the dataset. 
+Colour Distribution Analysis 
+To further examine the visual attributes of the dataset, average RGB histograms were generated 
+for both the fire and no-fire image categories.  This research identifies color intensity patterns 
+distinct to each class, which can drive preprocessing choices and facilitate the development of 
+feature-sensitive classification models. 
+The histogram for fire photos exhibits a reasonably similar distribution across the three 
+channels (red, green, and blue), with a little predominance in the red channel at elevated pixel 
+intensities.  This is anticipated because to the existence of flames that emit high-energy red and 
+orange light.  Furthermore, fire scenes frequently feature smoke and intense illumination, 
+which can elevate the intensity in the higher pixel value ranges (approaching 250). 
+Conversely, the nofire photos demonstrate a more pronounced prevalence of lower pixel 
+brightness, particularly within the blue and green channels.  This suggests that these pictures 
+may feature increased flora, sky, and shaded areas, leading to a cooler and darker overall tone 
+in contrast to fire scenes.  A notable peak exists at both the low and high extremes of the 
+spectrum, likely attributable to shadowed regions and overexposed backgrounds, respectively. 
+The histogram patterns (figure 5) confirm the necessity for illumination correction and color 
+normalization, particularly for fire photographs that may experience glare, as well as for non -
+fire situations affected by shadows or underexposure.  This endorses the application of Multi -
+Scale Retinex (MSR) and RGB -to-YCbCr conversion in the methodology. Comprehending 
+channel behavior aids in recognizing distinguishing characteristics.  The predominance of red 
+in fire imagery can be used via colour space transformation to enhance pertinent fire -related 
+characteristics while diminishing background interference. 
+
+======PAGE======
+21 
+ 
+  
+Figure 5: Colour Distribution Analysis of each class. 
+Brightness, Contrast, and Standard Deviation Analysis 
+To further examine the visual diversity within the dataset, three essential image statistics were 
+analysed: brightness, contrast, and standard deviation (figure 6).  These characteristics directly 
+influence the appearance of fire and non-fire areas in images and are essential for assessing the 
+efficacy of preprocessing techniques such as Multi-Scale Retinex (MSR). 
+Brightness Distribution 
+The histogram contrasting brightness levels of fire and non -fire photos indicates that fire 
+photographs generally exhibit elevated brightness values, predominantly grouping between 
+110 and 160.  This is anticipated, as fire produces light and frequently re sults in overexposed 
+areas in photographs.  Conversely, nofire photos display diminished brightness levels, 
+predominantly between 50 and 110, reflecting natural lighting situations like shadows, foliage, 
+or overcast skies. 
+Observation: The distinct brightness differentiation among classes facilitates the application of 
+brightness-sensitive preprocessing techniques such as MSR, which may standardize 
+illumination across varying conditions while maintaining significant visual i ndicators 
+associated with fire. 
+Contrast Distribution  
+The contrast histogram reveals a moderate overlap between fire and no-fire images, with both 
+distributions peaking in the 50 –65 range.  Conversely, nofire photos demonstrate a broader 
+distribution, revealing greater contrast variance.  This may result from  the existence of many 
+textures, including trees, sky, water, or ground, which frequently reflect light unevenly. 
+Observation: Although contrast alone may not serve as a robust differentiator, augmenting local 
+contrast, as implemented in MSR, might enhance edge identification and emphasize fire-related 
+textures, particularly in instances of small or faint fires. 
+ Standard Deviation Distribution 
+
+======PAGE======
+22 
+ 
+The analysis of standard deviation, which quantifies the variability of pixel intensities, closely 
+resembles the distribution of contrast.  Once more, nofire photos exhibit a wider spread, 
+signifying greater variety in their pixel values.  Fire photos are typically more concentrated in 
+the mid-range, perhaps because the dominance of flames diminishes variety. 
+Observation: Comprehending intensity variability aids in predicting the model's capacity to 
+manage intra -class fluctuations.  MSR and color space modifications can diminish this 
+variability, enhancing feature consistency for model training. 
+   
+Figure 6: Brightness, Contrast, and Standard Deviation Analysis of the dataset. 
+These findings unequivocally endorse the project's decision to employ illumination correction 
+(MSR) and color space conversion to augment feature visibility. 
+TSNE Analysis 
+To illustrate the separability of fire and no -fire photos based on extracted characteristics, t -
+distributed Stochastic Neighbor Embedding (t -SNE) was utilized on brightness, contrast, 
+texture metrics, and mean RGB values (Devassy, et al,2020).  The resultant 2D plot (figure 7) 
+exhibits partial grouping of the two classes, accompanied by some overlap, suggesting that 
+although the characteristics possess discriminative capability, they are inadequate for definitive 
+class separation. 
+The overlap indicates that specific nofire photographs may exhibit fire-like characteristics (e.g., 
+intense sunshine or autumn foliage), whereas certain fire images may appear visually 
+understated.  This underscores the necessity for sophisticated preprocessing methods—such as 
+Multi-Scale Retinex and RGB -to-YCbCr conversion —to improve contrast and feature 
+definition. 
+
+======PAGE======
+23 
+ 
+ 
+Figure 7: TSNE plot of the dataset. 
+The result further endorses the application of DenseNet, a deep learning model proficient in 
+learning non -linear feature connections that t -SNE projections indicate are challenging to 
+capture with simple statistical features alone.  This phase confirms ess ential methodological 
+choices in feature augmentation and model selection. 
+Conclusive Observations from Exploratory Data Analysis 
+ The Exploratory Data Analysis (EDA) uncovers several essential findings that guide the 
+project's design.  The dataset exhibits a moderate class imbalance (61% no fire, 39% fire), 
+requiring class balancing methods such as augmentation.  Substantial discrep ancies in image 
+dimensions within classes underscore the necessity for resizing to maintain uniformity and 
+enhance model efficiency.  Analysis of the RGB histogram indicates a predominance of the red 
+channel in fire photos, so endorsing the application of color space modification (e.g., RGB-to-
+YCbCr) to improve the visibility of fire features.  Analyses of brightness and contrast reveal 
+that fire photos are often brighter, but nofire images exhibit greater fluctuation, underscoring 
+the necessity for lightin g adjustment by Multi -Scale Retinex (MSR).  The standard deviation 
+indicates increased visual complexity in nofire scenarios.  The t -SNE plot indicates partial 
+clustering and class overlap, so affirming the appropriateness of DenseNet for discerning non-
+linear patterns that handcrafted features struggle to differentiate.  These insights collectively 
+validate the selected preprocessing methods and model architecture for effective wildfire 
+identification. 
+3.3 Data preprocessing: RGB-to-YCbCr 
+The RGB-to-YCbCr conversion is a prevalent method in image processing that distinguishes 
+luminance (brightness) from chrominance (colour) information  (Safir, P., 2022 ).  This 
+transformation separates the original RGB image into three components: 
+
+======PAGE======
+24 
+ 
+ 
+• Luminance (brightness) 
+• Cb: Chrominance-blue (blue subtracted from luminance) 
+• Cr: Chrominance-red (red subtracted from luminance) 
+Conversion Formula 
+Equation 1: Formula for conversion of RGB-to-YCbCr 
+ 
+By segregating luminance from chromatic elements, the model may concentrate on structural 
+and brightness-related fire characteristics (such as flame contours and smoke) without being 
+diverted by extraneous colour fluctuations in the background. (Safir, P., 2022) 
+The function convert_rgb_to_ycbcr(image) use created which uses OpenCV's inherent color 
+space conversion capabilities to convert an image from the RGB color space to the YCbCr 
+color space. 
+ Rationale for Selection 
+ Fire detection frequently necessitates heightened sensitivity to light intensity and form rather 
+than just hue.  In RGB, color and luminance are interdependent, which can provide challenges 
+in environments with sunlight, foliage, or reflections.  
+ The RGB-to-YCbCr conversion alleviates this problem by distinguishing luminance (Y) from 
+chromatic components (Cb, Cr), hence improving the model's emphasis on flame intensity and 
+structure. (Fang, et al,2025) 
+ What Enhancements It Provides 
+The RGB -to-YCbCr conversion improves fire detection by separating the luminance 
+component (Y), enabling the model to concentrate on structural fire patterns instead of being 
+affected by background colour fluctuations.  This minimizes false positives from red or orange 
+items that visually mimic flames in RGB space. 
+Figure 8 demonstrates that the YCbCr -transformed fire image accentuates areas of high 
+luminosity and form related to smoke and flames, while diminishing extraneous colour 
+information.  Likewise, in the non-fire scenario, the change mitigates distracting colours from 
+flora and landscape, providing a more consistent backdrop.  The clarity in luminance and 
+diminished chromatic noise facilitate the classifier's ability to differentiate between fire and 
+non-fire circumstances. 
+
+======PAGE======
+25 
+ 
+RGB-to-YCbCr enhances edge definition, flame intensity recognition, and background 
+suppression, all essential for augmenting model accuracy across varied environmental contexts. 
+ 
+Figure 8: Output comparison of RGB image and RGB-to-YCbCr pre-processed image 
+3.4 Data preprocessing: Multi-Scale Retinex (MSR) 
+The Multi -Scale Retinex (MSR) algorithm is a sophisticated picture enhancement method 
+aimed at improving visual perception by rectifying uneven illumination and augmenting details 
+in both shaded and highly illuminated regions  (Zotin, 2020).  It emulates the human visual 
+system's capacity to perceive uniform brightness and contrast across diverse lighting 
+conditions.  MSR enhances dynamic range compression, color consistency, and detail 
+enhancement, rendering it exceptionally beneficial for wildfire detection, where flames, smoke, 
+and background settings exhibit significant variability in visibility. 
+MSR improves an image by utilizing the Single -Scale Retinex (SSR) technique over various 
+Gaussian blur scales (sigmas) and averaging the outcomes  (Zotin, 2020).  The SSR equation 
+for each color channel is:  
+Equation 2: Formula for MSR 
+ 
+
+======PAGE======
+26 
+ 
+In Multi-Scale Retinex, this process is executed across various 𝜎 (sigma) values to capture 
+illumination fluctuations at distinct scales: 
+Equation 3:Formula for MSR 
+ 
+The resultant image is normalized and scaled to 8-bit values for viewing or model input. 
+Implementation of the algorithm: 
+The Python implementation of the Multi -Scale Retinex  (MSR) algorithm initiates by 
+converting the input image to a float32 data type and incrementing each pixel value by 1 to 
+avert mathematical complications associated with the logarithm of zero.  A Gaussian blur is 
+applied to simulate the illumination compo nent of the image for each designated sigma value 
+(e.g., [15, 80, 250]).  The algorithm calculates the Retinex output by deducting the logarithm 
+of the blurred picture from the logarithm of the original image, prioritizing reflectance over 
+illumination.  T he data are aggregated across all scales and averaged to get the final MSR -
+enhanced image.  The output is ultimately adjusted to the 0–255 range and transformed into an 
+8-bit format appropriate for visualization and model input.  This implementation enable s the 
+model to adeptly manage varied lighting conditions in wildfire photos, hence enhancing 
+visibility and accentuating essential elements vital for precise categorization. 
+Optimization of Hyperparameters 
+ The efficacy of MSR is heavily contingent upon the selection of Gaussian sigma values.  A 
+grid search was performed on combinations of three sigmas selected from the set [10, 30, 50, 
+100, 200, 250] using 10 random photos (5 depicting fire and 5 depicting no fire).  Each 
+parameter set was assessed utilizing: 
+• Entropy quantifies visual detail; increased entropy indicates superior detail retention. 
+• Contrast penalty: Imposes a penalty on low-contrast photographs to prioritize those that 
+accentuate distinctions between fire and backdrop. 
+The optimal sigma combination was (100, 200, 250), which earned the highest average 
+assessment score, effectively balancing increased visibility with little contrast degradation 
+(figure 9) 
+  
+Figure 9: Output of Hyperparameter tuning 
+
+======PAGE======
+27 
+ 
+Rationale for Selection 
+The Multi-Scale Retinex (MSR) algorithm was chosen for this project because of its efficacy 
+in addressing the difficult visual conditions found in wildfire photos, including inconsistent 
+illumination, thick smoke, and overexposure. In contrast to conventio nal enhancement 
+methods, MSR enhances visibility in low -light and occluded regions while reducing 
+illumination artifacts (Wang, et al, 2025). The integration with the luminance -centric YCbCr 
+color space amplifies this impact, enabling the model to more effectively differentiate fire -
+related characteristics. This preprocessing procedure guarantees more uniform and informative 
+image input, hence enhancing the accuracy and resilience of wildfire ident ification under 
+various environmental conditions. 
+What Enhancements It Provides 
+The Multi -Scale Retinex (MSR) technique, when utilized with precisely calibrated sigma 
+values, markedly improves the quality of wildfire images by augmenting entropy and contrast. 
+This leads to enhanced feature representation, especially of fire edges and smoke patterns, 
+which are frequently diminished in low -light or cloudy conditions. The visual comparisons 
+demonstrate that MSR processing uncovers details hidden in the source pictures, emphasizing 
+flames in low-light circumstances and enhancing textures in fire-free landscapes. Furthermore, 
+MSR diminishes deceptive visual artifacts, guaranteeing that the input provided to the 
+DenseNet model is more informative and less cacophonous. This finally enhances the model's 
+classification precision and generalizability. 
+ 
+Figure 10: Output comparison of raw image and pre-processed MSR image.4 
+3.5 Data preprocessing: Combing both the algorithms 
+The YCbCr + Multi -Scale Retinex (MSR) preprocessing pipeline improves wildfire images 
+through the integration of color space transformation and sophisticated illumination correction.  
+This method initiates by transforming RGB images into the YCbCr color sp ace, thereby 
+
+======PAGE======
+28 
+ 
+distinguishing brightness (Y) from chrominance components (Cb and Cr).  MSR is applied 
+solely to the Y channel, enhancing brightness and contrast while preserving color fidelity.  The 
+augmented Y channel is recombined with the original Cb and Cr channels to generate a visually 
+refined image. 
+This method greatly improves fire visibility, rendering flames and smoke more discernible in 
+intricate woodland environments, while maintaining texture and minimizing lighting artifacts  
+(figure 11) .  Non -fire scenes also gain enhanced clarity in shadows and highlights, while 
+preserving natural color tones.  This preprocessing phase enhances feature extraction and 
+increases model accuracy by highlighting and differentiating important patterns, hence 
+augmenting the performance of the DenseNet model in wildfir e detection across various 
+contexts. 
+ 
+Figure 11: Output comparison of Raw image and combined data preprocessing 
+3.6 Classification model: DenseNet Model 
+DenseNet (Densely Connected Convolutional Network) is a cutting-edge convolutional neural 
+network architecture recognized for its efficiency and superior performance in image 
+classification applications.  Huang et al. (2017) proposed DenseNet, which has an innovat ive 
+connectivity structure wherein each layer obtains inputs from all prior layers and transmits its 
+own feature maps to all subsequent layers.  This intricately linked architecture enhances 
+information transmission and feature reutilization across the net work, mitigating vanishing 
+gradient problems, improving feature propagation, and substantially decreasing the parameter 
+count. 
+Architecture of DenseNet 
+DenseNet121 is a deep convolutional neural network consisting of 121 layers, characterized 
+by a dense connection architecture in which each layer receives inputs from all preceding layers 
+within the same block  (figure 12).  This architecture facilitates feature reutilization, gradient 
+
+======PAGE======
+29 
+ 
+propagation, and parameter efficiency.  The architecture commences with a 7×7 convolution 
+and 3×3 max pooling, succeeded by four dense blocks comprising 6, 12, 24, and 16 layers 
+correspondingly, each interspersed with transition layers that incorporate 1×1 convolutions and 
+average pooling.  The model terminates with global average pooling followed by a fully linked 
+layer.  Exhibiting a growth rate of 32, it effectively produces new features while preserving a 
+manageable model size of approximately 8 million parameters. (Huang et al. 2017) 
+ 
+Figure 12: Architecture of DenseNet. 
+Proposed Architecture 
+This project involved freezing the pretrained DenseNet121 backbone and augmenting it with 
+custom layers, which included global average pooling, a 256 -unit dense layer, dropout (0.2), 
+and a sigmoid classifier (figure 13).  The base model is initialized with ImageNet weights and 
+remains fixed during training to preserve pretrained feature representations.  A Global Average 
+Pooling layer is incorporated atop the DenseNet base to diminish the spatial dimensions of the 
+feature maps, succeeded by a completely linked dense layer utilizing ReLU activation to create 
+non-linearity.  A dropout layer is utilized for regularization, and a concluding sigmoid -
+activated output layer is employed for binary classification (fire versus no fire). 
+ 
+Figure 13: Proposed Architecture. 
+
+======PAGE======
+30 
+ 
+Optimization of Hyperparameters 
+An extensive hyperparameter tweaking process was executed using GridSearchCV from scikit-
+learn in conjunction with KerasClassifier to enhance the model's performance.  A 
+hyperparameter grid was established, comprising learning rates (0.0001, 0.001, 0.01), dropout 
+rates (0.2, 0.3, 0.5, 0.7), dense layer units (64, 128, 256), and batch sizes (2, 4, 8, 16, 32).  Every 
+combination was assessed using 3-fold cross-validation to guarantee robustness. 
+This comprehensive grid search examined 180 parameter possibilities (totaling 540 training 
+iterations), ultimately determining the best configuration as follows: 
+• Learning Rate: 0.001 
+• Dropout Rate: 20% 
+• Dense Units: 256 
+• Batch Size: 16 
+ This combination attained a validation accuracy of 97.5%, signifying exceptional 
+classification performance with negligible overfitting. 
+Model Development 
+Subsequent to hyperparameter optimization, the optimal model configuration was employed to 
+perform comprehensive training over 20 epochs, utilizing the determined batch size and early 
+stopping mechanism.  The training utilized the Adam optimizer and binary  cross-entropy as 
+the loss function due to the binary classification nature of the problem.  Two callbacks were 
+incorporated to improve training: EarlyStopping (to terminate training upon convergence) and 
+ReduceLROnPlateau (to decrease the learning rate when validation loss stagnates). 
+The model was trained on processed wildfire pictures. The preprocessed inputs comprised 
+YCbCr transformation and Multi -Scale Retinex (MSR) improvement, which markedly 
+enhanced the visibility of fire zones and contrast uniformity, enabling DenseNet to acqui re 
+large spatial characteristics across diverse environmental circumstances. 
+Rationale for Selection 
+DenseNet121 was selected for this wildfire classification assignment because of its remarkable 
+capacity to capture intricate visual information while utilizing fewer parameters and 
+minimizing overfitting.  Their extensive connection enhances feature reuse and improves 
+gradient flow, rendering them particularly effective on comparatively small datasets.  In 
+contrast to conventional CNNs, DenseNet121 reduces redundancy by utilizing outputs from 
+preceding layers, hence enhancing generalization (Huang et al. 2017).  Pretrained on ImageNet, 
+it offers a robust feature extraction framework, minimizing training duration and enhancing 
+performance in transfer learning contexts.  The model's compact dimensions and depth provide 
+an optimal balance between computing expense  and accuracy, rendering it suitable for real -
+time applications such as wildfire detection in diverse climatic situations, where precision and 
+efficiency are paramount. 
+======PAGE======
+31 
+ 
+3.7 Evaluation Framework and metrics  
+Framework 
+The assessment strategy for this project was created to measure the efficacy of both the deep 
+learning model architecture and the influence of preprocessing procedures.  A baseline 
+Convolutional Neural Network (CNN) model was trained on the unprocessed wildfire dataset 
+to provide a benchmark.  The identical CNN architecture was subsequently retrained on the 
+pre-processed dataset, which included RGB -to-YCbCr conversion and Multi -Scale Retinex 
+(MSR) augmentation.  This facilitate d a comparative investigation of the impact of 
+preprocessing on model performance. 
+The subsequent evaluation of the proposed DenseNet121 model was conducted in an analogous 
+fashion.  Initially, it was trained on the unprocessed photos, followed by the pre -processed 
+dataset.  Both iterations of the DenseNet model were evaluated utilizing essential criteria 
+including accuracy, precision, recall, and F1-score. 
+This multi-tiered assessment facilitated a direct juxtaposition of the conventional CNN and the 
+sophisticated DenseNet model, alongside a comparison of raw and augmented input data.  The 
+findings unequivocally indicated that the suggested preprocessing pipeline markedly enhanced 
+the model's capacity to identify wildfire characteristics, especially in intricate and low-visibility 
+environments, resulting in enhanced performance across all assessment criteria. 
+Metrics 
+Four essential metrics were employed to assess model performance.   
+Accuracy quantifies the ratio of successfully identified photos to total predictions, offering a 
+comprehensive performance overview.  (Khalid, et al,2020) 
+Equation 4: Formula for Accuracy. 
+ 
+Binary Cross -Entropy serves as the loss function for binary classification, measuring the 
+disparity between projected probability and actual labels; reduced values signify enhanced 
+performance.  (Khalid, et al,2020) 
+Equation 5: Formula for Binary Cross-Entropy 
+ 
+
+======PAGE======
+32 
+ 
+The Confusion Matrix provides a comprehensive analysis of true positives, true negatives, false 
+positives, and false negatives, facilitating the evaluation of model precision and recall.  (Khalid, 
+et al,2020) 
+Finally, the Classification Report encapsulates precision, recall, F1-score, and support for each 
+class, providing a comprehensive understanding of the model's efficacy in differentiating 
+between fire and no-fire images. (Khalid, et al,2020) 
+Equation 6: Formula for precision, Recall and F1- score. 
+ 
+3.8 Ethical, Social, and Legal Considerations 
+The wildfire detection initiative entails several ethical, societal, and legal implications.   
+• The system must ethically emphasize accuracy and dependability, as erroneous 
+predictions may lead to delayed reactions or unwarranted terror.  Ensuring openness 
+and explicability in the model's judgments is crucial for establishing confidence.  (Dhar, 
+S. and Dhar, A., 2025) 
+• The project seeks to enhance early warning systems that safeguard communities and 
+ecosystems, although it must tackle accessibility challenges, particularly in 
+underprivileged or rural areas, to guarantee equal advantages.  Engagement with 
+stakeholders is crucial for fostering public confidence and ensuring effective 
+implementation.   
+• The system is legally obligated to adhere to data protection standards such as GDPR, 
+particularly when drone video or location data contains identifying information.  The 
+utilization of the Kaggle wildfire dataset, licensed under Creative Commons BY 4.0, is 
+legally permissible, contingent upon the maintenance of appropriate acknowledgment.  
+All future real -time deployments must adhere to local UAV and remote sensing 
+regulations.  These factors guarantee that the project is ethical, equitable, and compliant 
+with the law. 
+3.9 Use of Tools and Techniques 
+This study employed many tools and technologies for image processing, model creation, 
+assessment, and visualization.  The principal programming language utilized was Python, 
+selected for its simplicity and robust ecology in artificial intelligence research .  The 
+
+======PAGE======
+33 
+ 
+fundamental deep learning tasks were executed with TensorFlow and Keras, which provide 
+high-level APIs, pre-trained models (e.g., DenseNet121), and seamless interaction with GPU 
+acceleration (Huang et al. 2017).  OpenCV was utilized extensively for picture preparation and 
+editing, encompassing color space conversion and Gaussian blurring for MSR improvement. 
+Scikit-image offered sophisticated capabilities for statistical image analysis and feature 
+extraction, including entropy, contrast, and texture metrics.  Data visualization was conducted 
+using Matplotlib and Seaborn, including histograms, assessment scores , and t -SNE plots.  
+NumPy and Pandas were utilized for data manipulation and tabular analysis.  Scikit -learn 
+facilitated model assessment through classification reports, confusion matrices, and 
+hyperparameter optimization with GridSearchCV. 
+TQDM was ultimately employed to view extended loops during preprocessing and tuning.  
+These technologies jointly facilitated rapid preprocessing, model training, and thorough 
+assessment within a well-organized and reproducible workflow. 
+  
+======PAGE======
+34 
+ 
+4. Results  
+This section delineates the outcomes of wildfire picture categorization employing both the 
+baseline CNN and DenseNet models.  It assesses performance on both raw and preprocessed 
+pictures improved by RGB -to-YCbCr conversion and Multi -Scale Retinex (MSR).  Metrics 
+including accuracy, loss, confusion matrix, and classification report are examined.  
+4.1 CNN model without preprocessing 
+The CNN model, trained without preprocessing, attained a test accuracy of 82.89% and a loss 
+of 0.4508.  The accuracy and loss graphs (figure 14) demonstrate steady enhancement 
+throughout the epochs, however some variations in validation loss imply slight overfitting or 
+instability in the learning process.  The confusion matrix (figure 15) indicates that the model 
+accurately recognized 109 fire photos and 230 no -fire images, while misclassifying 49 fire 
+instances and 21 no-fire instances.  This indicates a p ropensity to prioritize the majority class 
+(no-fire), as further evidenced by the categorization report. 
+ 
+Figure 14: Training of the CNN model without preprocessing. 
+The model attained an accuracy of 0.84 and a recall of 0.69 for the fire class, indicating 
+difficulties in consistently detecting fire incidents.  In contrast, it achieved a recall of 0.92 for 
+the no -fire class, indicating a bias.  Although the CNN model d emonstrates satisfactory 
+performance, the findings highlight the necessity for sophisticated models and efficient 
+preprocessing techniques (such as YCbCr + MSR) to improve fire detection accuracy under 
+difficult visual circumstances. 
+
+======PAGE======
+35 
+ 
+ 
+Figure 15: Results of CNN model without preprocessing on test data. 
+4.2 DenseNet model without preprocessing 
+The DenseNet model, when trained without preprocessing, exhibits a substantial enhancement 
+in classification performance relative to the CNN baseline.  Throughout the training process, 
+the model exhibited a steady increase in both training and validation a ccuracy, achieving a 
+maximum test accuracy of 90.95% and a significantly low-test loss of 0.2576 (figure 16).  The 
+confusion matrix demonstrates significant class differentiation, especially for the 'nofire' 
+category, with just two false negatives.  The cl assification report validates this performance, 
+indicating a macro average accuracy of 0.93 and an F1-score of 0.90 (figure 17). 
+ 
+Figure 16: Training of the DenseNet model without preprocessing. 
+
+======PAGE======
+36 
+ 
+This robust result underscores DenseNet's capacity to acquire profound and abstract 
+hierarchical characteristics from raw pictures, attributable to its dense connection and effective 
+parameter utilization.  Despite great accuracy and precision, the recall for the 'fire' class (0.78) 
+suggests that certain fire instances were misclassified.  These observations indicate that 
+although DenseNet is robust, it may gain from improved feature visibility, prompting the 
+application of preprocessing methods in the subsequent assessment step. 
+ 
+Figure 17:Results of DenseNet model without preprocessing on test data. 
+4.3 CNN model with preprocessing 
+The CNN model's results after preprocessing shown a significant enhancement compared to its 
+raw data equivalent.  The model attained a test accuracy of 92.11% and a decreased test loss of 
+0.2283, underscoring improved learning stability and generalization.  The training plots 
+demonstrate (figure 18)  a constant improvement in both training and validation accuracy, 
+accompanied by a steady drop in losses, signifying effective convergence without overfitting.   
+ 
+Figure 18:Training of the CNN model with preprocessing. 
+
+======PAGE======
+37 
+ 
+The confusion matrix (figure 19) indicates robust classification performance, with the majority 
+of fire and no-fire data correctly predicted.  Both classes shown a considerable enhancement in 
+precision and recall, particularly the fire category, which had previously demonstrated elevated 
+misclassification rates.  The classification report indicates an F1-score of 0.90 for fire and 0.93 
+for no-fire, validating the model's robustness.  The performance enhancement is due to the 
+preprocessing pipeline (RGB -to-YCbCr + MSR), which improved visibility and contrast, 
+hence facilitating the detection of fire-related characteristics.  The results confirm the efficacy 
+of the preprocessing technique in enhancing the classification abilities of the CNN. 
+ 
+Figure 19:Results of CNN model with preprocessing on test data. 
+4.4 DenseNet model with preprocessing: Proposed Method 
+The suggested model, which combines DenseNet architecture with YCbCr color space 
+conversion and Multi-Scale Retinex (MSR) preprocessing, shown outstanding performance in 
+wildfire classification tasks.  This model attained a test accuracy of 98.84% and a very low test 
+loss of 0.1098, far surpassing all other configurations. 
+The training and validation accuracy continuously remained elevated and well matched 
+throughout all epochs, signifying exceptional generalization.  The validation accuracy reached 
+a maximum of 98.0%, exhibiting little indications of overfitting or performance decline (figure 
+20).  The associated loss curves exhibited a consistent decrease, indicating robust and 
+dependable convergence. 
+ 
+
+======PAGE======
+38 
+ 
+ 
+Figure 20: Training of the DenseNet model with preprocessing. 
+The confusion matrix (figure 21) validates the model's robustness: just 5 misclassifications 
+among 409 samples, with accuracy, recall, and F1-scores attaining 0.98 or 0.99 for both classes.  
+This indicates a model that is both extremely sensitive and specific, proficient in reliably 
+recognizing fire incidents while reducing false positives. 
+The improvement achieved by preprocessing —especially in accentuating brightness and 
+rectifying illumination discrepancies—was crucial for enhancing feature clarity.  As a result, 
+DenseNet was able to extract more information representations, facilitating i mproved 
+differentiation between fire and no-fire situations under complicated visual settings. 
+ 
+ 
+Figure 21: Results of DenseNet model with preprocessing on test data. 
+ 
+
+======PAGE======
+39 
+ 
+4.5 Comparative Analysis of Model Performance 
+The comparison analysis (figure 22 ) underscores  the substantial benefit derived from 
+integrating DenseNet with preprocessing (YCbCr  + MSR).  This model attained the best test 
+accuracy of 98.84% and the lowest test loss of 0.1098, dramatically surpassing all other setups.  
+The use of preprocessing improved feature quality, enabling DenseNet to more effectively 
+generalize and identify fire occurrences in difficult situations. 
+The CNN with preprocessing demonstrated superior performance compared to the baseline 
+CNN, with an accuracy of 92.11% and a decreased loss of 0.2283, suggesting that even a more 
+straightforward model gains from increased picture clarity and color correction. 
+Without preprocessing, DenseNet attained an accuracy of 90.95% and a loss of 0.2576, 
+surpassing the CNN baseline, although exhibiting a somewhat larger loss than its preprocessed 
+version, underscoring the need of preprocessing for intricate models. 
+The CNN baseline had the lowest accuracy (82.89%) and the largest loss (0.4508), 
+underscoring the necessity of both sophisticated architectures and preprocessing techniques for 
+effective wildfire picture categorization. 
+ 
+Figure 22: Comparative Analysis of Model Performance on test data. 
+  
+
+======PAGE======
+40 
+ 
+5. Analysis and Discussion 
+5.1 The Optimal Model and Rationale for Its Pre-eminence   
+The most efficient model was DenseNet, along with RGB -to-YCbCr translation and Multi -
+Scale Retinex (MSR) preprocessing.  It attained a test accuracy of 98.84% and the minimal 
+loss of 0.1098, markedly surpassing all other models.  This advantage arises from  DenseNet's 
+effective feature reuse and gradient flow, further enhanced by preprocessing that improves 
+picture clarity and contrast.  The preprocessing pipeline enhanced fire visibility in difficult 
+situations such as smoke and low light.  This allowed DenseNet to extract more intricate spatial 
+patterns, hence minimizing misclassifications and decreasing false positives.  The model's 
+stability and elevated F1-scores indicate its resilience in handling intricate wildfire images. 
+ 5.2 Comparative Analysis with Existing Literature 
+ The suggested method presents substantial improvements in preprocessing techniques and 
+classification efficacy relative to current research.  Previous studies, such as Wu et al. (2020) 
+and Ghali et al. (2022), utilized transfer learning with MobileNetV2 a nd EfficientNetB5, 
+respectively, predominantly using raw or little enhanced pictures, resulting in accuracies 
+between 95% and 97%.  These models had difficulties in obscured or inadequately illuminated 
+environments.  This work implemented a hybrid preproce ssing pipeline utilizing YCbCr and 
+MSR, which directly tackled visibility and illumination discrepancies, thereby enhancing 
+model interpretability and feature extraction. 
+Moreover, ensemble approaches and vision transformers in the literature, while precise, 
+sometimes necessitated substantial processing resources and exhibited restricted deployment 
+viability.  DenseNet, recognized for its compactness and dense interconnectivity, demonstrated 
+effectiveness in balancing model depth and efficiency, achieving great accuracy while 
+maintaining computing feasibility.  This study's results, particularly the 98.84% test accuracy 
+with preprocessing, surpass the performance metrics of most cited models, indicating enhanced 
+resilience to visual distortions.  Consequently, the model not only conforms to contemporary 
+deep learning progressions but also enhances the state of the art through deliberate 
+preprocessing and architectural integration. 
+ 5.3 Project Limitations  
+Notwithstanding encouraging outcomes, the study exhibits specific limits.  The dataset 
+employed, while geographically and environmentally varied, was restricted to static, publically 
+available photos, perhaps failing to capture real-time fluctuations such as swift fire propagation 
+or shifting wind conditions  (Ramos et al,2025).  The dependence on a binary categorization 
+(fire/no-fire) framework may oversimplify complex fire conditions such as smoke -only or 
+smouldering vegetation, thus diminishing field applicability. 
+Moreover, whereas preprocessing improved visibility, it also added computational effort, 
+potentially complicating real -time deployment, especially on resource -limited edge devices.  
+The model, while precise, has not been evaluated on multi -source imagery ( e.g., drone, 
+======PAGE======
+41 
+ 
+satellite, CCTV) in practical surveillance systems, restricting its applicability beyond 
+controlled datasets. (Ramos et al,2025) 
+A further limitation is the lack of time information.  Numerous fires develop progressively, and 
+including video-based data or consecutive frames may improve detection efficacy.  Ultimately, 
+the efficacy of the model's training pipeline relies on the quali ty of preprocessing, which, if 
+improperly calibrated (e.g., erroneous Retinex sigma values), may distort critical features.  
+These constraints underscore the necessity for real -time evaluation, varied input modalities, 
+and possible architectural enhancements in subsequent versions. (Ramos et al,2025) 
+ 5.4 Relationship between Outcomes and Project Aims 
+The results closely align with the project's primary objectives.  The primary aim was to enhance 
+wildfire identification by using advanced preprocessing techniques (MSR and RGB-to-YCbCr) 
+with the DenseNet architecture.  The suggested model attained a remar kable test accuracy of 
+98.84%, indicating a substantial 15.95% enhancement over the CNN baseline model without 
+preprocessing (82.89%).  The evaluation criteria, comprising accuracy, recall, and F1-score—
+all exceeding 0.98 —reinforce the model's resilience u nder diverse environmental 
+circumstances. 
+The preprocessing pipeline significantly improved picture quality and clarity, resulting in a 
+decrease in test loss from 0.4508 to 0.1098, so confirming its efficacy in enhancing contrast 
+and feature visibility.  This immediately facilitates the project's objective of improving 
+classification accuracy through preprocessing.  The exceptional performance of DenseNet, 
+particularly in relation to the CNN baseline, underscores its capacity to generalize across 
+intricate visual inputs, achieving the goal of estab lishing a scalable and dependable deep 
+learning framework.  The use of comparison benchmarks and validation methodologies 
+achieves the objective of providing a thorough, practical assessment method for early wildfire 
+detection systems. 
+ 5.5 Correlation between Findings and Research Questions  
+The findings of the study immediately respond to all three research questions.  The initial 
+inquiry concentrated on the influence of employing MSR, YCbCr transformation, and 
+DenseNet on detection precision.  The suggested model achieved an accuracy of 98.8 4%, 
+representing a 7.89% enhancement over DenseNet without preprocessing (90.95%) and a 
+15.95% increase compared to the baseline CNN without preprocessing.  This confirms that the 
+hybrid technique markedly improves robustness and accuracy relative to previ ously 
+documented strategies. 
+The second study topic evaluated the efficacy of preprocessing in enhancing picture clarity and 
+categorization.  Following the implementation of MSR and YCbCr, the model's test loss 
+decreased from 0.4508 to 0.1098, while the recall for the fire class enhanced from 0.69 (CNN 
+without preprocessing) to 0.98 (DenseNet with preprocessing).  Confusion matrices 
+demonstrate a substantial decrease in false positives, indicating that preprocessing is crucial 
+for noise reduction and fire region identification. 
+======PAGE======
+42 
+ 
+The final question examined DenseNet's ability for feature extraction.  In comparison to the 
+CNN with preprocessing (accuracy: 92.11%), DenseNet with preprocessing achieved a 6.73% 
+enhancement in accuracy, underscoring its efficacy in discerning subtle vis ual details such as 
+smoke gradients or incomplete fires.  These data confirm that the proposed strategy not only 
+fulfills but surpasses the study's research objectives. 
+ 5.6 Practical Implementation  
+The suggested model demonstrates significant potential for practical application in wildfire 
+early-warning systems.  The concept, with a lightweight and scalable DenseNet backbone, may 
+be incorporated into UAVs, security cameras, or IoT edge devices functioning in remote forest 
+areas.  Preprocessing improves identification in difficult illumination or smoke -obscured 
+settings, delivering good dependability across various field circumstances.  (Ghali, and 
+Akhloufi, 2023) 
+The system's high accuracy and low false positive rate render it appropriate for automated 
+alarm creation, diminishing reliance on human supervision.  Furthermore, the model's 
+dependence on open -source tools and publicly accessible datasets facilitates eco nomical 
+implementation in resource-limited environments. 
+To implement a viable solution, further measures are required, including real -time 
+optimization, hardware compatibility testing, and the integration of video feeds for ongoing 
+monitoring.  This model, with proper tuning and deployment techniques, can function as a 
+resilient AI foundation for smart forest surveillance systems, aiding governmental and 
+environmental entities in mitigating wildfire damage through swift reaction and monitoring.  
+(Ghali, and Akhloufi, 2023) 
+  
+======PAGE======
+43 
+ 
+6. Conclusion 
+Wildfires represent a considerable danger to ecosystems, human lives, biodiversity, and global 
+economy.  The rising frequency and severity of these disasters, intensified by climate change 
+and anthropogenic activity, has led to an escalating demand for rap id, dependable, and 
+sophisticated wildfire detection systems.  This study sought to fulfill that need by creating a 
+deep learning-based wildfire classification model that improves accuracy and reliability using 
+sophisticated picture preprocessing methods. 
+The integration of Multi-Scale Retinex (MSR) and RGB-to-YCbCr color space translation with 
+the DenseNet121 architecture resulted in a significant enhancement in detection accuracy, 
+achieving 98.84% test accuracy, a marked increase over the baseline CNN mod el's 82.89% 
+accuracy.  The integration of preprocessing with DenseNet enhanced feature visibility and 
+mitigated false positives and misclassifications—critical challenges in traditional approaches. 
+This study substantially enhances early wildfire detection technology, demonstrating how 
+meticulous preprocessing and a resilient deep learning framework may provide scalable, 
+automated, and accurate monitoring systems.  It corresponds with international s ustainability 
+initiatives by possibly mitigating wildfire damage through expedited notifications and 
+enhanced emergency responses. 
+6.1 Future works 
+To augment the functionalities and practical implementation of the proposed wildfire detection 
+system, the following further recommendations are offered: 
+Geolocation and Cartography 
+Combine geolocation metadata with image -based detections to facilitate accurate fire 
+localization.  This would provide real-time mapping on forest monitoring dashboards, enabling 
+responders to view active fire zones and allocate resources more efficiently. (Saleh, et al,2024) 
+Expanded Dataset Training 
+Enhance model generalizability by training on extensive, multi-source datasets that encompass 
+regionally varied wildfire scenarios derived from satellite, aerial, and terrestrial pictures.  This 
+would enable the model to adjust to various terrains, plant classifications, and fire 
+circumstances. 
+Immediate Implementation on Embedded Systems 
+Modify the system for implementation on edge devices, including drones, UAVs, or embedded 
+boards (e.g., Jetson Nano).  This encompasses real -time processing of live video streams, 
+onboard inference, and prompt alarm production, rendering the system appropr iate for field 
+monitoring and early action. (Saleh, et al,2024) 
+  
+======PAGE======
+44 
+ 
+Reference  
+Barmpoutis, P., Papaioannou, P., Dimitropoulos, K. and Grammalidis, N., 2020. A review on 
+early forest fire detection systems using optical remote sensing. Sensors, 20(22), p.6442. 
+Bouguettaya, A., Zarzour, H., Taberkit, A.M. and Kechida, A., 2022. A review on early 
+wildfire detection from unmanned aerial vehicles using deep learning -based computer vision 
+algorithms. Signal Processing, 190, p.108309. 
+Devassy, B.M. and George, S., 2020. Dimensionality reduction and visualisation of 
+hyperspectral ink data using t-SNE. Forensic science international, 311, p.110194. 
+Dhar, S. and Dhar, A., 2025. Integrating Machine Learning Into Wildlife and Forest 
+Conservation: Ethical Considerations and Sustainable Practices. In Machine Learning and 
+Internet of Things in Fire Ecology (pp. 129-156). IGI Global Scientific Publishing. 
+El-Madafri, I., Peña, M. and Olmedo -Torre, N., 2023. The wildfire dataset: Enhancing deep 
+learning-based forest fire detection with a diverse evolving open-source dataset focused on data 
+representativeness and a novel multi-task learning approach. Forests, 14(9), p.1697. 
+Fang, W., Fan, J., Zheng, Y., Weng, J., Tai, Y. and Li, J., 2025, April. Guided real image 
+dehazing using ycbcr color space. In Proceedings of the AAAI Conference on Artificial 
+Intelligence (Vol. 39, No. 3, pp. 2906-2914). 
+Ghali, R. and Akhloufi, M.A., 2023. CT -Fire: A CNN-Transformer for wildfire classification 
+on ground and aerial images. International Journal of Remote Sensing, 44(23), pp.7390-7415. 
+Ghali, R. and Akhloufi, M.A., 2023. Deep learning approaches for wildland fires using satellite 
+remote sensing data: Detection, mapping, and prediction. Fire, 6(5), p.192. 
+Ghali, R., Akhloufi, M.A. and Mseddi, W.S., 2022. Deep learning and transformer approaches 
+for UAV-based wildfire detection and segmentation. Sensors, 22(5), p.1977. 
+Govil, K., Welch, M.L., Ball, J.T. and Pennypacker, C.R., 2020. Preliminary results from a 
+wildfire detection system using deep learning on remote camera images. Remote Sensing, 
+12(1), p.166. 
+Huang, G., Liu, Z., Van Der Maaten, L. and Weinberger, K.Q., 2017. Densely connected 
+convolutional networks. In Proceedings of the IEEE conference on computer vision and pattern 
+recognition (pp. 4700-4708). 
+Jain, P., Coogan, S.C., Subramanian, S.G., Crowley, M., Taylor, S. and Flannigan, M.D., 2020. 
+A review of machine learning applications in wildfire science and management. Environmental 
+Reviews, 28(4), pp.478-505. 
+Johnston, J.M., Johnston, L.M., Wooster, M.J., Brookes, A., McFayden, C. and Cantin, A.S., 
+2018. Satellite detection limitations of sub -canopy smouldering wildfires in the North 
+American boreal forest. Fire, 1(2), p.28. 
+======PAGE======
+45 
+ 
+Joint Economic Committee (2023) Climate-exacerbated wildfires cost the U.S. between $394 
+to $893 billion each year in economic costs and damages. United States Congress. Available 
+at: https://www.jec.senate.gov/public/index.cfm/democrats/2023/10/climate -exacerbated-
+wildfires-cost-the-u-s-between-394-to-893-billion-each-year-in-economic-costs-and-damages 
+[Accessed 21 Apr. 2025]. 
+Jonnalagadda, A.V. and Hashim, H.A., 2024. SegNet: A segmented deep learning based 
+Convolutional Neural Network approach for drones wildfire detection. Remote Sensing 
+Applications: Society and Environment, 34, p.101181. 
+Khalid, S., Goldenberg, M., Grantcharov, T., Taati, B. and Rudzicz, F., 2020. Evaluation of 
+deep learning models for identifying surgical actions and measuring performance. JAMA 
+network open, 3(3), pp.e201664-e201664. 
+Ororatech (2023) Why Earth observation is the future of fire detection. Available at: 
+https://ororatech.com/why-earth-observation-is-the-future-of-fire-detection/ [Accessed 21 
+Apr. 2025]. 
+Ramos, L., Casas, E., Bendek, E., Romero, C. and Rivas-Echeverría, F., 2024. Computer vision 
+for wildfire detection: a critical brief review. Multimedia Tools and Applications, 83(35), 
+pp.83427-83470. 
+Safir, P., 2022. Rgb And Ycbcr Color Spaces, Standards And Conversions For Fpga Engineers. 
+Universum: технические науки, (10-5 (103)), pp.63-66. 
+Saleh, A., Zulkifley, M.A., Harun, H.H., Gaudreault, F., Davison, I. and Spraggon, M., 2024. 
+Forest fire surveillance systems: A review of deep learning methods. Heliyon, 10(1). 
+Saleh, A., Zulkifley, M.A., Harun, H.H., Gaudreault, F., Davison, I. and Spraggon, M., 2024. 
+Forest fire surveillance systems: A review of deep learning methods. Heliyon, 10(1). 
+Sathishkumar, V.E., Cho, J., Subramanian, M. and Naren, O.S., 2023. Forest fire and smoke 
+detection using deep learning-based learning without forgetting. Fire ecology, 19(1), p.9. 
+The Week (2023) The economic cost of the wildfire season in Europe. Available at: 
+https://theweek.com/environment/the-economic-cost-of-the-wildfire-season [Accessed 21 
+Apr. 2025]. 
+Treneska, S. and Stojkoska, B.R., 2021, May. Wildfire detection from UAV collected images 
+using transfer learning. In Proceedings of the 18th International Conference on Informatics and 
+Information Technologies, Skopje, North Macedonia (pp. 6-7). 
+Vasconcelos, R.N., Franca Rocha, W.J., Costa, D.P., Duverger, S.G., Santana, M.M.D., 
+Cambui, E.C., Ferreira -Ferreira, J., Oliveira, M., Barbosa, L.D.S. and Cordeiro, C.L., 2024. 
+Fire Detection with Deep Learning: A Comprehensive Review. Land, 13(10), p.1696. 
+Wang, H., Hou, X., Li, J., Yan, Y., Sun, W., Zeng, X., Zhang, K. and Cao, X., 2025. Multi -
+scale Retinex unfolding network for low -light image enhancement. IEEE Transactions on 
+Multimedia. 
+======PAGE======
+46 
+ 
+Wang, L., Zhang, H., Zhang, Y., Hu, K. and An, K., 2023. A deep learning -based experiment 
+on forest wildfire detection in machine vision course. IEEE Access, 11, pp.32671-32681. 
+Wu, H., Li, H., Shamsoshoara, A., Razi, A. and Afghah, F., 2020, March. Transfer learning for 
+wildfire identification in UAV imagery. In 2020 54th Annual Conference on Information 
+Sciences and Systems (CISS) (pp. 1-6). IEEE. 
+Yandouzi, M., Grari, M., Idrissi, I., Boukabous, M., Moussaoui, O., Azizi, M., Ghoumid, K. 
+and Elmiad, A.K., 2022. Forest fires detection using deep transfer learning. Forest, 13(8), p.1. 
+Zotin, A.G., 2020. Fast algorithm of image enhancement based on multi -scale retinex. 
+International journal of reasoning-based intelligent systems, 12(2), pp.106-116. 
+  
+======PAGE======
+47 
+ 
+Appendix 
+Explanation of t-SNE 
+ t-Distributed Stochastic Neighbor  Embedding (t -SNE) is a non -linear dimensionality 
+reduction method commonly employed for displaying high -dimensional data in reduced 
+dimensions, generally two or three dimensions.  t-SNE, created by Laurens van der Maaten and 
+Geoffrey Hinton, transforms similarities among data points into joint probabilities and aims to 
+reduce the divergence between these probabilities in the low-dimensional representation. 
+ 
+ 
+The technique excels in maintaining the local structure of the data, indicating that points in 
+high-dimensional space that are proximate tend to remain near in the reduced depiction.  t-SNE 
+is exceptionally useful for detecting clusters, patterns, and correlations that are not readily 
+apparent in high-dimensional datasets. 
+This experiment employed t -SNE to depict the distinguishability between fire and non -fire 
+photos based on extracted attributes such as brightness, contrast, and texture metrics.  It enabled 
+a visual assessment of the potential for the characteristics to in herently create discernible 
+clusters prior to categorization.  While t-SNE is not a classifier, it demonstrated the significance 
+of preprocessing and model selection by revealing incomplete grouping and overlapping 
+regions, hence underscoring the necessity for deep learning-based feature extraction. 
+ 
+ 
+ 
+ 
+ 
+ 
+
+======PAGE======
+48 
+ 
+Evaluation Methods for MSR: Entropy and Contrast 
+1. Shannon Entropy 
+Formula: 
+ 
+Entropy quantifies the degree of information or randomness inherent in a picture. An elevated 
+entropy value signifies enhanced detail, improved texture visibility, and greater variety in pixel 
+intensities. 
+The rationale for its use: In wildfire detection, it is essential to capture intricate features such 
+as flame peripheries and smoke gradients. The increased entropy during MSR preprocessing 
+indicates that certain critical characteristics are retained and even augmented, rendering the 
+picture more useful for the DenseNet model. 
+2. Detection of Low Contrast 
+The exposure.is_low_contrast function assesses if a picture exhibits inadequate contrast by 
+analyzing the distribution of pixel intensities.  It returns True if the image's intensity range is 
+below a defined threshold (e.g., 5%). 
+The rationale for its use: Wildfire imagery frequently experiences smoke and illumination 
+irregularities, resulting in diminished contrast.  The objective of assessing contrast was to 
+confirm that MSR enhanced detail (via entropy) while preventing the gene ration of pictures 
+with faded or indistinct details.  A "low contrast penalty" was employed during MSR tuning to 
+emphasize crisper, sharper outputs, hence enhancing the model's reliability in fire detection. 
+  
+
+======PAGE======
+49 
+ 
+Baseline CNN Model Explanation 
+• Conv2D Layer (Convolutional Layer): To autonomously acquire spatial hierarchies of 
+features from input pictures. Implements filters throughout the picture to identify 
+characteristics like as edges, textures, and patterns; each filter acquires distinct feat ure 
+maps throughout the training process. 
+• Activation (ReLU): Introduce non -linearity to facilitate the learning of intricate 
+patterns. Transforms input values to output in a non -linear manner, allowing the 
+network to represent more intricate relationships. 
+• MaxPooling2D Layer (Pooling Layer): Decrease the spatial dimensions of feature maps 
+to minimize computation and mitigate overfitting. Extracts the greatest value from a 
+compact window (e.g., 2×2) inside the feature map, preserving essential features while 
+minimizing dimensions. 
+• Flatten Layer: Convert 2D feature maps into a 1D feature vector for dense layers. 
+Transforms multidimensional feature maps into a singular vector appropriate for fully 
+linked layers. 
+• Dense Layer (Fully Connected Layer): Acquire advanced patterns and execute 
+decision-making. Each neuron is interconnected with all neurons in the preceding layer 
+to acquire intricate feature correlations. 
+• Dropout Layer: Mitigate overfitting and enhance model generalization. Randomly 
+disables a fraction of neurons during training to enhance the model's robustness. 
+ 
+Architecture used: 
+The basic Convolutional Neural Network (CNN) model adheres to a conventional design 
+centered on feature extraction and classification, as seen in the picture above. 
+The components utilized in the model are: 
+Convolutional Layers 
+• Conv2D (32 filters, 3×3 kernel, ReLU activation): Extracts fundamental characteristics, 
+including edges and textures, from the input picture (224×224×3). 
+
+======PAGE======
+50 
+ 
+• Conv2D (64 filters, 3×3 kernel, ReLU activation): Acquires intricate characteristics 
+such as forms and patterns. 
+• Conv2D (128 filters, 3×3 kernel, ReLU activation): Extracts advanced features that 
+delineate intricate object structures (e.g., flames, smoke patterns). 
+ Pooling Layers 
+• MaxPooling2D (2×2) is applied after each Conv2D layer to diminish spatial dimensions 
+by downsampling, hence decreasing computational load and mitigating overfitting, 
+while retaining essential features. 
+ Flatten Layer 
+• Transforms the 2D feature maps into a 1D vector before to inputting into dense layers 
+for classification. 
+ Fully Connected (Dense) Layers 
+• A dense layer (128 units, ReLU activation) functions as a conventional neural network 
+layer, amalgamating the retrieved characteristics to acquire intricate representations. 
+• Dropout (rate=0.5): Randomly disables 50% of neurons during training to mitigate 
+overfitting and enhance model generalization. 
+• A dense layer with one unit and a Sigmoid activation function produces a singular 
+probability value for binary classification (fire/no fire). 
+ Compilation Configurations 
+• The Adam optimizer was employed for effective and adaptive learning. 
+• Loss function: Binary Cross-Entropy, appropriate for binary classification jobs. 
+• The metric employed to assess model performance during training and testing was 
+accuracy. 
+ 
